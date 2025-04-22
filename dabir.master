@@ -1,0 +1,180 @@
+﻿<%@ Master Language="VB" CodeFile="dabir.master.vb" Inherits="light_MasterPage" %>
+<%--<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>--%>
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+   <%-- <script src="../Scripts/jquery-1.4.1.js"></script>--%>
+   
+     <asp:ContentPlaceHolder id="head" runat="server">
+
+    </asp:ContentPlaceHolder>
+
+	<title>پتروشیمی من</title>
+   >
+   
+    <link rel="icon" type="image/png" href="images/Logo-site.png" />
+    <link href="dabir.css" rel="stylesheet" />
+	<!-- Main Styles -->
+	<link rel="stylesheet" href="assets/styles/style.min.css">
+	
+	<!-- Material Design Icon -->
+	<link rel="stylesheet" href="assets/fonts/material-design/css/materialdesignicons.css">
+
+	<!-- mCustomScrollbar -->
+	<link rel="stylesheet" href="assets/plugin/mCustomScrollbar/jquery.mCustomScrollbar.min.css">
+
+	<!-- Waves Effect -->
+	<link rel="stylesheet" href="assets/plugin/waves/waves.min.css">
+
+	<!-- Sweet Alert -->
+	<link rel="stylesheet" href="assets/plugin/sweet-alert/sweetalert.css">
+	
+	<!-- RTL -->
+	<link rel="stylesheet" href="assets/styles/style-rtl.min.css">
+   <link rel="icon" type="image/png" href="images/Logo-site.png" />
+   <%-- <script>
+        $(document).ready(function () {
+            $("#ImgProfile").
+            alert('');
+        });
+    </script>--%>
+
+</head>
+
+<body>
+     <form id="form1" runat="server">
+          <link rel="icon" type="image/png" href="images/Logo-site.png" />
+             <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true">
+</asp:ScriptManager>
+        <%-- <cc1:HoverMenuExtender ID="HoverMenuExtender1" runat="server" TargetControlID="label_lname" PopupControlID="panel_p" OffsetX="0" OffsetY="0" >
+
+    </cc1:HoverMenuExtender>--%>
+ <%--   <cc1:PopupControlExtender ID="PopupControlExtender1" runat="server"  TargetControlID="label_lname" PopupControlID="panel_p" OffsetX="-80" OffsetY="20" >
+    </cc1:PopupControlExtender>--%>
+
+<div class="main-menu">
+
+	<header class="header">
+		<a href="#" class="logo"><i class="ico mdi mdi-cube-outline"></i>پتروشیمی تبریز</a>
+		<button type="button" class="button-close fa fa-times js__menu_close"></button>
+		<div class="user">
+			<a href="#" class="avatar"><img id="imgProfiles" src="assets/images/avatar-sm-5.jpg" alt="" runat="server" ><span class="status online"></span></a>
+           <%-- <asp:Image ID="Image1" runat="server" Width="70px" Height="70px" class="avatar" />--%>
+
+            <%--<a href="#" class="avatar">
+                <asp:Image ID="Image1" runat="server" Width="70px" Height="70px" class="avatar" />
+                <img alt="" id="imgProfiles"  />
+                <span class="status online"></span>
+
+            </a>--%>
+             <link rel="icon" type="image/png" href="images/Logo-site.png" />
+			<h5 class="name"><a href="#">
+                                <asp:Literal ID="ltr_family" runat="server"></asp:Literal>
+			                 </a></h5>
+			<h5 class="position">
+                  <asp:Literal ID="ltrLevel" runat="server" ></asp:Literal>
+			</h5>
+          <%--  <h5 class="position">
+                  <asp:Literal ID="ltrMadrak" runat="server" ></asp:Literal>
+			</h5>--%>
+			<!-- /.name -->
+			<div class="control-wrap js__drop_down">
+				<i class="fa fa-caret-down js__drop_down_button"></i>
+				<div class="control-list">
+					<div class="control-item"><a href="frmPass.aspx"><i class="fa fa-user"></i> تغییر رمز</a></div>
+					<div class="control-item"><a href="frmChngPic.aspx"><i class="fa fa-gear"></i> تغییر تصویر</a></div>
+                    <div class="control-item"><a href="personelProfileFrm.aspx"><i class="fa fa-user"></i> پروفایل</a></div>
+					<div class="control-item"><a href="login_2.aspx"><i class="fa fa-sign-out"></i> خروج از سیستم</a></div>
+				</div>
+				<!-- /.control-list -->
+			</div>
+			<!-- /.control-wrap -->
+		</div>
+		<!-- /.user -->
+	</header>
+	<!-- /.header -->
+	<div class="content">
+
+		<div class="navigation">
+			 <link rel="icon" type="image/png" href="images/Logo-site.png" />
+            <asp:Label ID="Label1" runat="server" Text=""></asp:Label>
+    
+		</div>
+		<!-- /.navigation -->
+	</div>
+	<!-- /.content -->
+</div>
+<!-- /.main-menu -->
+  
+<div class="fixed-navbar">
+	<div class="pull-left">
+		<button type="button" class="menu-mobile-button glyphicon glyphicon-menu-hamburger js__menu_mobile"></button>
+		<h1 class="page-title">
+                              <asp:Label ID="ltrDate" runat="server" Text="Label" ></asp:Label>
+		
+        </h1>
+		<!-- /.page-title -->
+       
+	</div>
+	<!-- /.pull-left -->
+	<div class="pull-right">
+		  <asp:ImageButton ID="Imagenoti" runat="server" Height="30px" 
+            ImageUrl="~/images/alarm/alarm.gif" Visible="False" Width="30px" 
+            ToolTip="کار جدید  دریافت کرده اید" />
+		<!-- /.ico-item -->
+		<a href="#" class="ico-item mdi mdi-email notice-alarm js__toggle_open" data-target="#message-popup"></a>
+       		<a href="login_2.aspx" class="ico-item mdi mdi-logout" ></a>
+	</div>
+	<!-- /.pull-right -->
+</div>
+<!-- /.fixed-navbar -->
+
+<div id="notification-popup" class="notice-popup js__toggle" data-space="75">
+	
+    <h2 class="popup-title">Your Notifications</h2>
+	<!-- /.popup-title -->
+	<div class="content">
+		
+		<!-- /.notice-list -->
+		<a href="#" class="notice-read-more">See more messages <i class="fa fa-angle-down"></i></a>
+	</div>
+	<!-- /.content -->
+</div>
+
+<div id="wrapper">
+	<div class="main-content">
+		
+        <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server"> 
+                 </asp:ContentPlaceHolder>  
+
+		<footer class="footer">
+			<ul class="list-inline">
+				<li>.</li>
+				<li><a href="#"></a></li>
+				<li><a href="#"></a></li>
+				<li><a href="#"></a></li>
+			</ul>
+		</footer>
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+
+	<script src="assets/scripts/jquery.min.js"></script>
+	<script src="assets/scripts/modernizr.min.js"></script>
+	<script src="assets/plugin/bootstrap/js/bootstrap.min.js"></script>
+	<script src="assets/plugin/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+	<script src="assets/plugin/nprogress/nprogress.js"></script>
+	<script src="assets/plugin/sweet-alert/sweetalert.min.js"></script>
+	<script src="assets/plugin/waves/waves.min.js"></script>
+
+	<script src="assets/scripts/main.min.js"></script>
+
+      </form>
+</body>
+</html>

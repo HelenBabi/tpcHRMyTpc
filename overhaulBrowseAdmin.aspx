@@ -1,0 +1,139 @@
+﻿<%@ Page Title="" Language="VB" MasterPageFile="~/dabir.master" AutoEventWireup="false" CodeFile="overhaulBrowseAdmin.aspx.vb" Inherits="overhaulBrowseAdmin" %>
+<%@ Register assembly="DevExpress.Web.ASPxGridView.v10.1, Version=10.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web.ASPxGridView" tagprefix="dx" %>
+<%@ Register assembly="DevExpress.Web.ASPxEditors.v10.1, Version=10.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web.ASPxEditors" tagprefix="dx" %>
+
+<%@ Register assembly="DevExpress.Web.ASPxGridView.v10.1.Export, Version=10.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web.ASPxGridView.Export" tagprefix="dx" %>
+
+<%@ Register assembly="DevExpress.Web.ASPxEditors.v10.1" namespace="DevExpress.Web.ASPxEditors" tagprefix="dx" %>
+<%@ Register assembly="DevExpress.Web.ASPxGridView.v10.1" namespace="DevExpress.Web.ASPxGridView" tagprefix="dx" %>
+
+
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+                        
+
+   
+ <div class="row">
+           
+            <div class="col-md-4">
+                <asp:Button ID="Button2" runat="server" Text="بازگشت" CssClass="btn btn-warning btn-sm float-end" />
+
+            </div>
+             <div class="col-md-4">
+                <dx:ASPxGridViewExporter ID="grvExporter1" runat="server" 
+                    GridViewID="GridWorkTable">
+                </dx:ASPxGridViewExporter>
+            </div>
+             <div class="col-md-4">    
+                 <asp:ImageButton ID="ibtnxl" runat="server" Height="48px" 
+                        ImageUrl="~/Icons/exel.JPG" ToolTip="استخراج اطلاعات به اکسل" 
+                        Width="48px" />
+            </div>
+        </div>
+
+   <div class="container mt-3">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- عنوان یا هر محتویات دیگر داخل صفحه -->
+                <h5 class="text-center">لیست ثبت نام</h5>
+            </div>
+        </div>
+
+        <!-- دیو برای جدول -->
+        <div class="table-responsive shadow-sm p-3 mb-5 bg-white rounded">
+             <dx:ASPxGridView ID="GridWorkTable" runat="server" AutoGenerateColumns="False" 
+                    EnableCallBacks="False" KeyFieldName="Id"  Width="100%" 
+                    ClientIDMode="AutoID">
+
+                    <ClientSideEvents FocusedRowChanged="function(s, e) {
+
+}" />
+
+                    <SettingsBehavior AllowFocusedRow="True" />
+
+                    <ClientSideEvents FocusedRowChanged="function(s, e) {
+
+}" />
+                
+                <SettingsBehavior AllowFocusedRow="True" />
+                <Settings ShowFilterRow="True" ShowHorizontalScrollBar="True" />
+
+<ClientSideEvents FocusedRowChanged="function(s, e) {
+
+}"></ClientSideEvents>
+
+<SettingsBehavior AllowFocusedRow="True"></SettingsBehavior>
+
+<Settings ShowFilterRow="True"></Settings>
+
+                    <ClientSideEvents FocusedRowChanged="function(s, e) {
+
+}" />
+
+                <Columns>
+                     <dx:GridViewDataTextColumn Caption="کد پیکیری" FieldName="Id" 
+                            UnboundType="Integer" VisibleIndex="0">
+                            <DataItemTemplate>
+                                <asp:LinkButton ID="LinkButton1" runat="server" 
+                                    CommandArgument='<%# Eval("Id")%>' CommandName='<%# "moshahede"%>' 
+                                    Text='<%# Eval("Id")%> ' CssClass="btn btn-light btn-sm"></asp:LinkButton>
+                            </DataItemTemplate>
+                            <HeaderStyle HorizontalAlign="Center" />
+                            <cellstyle horizontalalign="Center">
+                            </cellstyle>
+                        </dx:GridViewDataTextColumn>
+                       <dx:GridViewDataTextColumn Caption="کد ملی" FieldName="Nationality" 
+                            UnboundType="Integer" VisibleIndex="0" Width="150px">
+                            <DataItemTemplate>
+                                <asp:LinkButton ID="LinkButton2" runat="server" 
+                                     Text='<%# Eval("Nationality")%> '
+                                   CssClass="btn btn-link btn-sm"></asp:LinkButton>
+                            </DataItemTemplate>
+                            <HeaderStyle HorizontalAlign="Center" />
+                            <cellstyle horizontalalign="Center">
+                            </cellstyle>
+                        </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn Caption="نام" FieldName="FirstName" VisibleIndex="1" />
+                    <dx:GridViewDataTextColumn Caption="نام خانوادگی" FieldName="LastName" VisibleIndex="2" />
+                    <dx:GridViewDataTextColumn Caption="شماره پدر" FieldName="FatherName" VisibleIndex="3" />
+                                        <dx:GridViewDataTextColumn Caption="شناسنامه" FieldName="shSh" VisibleIndex="5" />
+                    <dx:GridViewDataTextColumn Caption="تولد" FieldName="BirthDay" VisibleIndex="6" />
+                    <dx:GridViewDataTextColumn Caption="بانک" FieldName="BankCardNo" VisibleIndex="7" />
+                    <dx:GridViewDataTextColumn Caption="شماره حساب" FieldName="IBAN" VisibleIndex="8" />
+                    <dx:GridViewDataTextColumn Caption="بیمه" FieldName="SSN" VisibleIndex="9" />
+                    <dx:GridViewDataTextColumn Caption="موبایل" FieldName="Mobile" VisibleIndex="10" />
+                    <dx:GridViewDataTextColumn Caption="تلفن" FieldName="Tell" VisibleIndex="11" />
+                    <dx:GridViewDataTextColumn Caption="کدپستی" FieldName="PostalCode" VisibleIndex="12" />
+                    <dx:GridViewDataTextColumn Caption="مدرک" FieldName="madrak" VisibleIndex="13" />
+                    <dx:GridViewDataTextColumn Caption="رشته" FieldName="FieldOfStudy" VisibleIndex="14" />
+                    <dx:GridViewDataTextColumn Caption="تاهل" FieldName="tahol" VisibleIndex="15" />
+                    <dx:GridViewDataTextColumn Caption="وظیفه" FieldName="xedmat" VisibleIndex="16" />
+                    <dx:GridViewDataTextColumn Caption="ایثارگری" FieldName="isargari" VisibleIndex="17" />
+                    <dx:GridViewDataTextColumn Caption="اورهال" FieldName="IsLastOverhaul" VisibleIndex="18" />
+                    <dx:GridViewDataTextColumn Caption="آدرس" FieldName="Address" VisibleIndex="19" />
+                    <dx:GridViewDataTextColumn Caption="وضعیت" FieldName="Title" VisibleIndex="20" />
+                    
+                    <dx:GridViewDataTextColumn FieldName="State" Visible="False" />
+                </Columns>
+
+                    <SettingsBehavior AllowFocusedRow="True" />
+
+                <SettingsPager PageSize="17" />
+
+                    <Settings ShowFilterRow="True" ShowHorizontalScrollBar="True" />
+
+<SettingsText GroupPanel="فيلد مورد نظر را جهت گروهبندي ,در اين محل قرار دهيد"></SettingsText>
+
+<SettingsDetail ShowDetailRow="True" allowonlyonemasterrowexpanded="True" exportmode="Expanded" showdetailbuttons="False"></SettingsDetail>
+
+            </dx:ASPxGridView>
+        </div>
+    </div>
+                   
+      
+</asp:Content>
+
+<asp:Content ID="Content3" runat="server" contentplaceholderid="head">
+   
+</asp:Content>
+
+

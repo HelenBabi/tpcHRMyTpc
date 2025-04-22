@@ -1,0 +1,143 @@
+﻿<%@ Master Language="VB" CodeFile="home.master.vb" Inherits="home" %>
+
+<%@ Register assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" tagprefix="cc1" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+       <link rel="stylesheet" type="text/css" href="home.css" />
+       <link rel="stylesheet" type="text/css" href="menu.css" />
+         <script type="text/javascript" src="scripts/jquery-1.4.1.js"></script>
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+    
+<%--    <script>
+        function menu_() {
+            var div_ = document.getElementById("subdrophome");
+            //var div_ = document.getElementsByName("subdrophome");
+            div_.style.display = "inline";
+        }
+        function menu_up() {
+            var div_ = document.getElementById("subdrophome");
+            div_.style.display = "none";
+        }
+        </script>--%>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('.drophome').mouseover(function () {
+
+                    var a = $(this).attr('id');
+                    $('.submenu').css('display', 'none');
+//                    $(this).css('background-color', 'white');
+                    $('.' + a).css('display', 'inline');
+//                    visibility: hidden;
+                    $('.drophome').removeClass("headmenuover");
+                    $(this).addClass("headmenuover");
+                })
+                $('.drophome').mouseout(function () {
+                    //                    $(this).next('div.submenu').attr('display', 'none');
+                    //                    $(this).next('div.submenu').css('display', 'none');
+                    //                    $('.submenu').css('display', 'none');
+
+                })
+            });
+</script>
+   
+</head>
+<body>
+   
+        <form id="form1" runat="server">
+   
+<asp:ScriptManager ID="ScriptManager1" runat="server">
+                </asp:ScriptManager>
+    <cc1:PopupControlExtender ID="PopupControlExtender1" runat="server"   TargetControlID="mmenu_img" PopupControlID="panel_p" OffsetX="-145" OffsetY="10"
+    Position="Bottom" >
+            </cc1:PopupControlExtender>
+        <div id="header">
+        
+         <div id="head_cen">
+             <table cellpadding="0" cellspacing="0" 
+                 style="width: 1024px; margin-top: 0px;">
+                 <tr>
+                     <td class="left_head" style="width: 728px; background-color: #1e4590;">
+                     
+                           
+                        
+               <asp:Label ID="Label4" runat="server" Width="728px" Height="100px"></asp:Label>
+
+     
+                        
+                     </td>
+                     <td class="bg_submenu rt"                     
+                        >
+               <asp:Label ID="Label5" runat="server" Width="196px"> </asp:Label>
+               <br />
+               <asp:Label ID="Label_lname" runat="server" Width="186px" CssClass="lbl_uname" 
+                             Font-Bold="True"></asp:Label>
+               <br />
+     <asp:Label ID="Label_fname1" runat="server" Width="174px" CssClass="lbl_ufname" Font-Bold="True"></asp:Label>
+                         <asp:Image ID="mmenu_img" runat="server" Height="10px" 
+                             ImageUrl="~/images/menu_img/go_right.png" Width="10px" />
+                                      <asp:Panel ID="Panel_p" runat="server" Width="150px" CssClass="Panel_p r5">
+                                     <asp:LinkButton ID="LinkButton1" runat="server" CssClass="lnbexit pmenu" 
+                                      Font-Underline="False" ForeColor="Black" Height="25px">تغییر رمز</asp:LinkButton>
+                                      <hr />
+                                  <asp:LinkButton ID="lnbexit0" runat="server" CssClass="lnbexit pmenu" 
+                                      Font-Underline="False" ForeColor="Black" Height="25px">تغییر تصویر</asp:LinkButton>
+                                      <hr />
+                                       <asp:LinkButton ID="lnbexit" runat="server" PostBackUrl="~/login_.aspx" CssClass="lnbexit pmenu" 
+                                      Font-Underline="False" ForeColor="Black" Height="25px">خروج</asp:LinkButton>
+    </asp:Panel>
+                     </td>
+                     <td class="style3" style="text-align :left;vertical-align:top;">
+                     <br />
+                         <asp:Image ID="persinpic" runat="server" style="margin-left:5px;" Height="60px" 
+                             ImageUrl="~/images/design_images/me30.jpg" Width="60px" />
+                             <br />
+                     </td>
+                 </tr>
+             </table>
+         </div>
+        </div>
+          <div class="page_">
+            <table cellpadding="0" cellspacing="0"  
+                 style="width: 1024px; margin-top: 0px;">
+                 <tr>
+                     <td class="style4" style="background-color: #e8e7e8;">
+                         <div style="height:auto;width:725px;">
+                         <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
+           <asp:Label ID="Label6" runat="server" Width="728px"></asp:Label>
+        </asp:ContentPlaceHolder>         
+
+                         </div>
+                        <asp:Label ID="Label3" runat="server" Width="728px"></asp:Label>
+
+                       
+
+                         <br />
+
+
+     
+                     </td>
+                     <td class="bg_submenu rb"                     
+                        >
+               <asp:Label ID="Label2" runat="server" Width="196px"></asp:Label>
+
+     
+                     </td>
+                     <td style="background-color: #1e4590;" class="right_float" id="menu_">
+            
+             
+
+         <asp:Label ID="Label1" runat="server" Width="100px"></asp:Label>
+                     </td>
+                 </tr>
+             </table>
+
+
+        </div>
+        </form>
+      </body>
+</html>

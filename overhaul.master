@@ -1,0 +1,112 @@
+﻿<%@ Master Language="VB" CodeFile="overhaul.master.vb" Inherits="light_MasterPage" %>
+
+<%--<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>--%>
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+   <%-- <script src="../Scripts/jquery-1.4.1.js"></script>--%>
+   
+     <asp:ContentPlaceHolder id="head" runat="server">
+
+    </asp:ContentPlaceHolder>
+
+	<title>ثبت نام اورهال</title>
+   >
+   
+   
+    <link href="dabir.css" rel="stylesheet" />
+	<!-- Main Styles -->
+	<link rel="stylesheet" href="assets/styles/style.min.css">
+	
+	<!-- Material Design Icon -->
+	<link rel="stylesheet" href="assets/fonts/material-design/css/materialdesignicons.css">
+
+	<!-- mCustomScrollbar -->
+	<link rel="stylesheet" href="assets/plugin/mCustomScrollbar/jquery.mCustomScrollbar.min.css">
+
+	<!-- Waves Effect -->
+	<link rel="stylesheet" href="assets/plugin/waves/waves.min.css">
+
+	<!-- Sweet Alert -->
+	<link rel="stylesheet" href="assets/plugin/sweet-alert/sweetalert.css">
+	
+	<!-- RTL -->
+	<link rel="stylesheet" href="assets/styles/style-rtl.min.css">
+   <link rel="icon" type="image/png" href="images/Logo-site.png" />
+   <%-- <script>
+        $(document).ready(function () {
+            $("#ImgProfile").
+            alert('');
+        });
+    </script>--%>
+
+</head>
+
+<body>
+     <form id="form1" runat="server">
+        
+             <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true">
+</asp:ScriptManager>
+      
+
+
+<!-- /.main-menu -->
+  
+<div class="fixed-navbar">
+	<div class="pull-left">
+		<button type="button" class="menu-mobile-button glyphicon glyphicon-menu-hamburger js__menu_mobile"></button>
+		<h5 class="page-title">
+                              <asp:Label ID="ltrDate" runat="server" Text="ثبت نام اورهال" ></asp:Label>
+		
+        </h5>
+		<!-- /.page-title -->
+       
+	</div>
+	<!-- /.pull-left -->
+	
+	<!-- /.pull-right -->
+</div>
+<!-- /.fixed-navbar -->
+
+<div id="notification-popup" class="notice-popup js__toggle" data-space="75">
+	
+    <h2 class="popup-title">Your Notifications</h2>
+	<!-- /.popup-title -->
+	<div class="content">
+		
+		<!-- /.notice-list -->
+		<a href="#" class="notice-read-more">See more messages <i class="fa fa-angle-down"></i></a>
+	</div>
+	<!-- /.content -->
+</div>
+
+<div id="wrapper">
+	<div class="main-content">
+		
+        <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server"> 
+                 </asp:ContentPlaceHolder>  
+
+		
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+
+	<script src="assets/scripts/jquery.min.js"></script>
+	<script src="assets/scripts/modernizr.min.js"></script>
+	<script src="assets/plugin/bootstrap/js/bootstrap.min.js"></script>
+	<script src="assets/plugin/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+	<script src="assets/plugin/nprogress/nprogress.js"></script>
+	<script src="assets/plugin/sweet-alert/sweetalert.min.js"></script>
+	<script src="assets/plugin/waves/waves.min.js"></script>
+
+	<script src="assets/scripts/main.min.js"></script>
+
+      </form>
+</body>
+</html>

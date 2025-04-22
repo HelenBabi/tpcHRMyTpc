@@ -1,0 +1,12 @@
+﻿SELECT     tblWorkHdr.SystemCode, MAX(tblWorkHdr.WorkDateE) AS MaxOfWorkDateE, tblHolder.HolderName + ' ' + tblHolder.HolderFamili AS karbar, 
+                      tblBuilding.BuildingName, tblUnits.UnitsName, tblSystem.SystemPhone, tblWorkHdr.WorkNote, 
+                      tblWorker.WorkerName + ' ' + tblWorker.WorkerFamili AS serviskar, tblSystem.SystemRoom
+FROM         tblWorkHdr INNER JOIN
+                      tblSystem ON tblWorkHdr.SystemCode = tblSystem.SystemCode INNER JOIN
+                      tblHolder ON tblSystem.HolderCode = tblHolder.HolderCode INNER JOIN
+                      tblBuilding ON tblSystem.BuildingCode = tblBuilding.BuildingCode INNER JOIN
+                      tblUnits ON tblSystem.UnitsCode = tblUnits.UnitsCode INNER JOIN
+                      tblWorker ON tblWorkHdr.WorkerCodeS = tblWorker.WorkerCode
+GROUP BY tblWorkHdr.WorkTypeCode, tblWorkHdr.SystemCode, tblHolder.HolderName, tblHolder.HolderFamili, tblBuilding.BuildingName, tblUnits.UnitsName, 
+                      tblSystem.SystemPhone, tblWorkHdr.WorkNote, tblWorker.WorkerName, tblWorker.WorkerFamili, tblSystem.SystemRoom
+HAVING      (tblWorkHdr.WorkTypeCode = 4)

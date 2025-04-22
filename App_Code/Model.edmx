@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="bimeDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="bimeDBModelStoreContainer">
+          <EntitySet Name="kalaTbl" EntityType="bimeDBModel.Store.kalaTbl" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="kalaType" EntityType="bimeDBModel.Store.kalaType" store:Type="Tables" store:Schema="dbo" store:Name="kalaType">
+            <DefiningQuery>SELECT 
+      [kalaType].[idtyp] AS [idtyp], 
+      [kalaType].[namtyp] AS [namtyp], 
+      [kalaType].[stat] AS [stat], 
+      [kalaType].[fileurl] AS [fileurl]
+      FROM [dbo].[kalaType] AS [kalaType]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="kalaUnits" EntityType="bimeDBModel.Store.kalaUnits" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="kalaTbl">
+          <Key>
+            <PropertyRef Name="kalaID" />
+          </Key>
+          <Property Name="kalaID" Type="int" Nullable="false" />
+          <Property Name="kalaValue" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="setadi" Type="int" Nullable="false" />
+          <Property Name="stat" Type="smallint" Nullable="false" />
+          <Property Name="CodeClosed" Type="bit" Nullable="false" />
+          <Property Name="opid" Type="int" Nullable="false" />
+          <Property Name="ArcTypeCode" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'bimeDB.dbo.kalaType' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="kalaType">
+          <Key>
+            <PropertyRef Name="idtyp" />
+            <PropertyRef Name="namtyp" />
+            <PropertyRef Name="stat" />
+            <PropertyRef Name="fileurl" />
+          </Key>
+          <Property Name="idtyp" Type="int" Nullable="false" />
+          <Property Name="namtyp" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="stat" Type="smallint" Nullable="false" />
+          <Property Name="fileurl" Type="varchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="kalaUnits">
+          <Key>
+            <PropertyRef Name="idDtl" />
+          </Key>
+          <Property Name="idDtl" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="years" Type="int" Nullable="false" />
+          <Property Name="perID" Type="int" Nullable="false" />
+          <Property Name="kalaID" Type="int" Nullable="false" />
+          <Property Name="sizeID" Type="int" Nullable="false" />
+          <Property Name="tempID" Type="int" Nullable="false" />
+          <Property Name="tarix" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="saat" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="stat" Type="int" Nullable="false" />
+          <Property Name="tarixThavil" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tahvilUser" Type="int" Nullable="false" />
+          <Property Name="tedad" Type="int" Nullable="false" />
+          <Property Name="tozihat" Type="nvarchar(max)" />
+        </EntityType>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="bimeDBModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="bimeDBEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="kalaTbl" EntityType="bimeDBModel.kalaTbl" />
+          <EntitySet Name="kalaType" EntityType="bimeDBModel.kalaType" />
+          <EntitySet Name="kalaUnits" EntityType="bimeDBModel.kalaUnits" />
+        </EntityContainer>
+        <EntityType Name="kalaTbl">
+          <Key>
+            <PropertyRef Name="kalaID" />
+          </Key>
+          <Property Name="kalaID" Type="Int32" Nullable="false" />
+          <Property Name="kalaValue" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="setadi" Type="Int32" Nullable="false" />
+          <Property Name="stat" Type="Int16" Nullable="false" />
+          <Property Name="CodeClosed" Type="Boolean" Nullable="false" />
+          <Property Name="opid" Type="Int32" Nullable="false" />
+          <Property Name="ArcTypeCode" Type="Byte" Nullable="false" />
+        </EntityType>
+        <EntityType Name="kalaType">
+          <Key>
+            <PropertyRef Name="idtyp" />
+            <PropertyRef Name="namtyp" />
+            <PropertyRef Name="stat" />
+            <PropertyRef Name="fileurl" />
+          </Key>
+          <Property Name="idtyp" Type="Int32" Nullable="false" />
+          <Property Name="namtyp" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="stat" Type="Int16" Nullable="false" />
+          <Property Name="fileurl" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="kalaUnits">
+          <Key>
+            <PropertyRef Name="idDtl" />
+          </Key>
+          <Property Name="idDtl" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="years" Type="Int32" Nullable="false" />
+          <Property Name="perID" Type="Int32" Nullable="false" />
+          <Property Name="kalaID" Type="Int32" Nullable="false" />
+          <Property Name="sizeID" Type="Int32" Nullable="false" />
+          <Property Name="tempID" Type="Int32" Nullable="false" />
+          <Property Name="tarix" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="saat" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="stat" Type="Int32" Nullable="false" />
+          <Property Name="tarixThavil" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="tahvilUser" Type="Int32" Nullable="false" />
+          <Property Name="tedad" Type="Int32" Nullable="false" />
+          <Property Name="tozihat" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="bimeDBModelStoreContainer" CdmEntityContainer="bimeDBEntities">
+          <EntitySetMapping Name="kalaTbl">
+            <EntityTypeMapping TypeName="bimeDBModel.kalaTbl">
+              <MappingFragment StoreEntitySet="kalaTbl">
+                <ScalarProperty Name="kalaID" ColumnName="kalaID" />
+                <ScalarProperty Name="kalaValue" ColumnName="kalaValue" />
+                <ScalarProperty Name="setadi" ColumnName="setadi" />
+                <ScalarProperty Name="stat" ColumnName="stat" />
+                <ScalarProperty Name="CodeClosed" ColumnName="CodeClosed" />
+                <ScalarProperty Name="opid" ColumnName="opid" />
+                <ScalarProperty Name="ArcTypeCode" ColumnName="ArcTypeCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="kalaType">
+            <EntityTypeMapping TypeName="bimeDBModel.kalaType">
+              <MappingFragment StoreEntitySet="kalaType">
+                <ScalarProperty Name="idtyp" ColumnName="idtyp" />
+                <ScalarProperty Name="namtyp" ColumnName="namtyp" />
+                <ScalarProperty Name="stat" ColumnName="stat" />
+                <ScalarProperty Name="fileurl" ColumnName="fileurl" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="kalaUnits">
+            <EntityTypeMapping TypeName="bimeDBModel.kalaUnits">
+              <MappingFragment StoreEntitySet="kalaUnits">
+                <ScalarProperty Name="idDtl" ColumnName="idDtl" />
+                <ScalarProperty Name="years" ColumnName="years" />
+                <ScalarProperty Name="perID" ColumnName="perID" />
+                <ScalarProperty Name="kalaID" ColumnName="kalaID" />
+                <ScalarProperty Name="sizeID" ColumnName="sizeID" />
+                <ScalarProperty Name="tempID" ColumnName="tempID" />
+                <ScalarProperty Name="tarix" ColumnName="tarix" />
+                <ScalarProperty Name="saat" ColumnName="saat" />
+                <ScalarProperty Name="stat" ColumnName="stat" />
+                <ScalarProperty Name="tarixThavil" ColumnName="tarixThavil" />
+                <ScalarProperty Name="tahvilUser" ColumnName="tahvilUser" />
+                <ScalarProperty Name="tedad" ColumnName="tedad" />
+                <ScalarProperty Name="tozihat" ColumnName="tozihat" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="bimeDB" Class="DataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=192.168.9.18;Initial Catalog=bimeDB;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="bimeDBConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.personel" Member="personels">
+    <Type Name="personel">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="nam" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="family" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="madrak" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="codePersoneli" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="reshte" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="tarixestexdam" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="codebime" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="postname" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="typ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="UnitsCode" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="codeMelli" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="father" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="shsh" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="mahalesodur" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="shserial" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="vaziatsh" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="mahaletavalod" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="tarixtavalod" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ellatevaziat" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="vaziattahol" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="teldaxeli" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="telmanzel" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="mobile" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="din" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="mazhab" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="shgozarname" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="opid" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ArcTypeCode" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="CodeClosed" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="adres" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="tarixDisable" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="jens" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="userType" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="UserPass" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="isResort" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="mozd" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="serviceNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UserPic" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="supervizer" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="emaill" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="pass" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ruzkarShabkar" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="setadiAmaliati" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="omurID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="sponsorshipNum" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="shift" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="modir" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="codePosti" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="shHesab" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="tarixSodur" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="tarixEzdevaj" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="sabegeNezam" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="daneshgah" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="moadel" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="tarixMadrak" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="shahrTahsil" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="esargariTyp" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="nesbatEsargari" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="tarixSarbazi" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="moafitType" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="sanatNaft" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="nesbatNaft" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="codePersonNaft" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="xedmatType" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="tarixSarbaziShuru" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="shMosalsalsh" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="NoeIsargari" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+</Database>

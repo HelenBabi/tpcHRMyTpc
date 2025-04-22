@@ -1,0 +1,82 @@
+﻿<%@ Master Language="VB" CodeFile="MasterPage.master.vb" Inherits="MasterPage" %>
+<link href="assets/styles/style-rtl.min.css" rel="stylesheet" />
+<link href="assets/styles/style.min.css" rel="stylesheet" />
+<link href="assets/styles/style-rtl.css" rel="stylesheet" />
+<link href="assets/styles/fonts.googleapis.css" rel="stylesheet" />
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>لوازم مازاد کارکنان</title>
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <style type="text/css">
+        .auto-style1 {
+            width: 100%;
+            height: 461px;
+            min-height:800px;
+        }
+        .auto-style6 {
+            height: auto;
+        }
+        .auto-style7 {
+            width: 100%;
+        }
+        .auto-style8 {
+            width: 831px;
+        }
+        .auto-style9 {
+            color: #666666;
+        }
+    </style>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div class="container">
+
+        <table class="auto-style1">
+            <tr>
+                <td class="auto-style3" style="background-color: #FFFFFF" >
+                    <table class="auto-style7">
+                        <tr>
+                            <td class="auto-style8">
+                                
+&nbsp;&nbsp;&nbsp;<asp:Button ID="Button1" runat="server" BorderStyle="None" Font-Names="Droid Arabic Naskh" Font-Size="16pt" ForeColor="#999999" style="background-color: #FFFFFF" Text=" آگهی جدید" />
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="Button4" runat="server" BorderStyle="None" Font-Names="Droid Arabic Naskh" Font-Size="16pt" ForeColor="#999999" style="background-color: #FFFFFF" Text="صفحه اصلی" />
+                            </td>
+                            <td>
+                                <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/Logo.jpg" />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="auto-style2">
+                    <table class="auto-style1">
+                        <tr>
+                            <td 
+                style="VERTICAL-ALIGN: top; TEXT-ALIGN: center; background-color: #E4E4E4;" class="auto-style6">
+                                
+                                              <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
+        
+        </asp:ContentPlaceHolder>
+                                
+                              </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td style="background-color: #FFFFFF; text-align: center;">
+                    <span class="auto-style9"> © 2023 <strong>سامانه پتروشیمی من</strong> 
+                        </span>
+                    &nbsp;</td>
+               </table>
+  
+    </div>
+       
+    
+    </form>
+</body>
+</html>

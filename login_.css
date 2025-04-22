@@ -1,0 +1,128 @@
+﻿html{
+	background-color:#e3e3e3;
+	text-align:center;
+    margin: 0px ;
+    padding:0px;
+    }
+body{
+    font: normal 0.7em/1.4em Tahoma, Verdana, Arial, Georgia, sans-serif; 
+    margin: 0px;
+    padding: 0px;
+    color: #e3e3e3;
+    }
+    .main_
+    {
+        width:960px;
+       height:804px;
+       margin:0px auto auto auto;
+       padding:0px;
+       text-align:right;
+       
+        }
+         .head_
+    {
+        width:960px;
+       height:200px;
+       margin:0px auto auto auto;
+       padding:0px;
+       text-align:right;
+       
+        }
+           .m_right
+    {
+        width:360px;
+       height:604px;
+       margin:0px 0px 0px auto;
+       padding:0px;
+       float:right;
+       text-align:center;
+        }
+           .m_left
+    {
+        width:600px;
+       height:604px;
+       margin:0px auto 0px  0px;
+       padding:0px;
+       float:left;
+       text-align:center;
+       
+        }
+        .scroller
+        {
+            border: 1px solid #bcbcbc;
+text-align:right;
+            vertical-align:middle;
+             width:504px;
+       height:604px;
+       margin:0px 50px 0px 50px;
+}
+         .login_d
+        {
+            width: 360px;
+            border-color: #bcbcbc; border-width: 1px; border-style: solid; background-color: #f4f4f4;
+            height:300px;
+        }
+          .user_img
+        {
+            width: 48px;
+         position:relative;
+            height:48px;
+    top: -23px;
+    left: 125px;
+    z-index:110;
+}
+.txt_
+{
+     border-color: #9a9a9a; border-width: 1px; border-style: solid; background-color: #ebebeb;
+     padding:0px 5px 0px 0px;
+     margin:0px;
+     color:Black;
+     text-align:right;
+    }
+    .lbl_
+{
+     color:Black;
+     text-align:right;
+    }
+    .r5 {
+  border-bottom-left-radius:5px 5px;
+  border-bottom-right-radius:5px 5px;
+  border-top-left-radius:5px 5px;
+  border-top-right-radius:5px 5px;
+    color: #003366;
+}
+.btn
+{
+     border: 1px solid #9a9a9a;
+    padding: 0px 5px 0px 0px;
+    color:Black;
+     text-align:center;
+     background-image:url('images/design_images/btn_blur.jpg');
+     background-repeat:repeat-x;
+     height:30px;
+     min-width:80px;
+    margin-left: 0px;
+    margin-right: 0px;
+    }
+    .btn:hover
+{
+   
+     background-image:url(images/design_images/btn_hover.jpg);
+     background-repeat:repeat-x;
+   cursor:pointer;
+     
+    }
+    .btn_l
+    {
+        margin-right:230px;
+        }
+        .sum_val
+        {
+            text-align:right;
+            margin-right:35px; 
+                      }
+ .pet_png
+ {
+     margin:50px 20px auto auto;
+     
+     }
