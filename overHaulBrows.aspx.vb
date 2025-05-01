@@ -108,8 +108,13 @@ Partial Class overHaulBrows
 
 
         Dim dt As New DataTable
-        Dim sqlstr As String
-        sqlstr = "SELECT * from overhaulBrowsVW"
+        Dim sqlstr As String = ""
+        If Session("unitID") = 19 Then
+            sqlstr = "SELECT * from overhaulBrowsVW"
+        Else
+            sqlstr = "SELECT * from overhaulBrowsVW omurID = " & Session("omurID") & " and kartablStat = 0 and State = 1"
+        End If
+
         dt = ClsDataTable.GetDataTable(sqlstr)
         ASPxGrvHead.DataSource = dt
         ASPxGrvHead.DataBind()

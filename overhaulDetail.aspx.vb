@@ -20,62 +20,343 @@ Imports Ionic.Zip
 Partial Class overhaulDetail
     Inherits System.Web.UI.Page
     Dim dtTicket As New DataTable
+    Dim sat As String = ClsDateTime.GetTimeNow
+    Dim tarix As String = ClsDateTime.GetDateNow
 
   
 
 
     Protected Sub Page_Load(sender As Object, e As System.EventArgs) Handles Me.Load
+
+
+        Dim strs As String = ""
+        strs = "SELECT        idDtl, sender, omurId, overhaulId, kartablStat         FROM overhaulKartablTbl " & _
+                  " WHERE(omurId = " & Session("omurID") & ")"
+
+        Dim dtts As New DataTable
+        dtts = ClsDataTable.GetDataTable(strs)
+
+        Dim senderr As Integer = 0
+
+        If dtts.Rows.Count > 0 Then
+
+            senderr = dtts.Rows(0).Item("sender").ToString()
+        End If
+
+        cmbRunevesht.SelectedValue = senderr
+
+
         loadItems()
-        PersonImage.ImageUrl = "~/Attachment/" & Nationality.Text & "/PersonalPic.jpg"
+        'PersonImage.ImageUrl = "~/Attachment/" & Nationality.Text & "/PersonalPic.jpg"
 
         If Not Page.IsPostBack Then
             LoadImages()
-        End If
-
-        'gridErja()
-        notes()
-        'load_grid_FAKTOR()
-        If Me.IsPostBack = False Then
-
             loadItems()
             loadcmbParaf()
-            loadComboRuneveshtTyp()
-        End If
-        If Session("from") = "user" Then
-            'btnWork.Visible = False
-            BtnCancel.Visible = False
 
-            'CheckFori.Enabled = False
+            PanelRunevest.Visible = True
+            loadComboRuneveshtTyp()
+            load_cmbRuneveshtUsers()
+
+        End If
+
+        gridErja()
+        notes()
+
+
+        ' برنامه ریزی
+        '       If Session("omurID") = 19 Then
+        '           PanelRunevest.Visible = True
+
+        '           ' پیمانکار
+        '       ElseIf Session("omurID") = 13 Then
+
+        '           PanelRunevest.Visible = False
+
+        '       Else
+        '           ' واحدها
+        '           PanelRunevest.Visible = False
+
+        '       End If
+
+
+        Dim sqlstr As String = "SELECT        omurId, overhaulId " & _
+    " FROM overhaulKartablTbl WHERE        (omurId = " & Session("omurID") & ") AND (overhaulId = " & Session("idOver") & ") AND ( kartablStat = 1 )"
+        Dim dt As New DataTable
+        dt = ClsDataTable.GetDataTable(sqlstr)
+        If dt.Rows.Count > 0 Then
+            BtnCancel.Visible = False
             btnOk.Visible = False
 
-            'cmbParaf.Visible = False
-            'btnParaf.Visible = False
-            CheckBoxRunevesht.Visible = False
-        ElseIf Session("from") = "admin" Then
+            PanelRunevest.Visible = True
+            'CmbruneveshtType.Visible = False
+            'lblruneveshtType.Visible = False
+            'GridView2.Columns.Item(2).Visible = False
+        Else
+
+            BtnCancel.Visible = True
             btnOk.Visible = True
 
-            'cmbParaf.Visible = True
-            'btnParaf.Visible = True
-            CheckBoxRunevesht.Visible = True
+            PanelRunevest.Visible = False
+        End If
+       
 
-        ElseIf Session("from") = "reciver" Then
-            btnOk.Visible = False
 
-            'cmbParaf.Visible = False
-            'btnParaf.Visible = False
-            CheckBoxRunevesht.Visible = True
-            btnOk.Visible = False
-            'btnWork.Visible = False
-            BtnCancel.Visible = False
+        '       Dim sqlstr2 As String = "SELECT        omurId, overhaulId " & _
+        '  " FROM overhaulKartablTbl WHERE        (omurId = 13) AND (overhaulId = " & Session("idOver") & ") AND ( kartablStat = 0 )"
+        '       Dim dt2 As New DataTable
+        '       dt2 = ClsDataTable.GetDataTable(sqlstr2)
+        '       If dt2.Rows.Count > 0 Then
+        '           BtnCancel.Visible = False
+        '           btnOk.Visible = False
+        '           'PanelRunevest.Visible = True
+        '           PanelRunevest.Visible = False
+        '           CmbruneveshtType.Visible = False
+        '           lblruneveshtType.Visible = False
+        '           GridView2.Columns.Item(2).Visible = False
+        '       End If
+
+        '       Dim sqlstr3 As String = "SELECT        omurId, overhaulId " & _
+        ' " FROM overhaulKartablTbl WHERE        (omurId = 19) AND (overhaulId = " & Session("idOver") & ") AND ( kartablStat = 1 )"
+        '       Dim dt3 As New DataTable
+        '       dt3 = ClsDataTable.GetDataTable(sqlstr3)
+        '       If dt3.Rows.Count > 0 And Session("omurID") = 19 Then
+        '           BtnCancel.Visible = True
+        '           btnOk.Visible = True
+        '           PanelRunevest.Visible = True
+        '       ElseIf dt3.Rows.Count > 0 And Session("omurID") = 13 Then
+        '           BtnCancel.Visible = False
+        '           btnOk.Visible = False
+        '           PanelRunevest.Visible = False
+        '       End If
+
+        '       Dim sqlstr6 As String = "SELECT        omurId, overhaulId " & _
+        '" FROM overhaulKartablTbl WHERE        (omurId = 19) AND (overhaulId = " & Session("idOver") & ") AND ( kartablStat = 0 )"
+        '       Dim dt6 As New DataTable
+        '       dt6 = ClsDataTable.GetDataTable(sqlstr6)
+        '       If dt6.Rows.Count > 0 And Session("omurID") = 19 Then
+        '           BtnCancel.Visible = False
+        '           btnOk.Visible = False
+        '           PanelRunevest.Visible = True
+        '       ElseIf dt6.Rows.Count > 0 And Session("omurID") = 13 Then
+        '           BtnCancel.Visible = False
+        '           btnOk.Visible = False
+        '           PanelRunevest.Visible = False
+        '       End If
+
+
+        '       Dim sqlstr4 As String = "SELECT        laterID  FROM            laterReciverTbl WHERE        (laterID = " & Session("idOver") & ")"
+        '       Dim dt4 As New DataTable
+        '       dt4 = ClsDataTable.GetDataTable(sqlstr4)
+        '       If dt4.Rows.Count > 0 And Session("omurID") = 13 Then
+        '           BtnCancel.Visible = False
+        '           btnOk.Visible = False
+        '           'PanelRunevest.Visible = True
+        '       End If
+
+        '       Dim sqlstr5 As String = "SELECT        omurId, overhaulId " & _
+        ' " FROM overhaulKartablTbl WHERE        (omurId <> 19) and (omurId <> 13) and (overhaulId = " & Session("idOver") & ") "
+        '       Dim dt5 As New DataTable
+        '       dt5 = ClsDataTable.GetDataTable(sqlstr5)
+        '       If dt5.Rows.Count = 0 And Session("omurID") = 13 Then
+        '           BtnCancel.Visible = False
+        '           btnOk.Visible = False
+        '           PanelRunevest.Visible = False
+        '       ElseIf dt5.Rows.Count = 0 And Session("omurID") = 19 Then
+
+        '           BtnCancel.Visible = False
+        '           btnOk.Visible = False
+        '           PanelRunevest.Visible = True
+        '       Else
+        '           BtnCancel.Visible = True
+        '           btnOk.Visible = True
+        '           PanelRunevest.Visible = False
+        '       End If
+    End Sub
+    Protected Sub btnOk_Click(sender As Object, e As EventArgs) Handles btnOk.Click
+        Dim sqlstr, sqlstr2, sqlstr3, sqlstr4, sqlstr5, sqlstr6, sqlstr7, str As String
+
+    
+
+        Dim saat As String = ClsDateTime.GetDateNow & " " & ClsDateTime.GetTimeNow
+
+        Dim payam As String = ""
+
+
+        payam = txtNazar.Text & "  تایید شد"
+
+        str = "SELECT        TOP (200) Id, sender, action, reciver, finish         FROM workTableGuidTbl " & _
+                  " WHERE(sender = " & Session("omurID") & ") AND (action = 1)"
+
+        Dim dtt As New DataTable
+        dtt = ClsDataTable.GetDataTable(str)
+        Dim reciver As Integer = 0
+
+        If dtt.Rows.Count > 0 Then
+
+            reciver = dtt.Rows(0).Item("reciver").ToString()
         End If
 
+        sqlstr7 = "INSERT INTO laterReciverTbl       (laterID, sender, reciverID, tarix, saat, matnErja)" & _
+                "VALUES        (" & Id.Text & ", " & Session("omurID") & ", " & reciver & ", '" & tarix & "', '" & sat & "', N'" & payam & "')"
 
+        sqlstr4 = " delete overhaulKartablTbl  where (overhaulId = " & Id.Text & ") and (omurId = " & Session("omurID") & ")"
+
+        sqlstr6 = "INSERT   INTO          overhaulKartablTbl( sender, omurId, overhaulId, kartablStat)         VALUES(" & Session("omurID") & "," & reciver & "," & Session("idOver") & ", 1)"
+
+        sqlstr = "  UPDATE RegisterOverhauls  SET   State = " & Session("omurID") & "  WHERE (Id = " & Session("idOver") & ") "
+
+
+        sqlstr2 = "INSERT INTO    overhaulCommentTbl ( IdOverhaul, notee, PerID, zaman) " & _
+                    " VALUES     (" & Session("idOver") & ", N'" & payam & "', " & Session("userid") & ", '" & saat & "')"
+
+        ''تایید برنامه ریزی
+        'If Session("omurID") = 19 Then
+        '    sqlstr = "  UPDATE RegisterOverhauls  SET   State = 2  WHERE (Id = " & Session("idOver") & ") "
+
+        '    sqlstr6 = "INSERT   INTO          overhaulKartablTbl(omurId, overhaulId, kartablStat)         VALUES(13," & Session("idOver") & ", 1)"
+
+        '    sqlstr7 = "INSERT INTO laterReciverTbl       (laterID, sender, reciverID, tarix, saat, matnErja)" & _
+        '         "VALUES        (" & Id.Text & ", " & Session("omurID") & ", 13, '" & tarix & "', '" & sat & "', N'" & payam & "')"
+
+        '    'تایید پیمانکار
+        'ElseIf Session("omurID") = 13 Then
+
+        '    sqlstr = "  UPDATE RegisterOverhauls  SET   State = 1  WHERE (Id = " & Session("idOver") & ") "
+
+        '    sqlstr3 = "INSERT   INTO          overhaulKartablTbl(omurId, overhaulId, kartablStat)         VALUES(19," & Session("idOver") & ", 1)"
+
+        '    sqlstr7 = "INSERT INTO laterReciverTbl       (laterID, sender, reciverID, tarix, saat, matnErja)" & _
+        '           "VALUES        (" & Id.Text & ", " & Session("omurID") & ", 19, '" & tarix & "', '" & sat & "', N'" & payam & "')"
+
+        'Else
+        '    'تایید واحدها
+        '    sqlstr = "  UPDATE RegisterOverhauls  SET   State = 3  WHERE (Id = " & Session("idOver") & ") "
+
+        '    sqlstr5 = "INSERT   INTO          overhaulKartablTbl(omurId, overhaulId, kartablStat)         VALUES(19," & Session("idOver") & ", 1)"
+
+        '    sqlstr7 = "INSERT INTO laterReciverTbl       (laterID, sender, reciverID, tarix, saat, matnErja)" & _
+        '           "VALUES        (" & Id.Text & ", " & Session("omurID") & ", 19, '" & tarix & "', '" & sat & "', N'" & payam & "')"
+
+        'End If
+
+
+
+
+        'sqlstr2 = "INSERT INTO    overhaulCommentTbl ( IdOverhaul, notee, PerID, zaman) " & _
+        '            " VALUES     (" & Session("idOver") & ", N'" & payam & "', " & Session("userid") & ", '" & saat & "')"
+
+
+
+            'Dim sqlstr8 As String = "SELECT       reciverID,sender,laterID  FROM            laterReciverTbl WHERE        (laterID = " & Session("idOver") & ") AND (reciverID = " & Session("omurID") & ")"
+            'Dim dt8 As New DataTable
+            'dt8 = ClsDataTable.GetDataTable(sqlstr8)
+            'Dim reciver As Integer
+            'If dt8.Rows.Count > 0 Then
+            '    reciver = dt8.Rows(0).Item("sender").ToString()
+
+            'Else
+            '    reciver = 19
+
+            'End If
+
+            'sqlstr7 = "INSERT INTO laterReciverTbl       (laterID, sender, reciverID, tarix, saat, matnErja)" & _
+            '       "VALUES        (" & Id.Text & ", " & Session("omurID") & ", " & reciver & ", '" & tarix & "', '" & sat & "', N'" & payam & "')"
+
+
+
+
+        'sqlstr4 = " delete overhaulKartablTbl  where (overhaulId = " & Id.Text & ") and (omurId = " & Session("omurID") & ")"
+
+
+
+
+
+            upStat(sqlstr4)
+            upStat(sqlstr)
+            upStat(sqlstr2)
+            upStat(sqlstr3)
+
+            upStat(sqlstr5)
+            upStat(sqlstr6)
+            upStat(sqlstr7)
+
+
+            notes()
+            loadItems()
+            gridErja()
 
     End Sub
+
+    Protected Sub BtnCancel_Click(sender As Object, e As EventArgs) Handles BtnCancel.Click
+
+        Dim sqlstr, sqlstr2, sqlstr3, sqlstr4, sqlstr6, sqlstr9 As String
+
+
+        Dim saat As String = ClsDateTime.GetDateNow & " " & ClsDateTime.GetTimeNow
+
+        Dim payam As String = ""
+
+
+        payam = txtNazar.Text & "  عدم تایید"
+
+
+        ' برنامه ریزی
+        If Session("omurID") = 19 Then
+            sqlstr = "  UPDATE RegisterOverhauls  SET   State = -2  WHERE (Id = " & Session("idOver") & ") "
+
+            sqlstr6 = "INSERT   INTO          overhaulKartablTbl(omurId, overhaulId, kartablStat)         VALUES(13," & Session("idOver") & ", 0)"
+
+            sqlstr9 = "INSERT INTO laterReciverTbl       (laterID, sender, reciverID, tarix, saat, matnErja)" & _
+                 "VALUES        (" & Id.Text & ", " & Session("omurID") & ", 13, '" & tarix & "', '" & sat & "', N'" & payam & "')"
+
+            ' پیمانکار
+        ElseIf Session("omurID") = 13 Then
+
+            sqlstr = "  UPDATE RegisterOverhauls  SET   State = -1  WHERE (Id = " & Session("idOver") & ") "
+
+
+        Else
+
+            sqlstr = "  UPDATE RegisterOverhauls  SET   State = -3  WHERE (Id = " & Session("idOver") & ") "
+
+            sqlstr6 = "INSERT   INTO          overhaulKartablTbl(omurId, overhaulId, kartablStat)         VALUES(19," & Session("idOver") & ", 0)"
+
+            sqlstr9 = "INSERT INTO laterReciverTbl       (laterID, sender, reciverID, tarix, saat, matnErja)" & _
+                  "VALUES        (" & Id.Text & ", " & Session("omurID") & ", 19, '" & tarix & "', '" & sat & "', N'" & payam & "')"
+
+            ' واحدها
+          
+
+        End If
+
+        sqlstr4 = " delete overhaulKartablTbl  where (overhaulId = " & Id.Text & ") and (omurId = " & Session("omurID") & ")"
+
+
+
+
+        sqlstr2 = "INSERT INTO    overhaulCommentTbl ( IdOverhaul, notee, PerID, zaman) " & _
+                    " VALUES     (" & Session("idOver") & ", N'" & payam & "', " & Session("userid") & ", '" & saat & "')"
+
+        sqlstr3 = "INSERT INTO smsTbl                  (mobile, message, tarix, saat)" & _
+          "VALUES     ('" & Mobile.Text & "', N'تایید نشد', '" & ClsDateTime.GetDateNow() & "', '" & ClsDateTime.GetTimeNow() & "')"
+
+        upStat(sqlstr4)
+        upStat(sqlstr)
+        upStat(sqlstr6)
+        
+        upStat(sqlstr2)
+        upStat(sqlstr3)
+        upStat(sqlstr9)
+        notes()
+        loadItems()
+        gridErja()
+    End Sub
+
     Private Sub LoadImages()
         Dim folder = "~/Attachment/" & Nationality.Text & "/"
         Dim folderPath = Server.MapPath(folder)
-        Dim files = Directory.GetFiles(folderPath).Take(6).ToList()
+        Dim files = Directory.GetFiles(folderPath).Take(7).ToList()
 
         Dim images = files.Select(Function(f) New With {
             Key .Url = ResolveUrl(folder & Path.GetFileName(f)),
@@ -89,7 +370,7 @@ Partial Class overhaulDetail
 
     Protected Sub btnDownloadZip_Click(sender As Object, e As EventArgs) Handles btnDownloadZip.Click
         Dim folderPath As String = Server.MapPath("~/Attachment/" & Nationality.Text & "/")
-        Dim files = Directory.GetFiles(folderPath).Take(6).ToList() ' همون فایل‌هایی که توی صفحه نشون دادی
+        Dim files = Directory.GetFiles(folderPath).Take(7).ToList()
 
         Response.Clear()
         Response.BufferOutput = False
@@ -110,38 +391,10 @@ Partial Class overhaulDetail
     End Sub
 
 
-    Sub gridErja()
-        Dim dt2 As New DataTable
 
-        Dim sqlstr As String = ""
-        If Session("from") = "user" Then
-            sqlstr = " SELECT        girande,tarix, saat, matnErja, erja, aslRuneveshtType, actionId, nam + ' ' + family AS ferestande, runeveshtTypeValue " & _
-   "FROM sugReciverVW WHERE        (sender = " & Session("userID") & ") AND (laterID = " & Session("sugID") & ") "
-        ElseIf Session("from") = "admin" Then
-            sqlstr = " SELECT        girande,tarix, saat, matnErja, erja, aslRuneveshtType, actionId, nam + ' ' + family AS ferestande, runeveshtTypeValue " & _
-  "FROM sugReciverVW WHERE        (laterID = " & Session("sugID") & ") "
-        ElseIf Session("from") = "reciver" Then
-            sqlstr = " SELECT        girande,tarix, saat, matnErja, erja, aslRuneveshtType, actionId, nam + ' ' + family AS ferestande, runeveshtTypeValue " & _
-     "FROM sugReciverVW WHERE        (reciverID = " & Session("userID") & ") AND (laterID = " & Session("sugID") & ") "
-        End If
-
-
-
-
-        dt2 = ClsDataTable.GetDataTable(sqlstr)
-        If dt2.Rows.Count > 0 Then
-            'PanelErja.Visible = True
-            GridViewErja.DataSource = dt2
-            GridViewErja.DataBind()
-        End If
-
-
-    End Sub
     Sub notes()
         Dim dt2 As New DataTable
         Dim sqlstr As String = " SELECT       ID, codePersoneli, headd, IdOverhaul, notee, note_id, REPLACE([pic ], ' ', '') AS picc from overhaulCommentVW WHERE        (IdOverhaul = " & Session("idOver") & ")  ORDER BY note_id DESC"
-
-
 
         dt2 = ClsDataTable.GetDataTable(sqlstr)
         If dt2.Rows.Count > 0 Then
@@ -242,21 +495,67 @@ Partial Class overhaulDetail
         ' ClientScript.RegisterStartupScript(Me.GetType(), "myalert", "alert('" + sb.ToString + "');", True)
     End Sub
 
-
-
     Private Sub loadComboRuneveshtTyp()
-        Dim sqlstr As String = "SELECT        TOP (200) runevestTypeID, runeveshtTypeValue, runeveshtTypeStat, visibile " & _
-       " FROM laterRuneveshtTypeTbl WHERE        (visibile = 1)"
-        Dim dt As New DataTable
-        dt = ClsDataTable.GetDataTable(sqlstr)
-        CmbruneveshtType.DataSource = dt
-        CmbruneveshtType.DataTextField = "runeveshtTypeValue"
-        CmbruneveshtType.DataValueField = "runevestTypeID"
-        CmbruneveshtType.DataBind()
+        Dim dtm As New DataTable
+        Dim sqlstr As String = ""
+        sqlstr = "SELECT        Title + N' دستمزد روزانه '+ FORMAT(Price, 'N0') + N' ریال ' AS cahrt, chartId " & _
+     "FROM overhaulChartTbl WHERE        (isActive  = 1)   ORDER BY chartId"
+        'End If
 
+        dtm = ClsDataTable.GetDataTable(sqlstr)
+        CmbruneveshtType.DataSource = dtm
+        CmbruneveshtType.TextField = "cahrt"
+        CmbruneveshtType.ValueField = "chartId"
+        CmbruneveshtType.DataBind()
+    End Sub
+
+    Private Sub load_cmbRuneveshtUsers()
+        Dim dtm As New DataTable
+        Dim sqlstr As String = ""
+
+        'If Session("from") = "admin" Then
+        sqlstr = "SELECT     omurID, omur         FROM omurTbl " & _
+                  " WHERE     (overhaul = 1) AND (CodeClosed = 0) ORDER BY omur"
+        'Else
+        '      sqlstr = "SELECT        nam + ' ' + family +  ' - ' + postname AS karbar, ID " & _
+        '"FROM omurTbl WHERE        (CodeClosed = 0) AND (overhaul = 1)  ORDER BY family"
+        'End If
+
+        dtm = ClsDataTable.GetDataTable(sqlstr)
+        cmbRunevesht.DataSource = dtm
+        cmbRunevesht.DataTextField = "omur"
+        cmbRunevesht.DataValueField = "omurID"
+        cmbRunevesht.DataBind()
 
     End Sub
 
+    Sub gridErja()
+        Dim dt2 As New DataTable
+
+        Dim sqlstr As String = ""
+        'If Session("from") = "user" Then
+        '         sqlstr = " SELECT        girande,tarix, saat, matnErja, erja, aslRuneveshtType, actionId, nam + ' ' + family AS ferestande, runeveshtTypeValue " & _
+        '"FROM sugReciverVW WHERE        (sender = " & Session("userID") & ") AND (laterID = " & Session("sugID") & ") "
+        '     ElseIf Session("from") = "admin" Then
+        sqlstr = " SELECT        girande,tarix, saat, matnErja, ferestande,FormattedNumber " & _
+"FROM overhalErjatVW WHERE        (laterID = " & Id.Text & ") "
+        '   ElseIf Session("from") = "reciver" Then
+        '       sqlstr = " SELECT        girande,tarix, saat, matnErja, erja, aslRuneveshtType, actionId, nam + ' ' + family AS ferestande, runeveshtTypeValue " & _
+        '"FROM sugReciverVW WHERE        (reciverID = " & Session("userID") & ") AND (laterID = " & Session("sugID") & ") "
+        'End If
+
+
+
+
+        dt2 = ClsDataTable.GetDataTable(sqlstr)
+        If dt2.Rows.Count > 0 Then
+            'PanelErja.Visible = True
+            GridViewErja.DataSource = dt2
+            GridViewErja.DataBind()
+        End If
+
+
+    End Sub
 
     Private Sub loadcmbParaf()
         Dim dtg As New DataTable
@@ -270,8 +569,6 @@ Partial Class overhaulDetail
         'cmbParaf.DataBind()
 
     End Sub
-
-
 
     Private Sub upStat(sqlstr As String)
         Dim cnn As New SqlConnection
@@ -294,7 +591,7 @@ Partial Class overhaulDetail
     Private Sub loadItems()
         Dim dt As DataTable
 
-        Dim sqlstrr As String = "SELECT *  FROM   overhaulBrowsVW WHERE        (Id = " & Session("idOver") & ")"
+        Dim sqlstrr As String = "SELECT *  FROM   overhaulAllVW WHERE        (Id = " & Session("idOver") & ")"
         dt = ClsDataTable.GetDataTable(sqlstrr)
         If dt.Rows.Count > 0 Then
 
@@ -314,54 +611,27 @@ Partial Class overhaulDetail
             PostalCode.Text = dt.Rows(0).Item("PostalCode")
             Address.Text = dt.Rows(0).Item("Address")
             Degree.Text = dt.Rows(0).Item("madrak")
-            Major.Text = dt.Rows(0).Item("FieldOfStudy")
+            Major.Text = dt.Rows(0).Item("reshte")
             'State.Text = dt.Rows(0).Item("IsLastOverhaul")
-            tahol.Text = dt.Rows(0).Item("tahol")
+            tahol.Text = dt.Rows(0).Item("martialStatus")
 
-            xedmat.Text = dt.Rows(0).Item("xedmat")
+            xedmat.Text = dt.Rows(0).Item("MilitaryName")
             isargari.Text = dt.Rows(0).Item("isargari")
-
-
+            IsLastOverhaul.Text = dt.Rows(0).Item("overhalHistory").ToString()
+            JobPosition.Text = dt.Rows(0).Item("JobPosition").ToString()
+            bime.Text = dt.Rows(0).Item("bime").ToString()
+            province.Text = dt.Rows(0).Item("province").ToString()
+            city.Text = dt.Rows(0).Item("city").ToString()
+            'oldPersoelCode.Text = "-"
+            EducationalOrientation.Text = dt.Rows(0).Item("EducationalOrientation").ToString()
+            lblStatus.Text = dt.Rows(0).Item("Title").ToString()
 
 
         End If
     End Sub
 
 
-
-
-
-
-
-
-    'Protected Sub btnWork_Click(sender As Object, e As EventArgs) Handles btnWork.Click
-    '    Dim sqlstr, sqlstr2 As String
-
-    '    sqlstr = "  UPDATE sugTbl  SET   sugStatusID = 4  WHERE (sugID = " & Session("sugID") & ") "
-    '    Dim saat As String = ClsDateTime.GetDateNow & " " & ClsDateTime.GetTimeNow
-
-    '    Dim payam As String = ""
-
-
-    '    payam = txtNazar.Text & " نیاز به توضیحات بیشتر"
-
-
-    '    sqlstr2 = "INSERT INTO    sugCommentTbl ( sugID, notee, PerID, zaman) " & _
-    '                " VALUES     (" & Session("sugID") & ", N'" & payam & "', " & Session("userid") & ", '" & saat & "')"
-    '    upStat(sqlstr)
-    '    upStat(sqlstr2)
-    '    notes()
-    'End Sub
-
-    'Protected Sub btnParaf_Click(sender As Object, e As EventArgs) Handles btnParaf.Click
-    '    'If cmbParaf.SelectedIndex < 0 Then
-    '    '    msg_box("لطفا پاراف خود را تنظیم نمایید")
-    '    '    Exit Sub
-    '    'End If
-    '    'txtNazar.Text = txtNazar.Text & " " & cmbParaf.SelectedItem.ToString
-    'End Sub
-
-
+    
 
     Protected Sub btnNazar_Click(sender As Object, e As EventArgs) Handles btnNazar.Click
         save_final()
@@ -369,125 +639,69 @@ Partial Class overhaulDetail
         txtNazar.Text = ""
     End Sub
 
-
-
     Protected Sub ImageButton1_Click(sender As Object, e As EventArgs) Handles ImageButton1.Click
         Session("idOver") = 0
         'If Session("from") = "user" Then
         '    Response.Redirect("sugMyWorkTableFrm.aspx")
-        'ElseIf Session("from") = "admin" Then
-        '    Response.Redirect("sugWorkTableAllFrm.aspx")
-
-        'ElseIf Session("from") = "reciver" Then
-        '    Response.Redirect("sugWorkTableFrm.aspx")
-        'End If
-        Response.Redirect("overhaulBrowseAdmin.aspx")
-
-
-    End Sub
-
-
-
-
-
-    Protected Sub CheckBoxRunevesht_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxRunevesht.CheckedChanged
-        If CheckBoxRunevesht.Checked = True Then
-            PanelRunevest.Visible = True
-
-            load_cmbRuneveshtUsers()
-
-            'PanelAttach.Visible = True
-            'btnPuyesh.Visible = True
-
+        If Session("omurID") = 13 Then
+            Response.Redirect("overhaulReportFrm.aspx")
 
         Else
-            PanelRunevest.Visible = False
-            'PanelAttach.Visible = False
-            'btnPuyesh.Visible = False
-
-        End If
-    End Sub
-    Private Sub load_cmbRuneveshtUsers()
-        Dim dtm As New DataTable
-        Dim sqlstr As String = ""
-
-        If Session("from") = "admin" Then
-            sqlstr = "SELECT        nam + ' ' + family +  ' - ' + postname AS karbar, ID " & _
-        "FROM personel WHERE        (CodeClosed = 0) AND (modir = 1)  ORDER BY family"
-        Else
-            sqlstr = "SELECT        nam + ' ' + family +  ' - ' + postname AS karbar, ID " & _
-      "FROM personel WHERE        (CodeClosed = 0) AND (UnitsCode = " & Session("unitID") & ")  ORDER BY family"
+            Response.Redirect("overhaulBrowseAdmin.aspx")
         End If
 
-        dtm = ClsDataTable.GetDataTable(sqlstr)
-        cmbRunevesht.DataSource = dtm
-        cmbRunevesht.TextField = "karbar"
-        cmbRunevesht.ValueField = "ID"
-        cmbRunevesht.DataBind()
+
 
     End Sub
+
+   
+    
 
     Protected Sub btnSaveFinal_Click(sender As Object, e As EventArgs) Handles btnSaveFinal.Click
-        If cmbRunevesht.Value = 0 Then
+        If cmbRunevesht.SelectedValue = 0 Then
             cmbRunevesht.Focus()
             msg_box("لطفا گیرنده را انتخاب نمایید")
 
             Exit Sub
         Else
 
-            If Val(hdn_tmp.Value) = 0 Then
-                save_Erja2()
+            'If Val(hdn_tmp.Value) = 0 Then
+            save_Erja2()
 
-            Else
-                save_Erja()
-            End If
-
-
+            'End If
 
             Dim payam As String = ""
-            If Session("from") = "admin" Then
-                payam = txtNazar.Text & " پیشنهاد ارجاع شد به کمیته مربوطه"
-            ElseIf Session("from") = "reciver" Then
-                payam = txtNazar.Text & " پیشنهاد ارجاع شد به کارشناس مربوطه"
-            End If
+
+            payam = txtNazar.Text & " پرونده ارجاع شد به " & cmbRunevesht.Text
+            'End If
 
             Dim sqlstr As String = ""
 
             Dim sqlstr2 As String = ""
+
             Dim saat As String = ClsDateTime.GetDateNow & " " & ClsDateTime.GetTimeNow
 
-            If Session("from") = "user" Then
-                sqlstr = "  UPDATE sugTbl  SET   sugStatusID = 8 WHERE (sugID = " & Session("sugID") & ") "
+            'sqlstr = "  UPDATE RegisterOverhauls  SET   State = " & cmbRunevesht.Value & " WHERE (Id = " & Session("idOver") & ") "
 
 
-            End If
-
-
-
-
-            If Session("from") = "admin" Then
-                sqlstr = "  UPDATE sugTbl  SET   sugStatusID = 9 WHERE (sugID = " & Session("sugID") & ") "
+            If Session("omurID") = 19 Then
+                sqlstr = "  UPDATE RegisterOverhauls  SET   State = 199 WHERE (Id = " & Session("idOver") & ") "
 
             End If
 
-            If Session("from") = "reciver" And Session("modir") = True Then
-                sqlstr = "  UPDATE sugTbl  SET   sugStatusID = 10 WHERE (sugID = " & Session("sugID") & ") "
-            End If
+            'If Session("omurID") = 13 Then
+            '    sqlstr = "  UPDATE RegisterOverhauls  SET   State = 9  WHERE (Id = " & Session("idOver") & ") "
 
-            If Session("from") = "reciver" And Session("modir") = False Then
-                sqlstr = "  UPDATE sugTbl  SET   sugStatusID = 11 WHERE (sugID = " & Session("sugID") & ") "
-            End If
+            'End If
 
-
-
-
-
-            sqlstr2 = "INSERT INTO    sugCommentTbl ( sugID, notee, PerID, zaman) " & _
-                        " VALUES     (" & Session("sugID") & ", N'" & payam & "', " & Session("userid") & ", '" & saat & "')"
+            sqlstr2 = "INSERT INTO    overhaulCommentTbl ( IdOverhaul, notee, PerID, zaman) " & _
+                        " VALUES     (" & Id.Text & ", N'" & payam & "', " & Session("userid") & ", '" & saat & "')"
             upStat(sqlstr)
             upStat(sqlstr2)
-            notes()
 
+            loadItems()
+            notes()
+            gridErja()
         End If
     End Sub
     Private Sub save_Erja2()
@@ -501,13 +715,13 @@ Partial Class overhaulDetail
             cmm.CommandType = CommandType.StoredProcedure
 
             cmm.Parameters.Add("@laterID", SqlDbType.Int)
-            cmm.Parameters("@laterID").Value = Session("sugID")
+            cmm.Parameters("@laterID").Value = Id.Text
 
             cmm.Parameters.Add("@reciverID", SqlDbType.Int, 5)
-            cmm.Parameters("@reciverID").Value = Val(cmbRunevesht.Value)
+            cmm.Parameters("@reciverID").Value = Val(cmbRunevesht.SelectedValue)
 
             cmm.Parameters.Add("@sender", SqlDbType.Int, 10)
-            cmm.Parameters("@sender").Value = Session("UserId")
+            cmm.Parameters("@sender").Value = Session("omurID")
 
             cmm.Parameters.Add("@matnErja", SqlDbType.NVarChar, 2000)
             cmm.Parameters("@matnErja").Value = txtMatnErja.Text
@@ -526,7 +740,7 @@ Partial Class overhaulDetail
             cmm.ExecuteNonQuery()
             result = cmm.Parameters("@ResultCode").Value
             If result = 0 Then
-                msg_box(" پیشنهاد باموفقیت ارجاع داده شد ")
+                msg_box(" پرونده باموفقیت ارجاع داده شد ")
                 '  Call save_()
                 btnSaveFinal.Visible = False
                 PanelRunevest.Enabled = False
@@ -537,7 +751,7 @@ Partial Class overhaulDetail
                 'btnWork.Enabled = False
                 BtnCancel.Enabled = False
 
-                ' load_grid()
+                'load_grid()
             Else
                 msg_box(cmm.Parameters("@pm").Value)
             End If
@@ -547,84 +761,20 @@ Partial Class overhaulDetail
 
 
     End Sub
-    Private Sub save_Erja()
+    
 
-        Dim cnn As New SqlConnection
-        cnn.ConnectionString = ClsConnection.GetConn
-        cnn.Open()
-        Dim cmm As New SqlCommand
-        Try
-            cmm.CommandText = "laterSaveErjaPrc"
-            cmm.CommandType = CommandType.StoredProcedure
-
-            cmm.Parameters.Add("@laterID", SqlDbType.Int)
-            cmm.Parameters("@laterID").Value = Session("sugID")
-
-            'cmm.Parameters.Add("@reciverID", SqlDbType.Int, 5)
-            'cmm.Parameters("@reciverID").Value = Val(cmbRunevesht.Value)
-
-            'cmm.Parameters.Add("@sender", SqlDbType.Int, 10)
-            'cmm.Parameters("@sender").Value = Session("UserId")
-
-            'cmm.Parameters.Add("@matnErja", SqlDbType.NVarChar, 2000)
-            'cmm.Parameters("@matnErja").Value = txtMatnErja.Text
-
-            cmm.Parameters.Add("@tempID", SqlDbType.Int, 5)
-            cmm.Parameters("@tempID").Value = Val(hdn_tmp.Value)
-
-            cmm.Parameters.Add("@pm", SqlDbType.NVarChar, 500)
-            cmm.Parameters("@pm").Direction = ParameterDirection.Output
-
-            cmm.Parameters.Add("@ResultCode", SqlDbType.TinyInt, 3)
-            cmm.Parameters("@ResultCode").Direction = ParameterDirection.Output
-            cmm.Connection = cnn
-
-            Dim result As Integer
-            cmm.ExecuteNonQuery()
-            result = cmm.Parameters("@ResultCode").Value
-            If result = 0 Then
-                msg_box(" پیشنهاد باموفقیت ارجاع داده شد ")
-                '  Call save_()
-                btnSaveFinal.Visible = False
-                PanelRunevest.Enabled = False
-                ' load_grid()
-            Else
-                msg_box(cmm.Parameters("@pm").Value)
-            End If
-        Catch ex As Exception
-            msg_box(ex.Message.ToString)
-        End Try
-
-
-    End Sub
-
-    Protected Sub BtnCancel_Click(sender As Object, e As EventArgs) Handles BtnCancel.Click
-
-        Dim sqlstr, sqlstr2, sqlstr3 As String
-
-        sqlstr = "  UPDATE RegisterOverhauls  SET   State = 5  WHERE (Id = " & Session("idOver") & ") "
-        Dim saat As String = ClsDateTime.GetDateNow & " " & ClsDateTime.GetTimeNow
-
-        Dim payam As String = ""
-
-
-        payam = txtNazar.Text & "  عدم تایید"
-
-
-        sqlstr2 = "INSERT INTO    overhaulCommentTbl ( IdOverhaul, notee, PerID, zaman) " & _
-                    " VALUES     (" & Session("idOver") & ", N'" & payam & "', " & Session("userid") & ", '" & saat & "')"
-
-        sqlstr3 = "INSERT INTO smsTbl                  (mobile, message, tarix, saat)" & _
-          "VALUES     ('" & Mobile.Text & "', N'تایید نشد', '" & ClsDateTime.GetDateNow() & "', '" & ClsDateTime.GetTimeNow() & "')"
-        upStat(sqlstr)
-        upStat(sqlstr2)
-        upStat(sqlstr3)
-        notes()
-
-    End Sub
+    
 
     Protected Sub btnRunevesht_Click(sender As Object, e As EventArgs) Handles btnRunevesht.Click
-        If cmbRunevesht.Value = 0 Then
+
+        If Session("omurID") <> 19 And Session("omurID") <> 13 And Val(CmbruneveshtType.Value) = 0 Then
+
+            msg_box("لطفا چارت پیشنهادی  را انتخاب نمایید")
+            CmbruneveshtType.Focus()
+            Exit Sub
+        End If
+
+        If cmbRunevesht.SelectedValue = 0 Then
             cmbRunevesht.Focus()
             msg_box("لطفا گیرنده  را انتخاب نمایید")
 
@@ -642,8 +792,6 @@ Partial Class overhaulDetail
     End Sub
     Private Sub save_tmp(ByVal INOUT As Boolean, ByVal IsDel As Boolean)
 
-
-
         Dim cnn As New SqlConnection
         cnn.ConnectionString = ClsConnection.GetConn
         cnn.Open()
@@ -656,19 +804,19 @@ Partial Class overhaulDetail
             cmm.Parameters("@tempID").Value = Val(hdn_tmp.Value)
 
             cmm.Parameters.Add("@reciverID", SqlDbType.Int, 5)
-            cmm.Parameters("@reciverID").Value = Val(cmbRunevesht.Value)
+            cmm.Parameters("@reciverID").Value = Val(cmbRunevesht.SelectedValue)
 
             cmm.Parameters.Add("@laterID", SqlDbType.Int)
-            cmm.Parameters("@laterID").Value = Session("sugID")
+            cmm.Parameters("@laterID").Value = Id.Text
 
             cmm.Parameters.Add("@sender", SqlDbType.Int, 10)
-            cmm.Parameters("@sender").Value = Session("UserId")
+            cmm.Parameters("@sender").Value = Session("omurID")
 
             cmm.Parameters.Add("@matnErja", SqlDbType.NVarChar, 2000)
             cmm.Parameters("@matnErja").Value = txtMatnErja.Text
 
             cmm.Parameters.Add("@runevestTypeID", SqlDbType.Int, 10)
-            cmm.Parameters("@runevestTypeID").Value = CmbruneveshtType.SelectedValue
+            cmm.Parameters("@runevestTypeID").Value = Val(CmbruneveshtType.Value)
 
             cmm.Parameters.Add("@pm", SqlDbType.NVarChar, 500)
             cmm.Parameters("@pm").Direction = ParameterDirection.Output
@@ -726,10 +874,6 @@ Partial Class overhaulDetail
         End If
     End Sub
 
-
-
-
-
     Protected Sub CheckBoxAttach_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxAttach.CheckedChanged
         If CheckBoxAttach.Checked = True Then
             'UpdatePanel1.Visible = True
@@ -747,24 +891,5 @@ Partial Class overhaulDetail
         End If
     End Sub
 
-
-
-    Protected Sub btnOk_Click(sender As Object, e As EventArgs) Handles btnOk.Click
-        Dim sqlstr, sqlstr2 As String
-
-        sqlstr = "  UPDATE RegisterOverhauls  SET   State = 1  WHERE (Id = " & Session("idOver") & ") "
-        Dim saat As String = ClsDateTime.GetDateNow & " " & ClsDateTime.GetTimeNow
-
-        Dim payam As String = ""
-
-
-        payam = txtNazar.Text & "  تایید شد"
-
-
-        sqlstr2 = "INSERT INTO    overhaulCommentTbl ( IdOverhaul, notee, PerID, zaman) " & _
-                    " VALUES     (" & Session("idOver") & ", N'" & payam & "', " & Session("userid") & ", '" & saat & "')"
-        upStat(sqlstr)
-        upStat(sqlstr2)
-        notes()
-    End Sub
+ 
 End Class

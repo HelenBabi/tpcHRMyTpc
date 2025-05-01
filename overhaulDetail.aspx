@@ -102,91 +102,230 @@
         }
     </style>
 
-
+    <div class="card mb-3">
+  <div class="card-header bg-primary text-white">ارجاعات</div>
+  <div class="card-body">
+     <asp:GridView ID="GridViewErja" runat="server" AutoGenerateColumns="False" 
+                                        Font-Size="10pt" TabIndex="12" Width="100%" style="color: #000000" 
+                                        CellPadding="3" ForeColor="Black" GridLines="Vertical" CssClass="table" BackColor="White" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px">
+                                        <AlternatingRowStyle BackColor="#CCCCCC" />
+                                        <Columns>
+                                            <asp:BoundField DataField="ferestande" HeaderText="فرستنده" >
+                                            <HeaderStyle HorizontalAlign="Center" />
+                                            <ItemStyle HorizontalAlign="Right" />
+                                            </asp:BoundField>
+                                            <asp:BoundField DataField="girande" HeaderText="گیرنده" />
+                                            <asp:BoundField DataField="FormattedNumber" HeaderText="چارت پیشنهادی" />
+                                           
+                                            <asp:BoundField DataField="matnErja" HeaderText="متن ارجاع">
+                                            <HeaderStyle HorizontalAlign="Center" />
+                                            <ItemStyle HorizontalAlign="Right" />
+                                            </asp:BoundField>
+                                           
+                                            <asp:BoundField DataField="tarix" HeaderText="تاریخ ارجاع" />
+                                            <asp:BoundField DataField="saat" HeaderText="ساعت" />
+                                           
+                                        </Columns>
+                                        <FooterStyle BackColor="#CCCCCC" />
+                                        <HeaderStyle BackColor="Black" Font-Bold="True" ForeColor="White" />
+                                        <PagerStyle BackColor="#999999" ForeColor="Black" HorizontalAlign="Center" />
+                                        <SelectedRowStyle BackColor="#000099" Font-Bold="True" ForeColor="White" />
+                                        <SortedAscendingCellStyle BackColor="#F1F1F1" />
+                                        <SortedAscendingHeaderStyle BackColor="#808080" />
+                                        <SortedDescendingCellStyle BackColor="#CAC9C9" />
+                                        <SortedDescendingHeaderStyle BackColor="#383838" />
+                                    </asp:GridView>
+  </div>
+</div>
          <!-- دکمه چاپ -->
-        <div class="no-print">
+       <%-- <div class="no-print">
             <asp:Button ID="btnPrint" runat="server" Text="چاپ فرم" CssClass="btn btn-success"
                 OnClientClick="window.print(); return false;" />
-        </div>
-     <div class="print-area">
-            <div class="print-header">
-                <div class="header-title">فرم اطلاعات متقاضی</div>
-                <div class="photo-box">
-                    <asp:Image ID="PersonImage" runat="server" ImageUrl="~/Images/NoImage.png" />
-                </div>
-            </div>
+        </div>--%>
 
-            <table class="info-table">
-                <tr>
-                    <td>کد پیگیری</td>
-                    <td><asp:Label ID="Id" runat="server" /></td>
-                    <td>نام</td>
-                    <td><asp:Label ID="FirstName" runat="server" /></td>
-                    <td>نام خانوادگی</td>
-                    <td><asp:Label ID="LastName" runat="server" /></td>
-                </tr>
-                <tr>
-                    <td>نام پدر</td>
-                    <td><asp:Label ID="FatherName" runat="server" /></td>
-                    <td>کد ملی</td>
-                    <td><asp:Label ID="Nationality" runat="server" /></td>
-                    <td>شماره شناسنامه</td>
-                    <td><asp:Label ID="ShSh" runat="server" /></td>
-                </tr>
-                <tr>
-                    <td>تاریخ تولد</td>
-                    <td><asp:Label ID="BirthDay" runat="server" /></td>
-                    <td>شماره کارت</td>
-                    <td><asp:Label ID="BankCardNo" runat="server" /></td>
-                    <td>شماره حساب</td>
-                    <td><asp:Label ID="IBAN" runat="server" /></td>
-                </tr>
-                <tr>
-                    <td>شماره بیمه</td>
-                    <td><asp:Label ID="SSN" runat="server" /></td>
-                    <td>موبایل</td>
-                    <td><asp:Label ID="Mobile" runat="server" /></td>
-                    <td>تلفن ثابت</td>
-                    <td><asp:Label ID="Tell" runat="server" /></td>
-                </tr>
-                <tr>
-                    <td>کد پستی</td>
-                    <td><asp:Label ID="PostalCode" runat="server" /></td>
-                    <td>مدرک</td>
-                    <td><asp:Label ID="Degree" runat="server" /></td>
-                    <td>رشته تحصیلی</td>
-                    <td><asp:Label ID="Major" runat="server" /></td>
-                </tr>
-                <tr>
-                    <td>وضعیت تاهل</td>
-                    <td><asp:Label ID="tahol" runat="server" /></td>
-                    <td>وضعیت نظام وظیفه</td>
-                    <td><asp:Label ID="xedmat" runat="server" /></td>
-                    <td>سابقه ایثارگری</td>
-                    <td><asp:Label ID="isargari" runat="server" /></td>
-                </tr>
-                <tr>
-                    <td>آدرس</td>
-                    <td colspan="5"><asp:Label ID="Address" runat="server" /></td>
-                </tr>
-            </table>
-        </div>
-
-      <br />
-<div class="row my-3">
-    <div class="col-md-4 mb-2">
-        <asp:Button ID="btnOk" runat="server" CssClass="btn btn-success btn-sm w-100" 
-            Text=' تایید می‌شود' />
-    </div>
-    <div class="col-md-4 mb-2">
-        <asp:Button ID="BtnCancel" runat="server" CssClass="btn btn-danger btn-sm w-100" 
-            Text=' تایید نمی‌شود' />
-    </div>
-     <div class="col-md-4 mb-2">
-          <asp:CheckBox ID="CheckBoxAttach" runat="server" CssClass="form-check-input" AutoPostBack="True" />
-      <label class="form-check-label fw-bold text-dark" for="CheckBoxAttach">مشاهده ضمایم</label>
-         </div>
+    
+     <div class="print-area" style="width:100%">
+    <div class="print-header">
+        <div class="header-title">            
 </div>
+        <%--<div class="photo-box">
+            <asp:Image ID="PersonImage" runat="server" ImageUrl="~/Images/NoImage.png" />
+        </div>--%>
+        
+    </div>
+
+    <table class="info-table" style="width:100%">
+        <tr>
+            <td>کد پیگیری</td>
+            <td><asp:Label ID="Id" runat="server" /></td>
+            <td>نام</td>
+            <td><asp:Label ID="FirstName" runat="server" /></td>
+            <td>نام خانوادگی</td>
+            <td><asp:Label ID="LastName" runat="server" /></td>
+        </tr>
+        <tr>
+            <td>نام پدر</td>
+            <td><asp:Label ID="FatherName" runat="server" /></td>
+            <td>کد ملی</td>
+            <td><asp:Label ID="Nationality" runat="server" /></td>
+            <td>شماره شناسنامه</td>
+            <td><asp:Label ID="ShSh" runat="server" /></td>
+        </tr>
+        <tr>
+            <td>تاریخ تولد</td>
+            <td><asp:Label ID="BirthDay" runat="server" /></td>
+            <td>شماره کارت</td>
+            <td><asp:Label ID="BankCardNo" runat="server" /></td>
+            <td>شماره حساب</td>
+            <td><asp:Label ID="IBAN" runat="server" /></td>
+        </tr>
+        <tr>
+            <td>نوع بیمه</td>
+            <td><asp:Label ID="bime" runat="server" /></td>
+            <td>شماره بیمه</td>
+            <td><asp:Label ID="SSN" runat="server" /></td>
+            <td>موبایل</td>
+            <td><asp:Label ID="Mobile" runat="server" /></td>
+        </tr>
+        <tr>
+            <td>تلفن ثابت</td>
+            <td><asp:Label ID="Tell" runat="server" /></td>
+            <td>کد پستی</td>
+            <td><asp:Label ID="PostalCode" runat="server" /></td>
+            <td>مدرک</td>
+            <td><asp:Label ID="Degree" runat="server" /></td>
+        </tr>
+        <tr>
+            <td>رشته تحصیلی</td>
+            <td><asp:Label ID="Major" runat="server" /></td>
+            <td>گرایش</td>
+            <td><asp:Label ID="EducationalOrientation" runat="server" /></td>
+            <td>وضعیت تاهل</td>
+            <td><asp:Label ID="tahol" runat="server" /></td>
+        </tr>
+        <tr>
+            <td>وضعیت نظام وظیفه</td>
+            <td><asp:Label ID="xedmat" runat="server" /></td>
+            <td>سابقه ایثارگری</td>
+            <td><asp:Label ID="isargari" runat="server" /></td>
+            <td>سابقه اورهال</td>
+            <td><asp:Label ID="IsLastOverhaul" runat="server" /></td>
+        </tr>
+        <tr>
+            <td>سمت اورهال قبلی</td>
+            <td><asp:Label ID="JobPosition" runat="server" /></td>
+            <td>وضعیت</td>
+            <td><asp:Label ID="lblStatus" runat="server" BackColor="#FFFF66" /></td>
+           
+        </tr>
+        <tr>
+            <td>استان</td>
+            <td><asp:Label ID="province" runat="server" /></td>
+                    <td>شهر</td>
+            <td><asp:Label ID="city" runat="server" /></td>
+                    <td>آدرس</td>
+            <td><asp:Label ID="Address" runat="server" /></td>
+        </tr>
+    </table>
+</div>
+
+
+     <div class="row">
+			<div class="col-md-3">
+                <div class="form-check">
+            <asp:CheckBox ID="CheckBoxAttach" runat="server" CssClass="form-check-input" AutoPostBack="True" />
+            <label class="form-check-label fw-bold text-dark ms-2" for="CheckBoxAttach">
+                مشاهده ضمایم
+            </label>
+        </div>
+                </div>
+         <br />
+         <div class="col-md-3">
+              <asp:Button ID="btnOk" runat="server" CssClass="btn btn-success btn-sm w-100" Text="تایید می‌شود" />
+                </div>
+         <br />
+         <div class="col-md-3">
+              <asp:Button ID="BtnCancel" runat="server" CssClass="btn btn-danger btn-sm w-100" Text="تایید نمی‌شود" />
+                </div>
+         <div class="col-md-3">
+                 <asp:HiddenField ID="hdn_tmp" runat="server" />
+                </div>
+         </div>
+    
+
+
+          <br />
+
+
+<asp:Panel ID="PanelRunevest" runat="server" GroupingText="ارجاع پرونده" CssClass="border rounded p-4 mt-4 shadow-sm bg-light" BackColor="#F0FFF0" Visible="False">
+  <div class="row g-4">
+    <div class="col-md-4">
+        واحد<label class="form-label fw-bold text-dark" for="cmbRunevesht"> گیرنده</label>
+<asp:DropDownList 
+    ID="cmbRunevesht" 
+    runat="server" 
+    CssClass="form-control selectpicker" 
+        data-width="100%"
+    title="جستجو کنید..." Height="50px" Width="100%">
+</asp:DropDownList>
+      <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="cmbRunevesht"
+        ErrorMessage="لطفا گیرنده را انتخاب نمایید" ForeColor="#FF33CC" InitialValue="0" ValidationGroup="c" />
+    </div>
+      <div class="col-md-4">
+      <label for="txtMatnErja" class="form-label fw-bold text-dark">متن</label>
+      <asp:TextBox ID="txtMatnErja" runat="server" Height="50px"
+        CssClass="form-control" placeholder="متن ارجاع را در این قسمت بنویسید" ValidationGroup="a" Width="100%" />
+         <div class="mt-2">
+        <asp:Button ID="btnRunevesht" runat="server" CssClass="btn btn-primary btn-sm w-100" Text="افزودن" ValidationGroup="c" />
+      </div>
+    </div>
+       <div class="col-md-4">
+               <asp:Label ID="lblruneveshtType" runat="server" Text="چارت پیشنهادی"></asp:Label>
+      <dx:ASPxComboBox ID="CmbruneveshtType" ClientInstanceName="ClientComboBox" DropDownRows="5" CallbackPageSize="5"
+        ForceDataBinding="true" TextField="Name" Width="100%" runat="server" ClientIDMode="AutoID"
+        IncrementalFilteringMode="Contains" ValueType="System.String"
+        CssClass="form-control" HorizontalAlign="Right">
+        <ItemStyle>
+          <SelectedStyle CssClass="selectedItem" />
+          <HoverStyle CssClass="hoveredItem" />
+        </ItemStyle>
+        <dropdownbutton imageposition="Right"></dropdownbutton>
+      </dx:ASPxComboBox>
+      <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="CmbruneveshtType"
+        ErrorMessage="لطفا جارت پیشنهادی را انتخاب نمایید" ForeColor="#FF33CC" InitialValue="0" ValidationGroup="c" />
+    </div>
+    
+
+  
+  </div>
+
+  <hr class="my-4" />
+
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <asp:GridView ID="GridView2" runat="server" AutoGenerateColumns="False" Font-Size="10pt"
+        Width="100%" CssClass="table table-bordered table-hover text-center">
+        <AlternatingRowStyle BackColor="White" />
+        <Columns>
+          <asp:BoundField DataField="idDtl" HeaderText="#" />
+          <asp:BoundField DataField="omur" HeaderText="گیرنده" />
+            <asp:BoundField DataField="Title" HeaderText="چارت پیشنهادی" />
+          <asp:BoundField DataField="matnErja" HeaderText="متن ارجاع" />
+          <asp:ButtonField CommandName="del" Text="حذف" />
+        </Columns>
+        <HeaderStyle CssClass="table-dark" />
+        <RowStyle BackColor="#EFF3FB" />
+      </asp:GridView>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 text-end">
+      <asp:Button ID="btnSaveFinal" runat="server" CssClass="btn btn-success btn-sm" Text="ذخیره و ارجاع" ValidationGroup="c" Visible="False" />
+    </div>
+  </div>
+</asp:Panel>
+
 
        <br />
      <asp:Panel ID="PanelAttach" runat="server" GroupingText="ضمایم" CssClass="border rounded p-3 mt-3" BackColor="#FFFFCC" Visible="False">
@@ -228,22 +367,7 @@
     <asp:Button ID="ImageButton1" runat="server" class="btn btn-warning btn-sm w-100" Text="برگشت" />
   </div>
 </div>
-         <br />       
-      <div class="row mb-3">
-  <div class="col-md-6">
-    <div class="form-check">
-      <asp:CheckBox ID="CheckBoxRunevesht" runat="server" CssClass="form-check-input" AutoPostBack="True" Visible="False" />
-      <%--<label class="form-check-label fw-bold text-dark" for="CheckBoxRunevesht">ارجاع</label>--%>
-      <asp:HiddenField ID="hdn_tmp" runat="server" />
-    </div>
-  </div>
-  <div class="col-md-6">
-    <div class="form-check">
      
-    </div>
-  </div>
-</div>
-      
 
     <br />
 
@@ -267,69 +391,6 @@
 </div>
 
 
-
-    
-
-             <br />
- 
-   <asp:Panel ID="PanelRunevest" runat="server" GroupingText="ارجاع پیشنهاد" CssClass="border rounded p-3 mt-3" BackColor="#CCFFCC" Visible="False">
-    <div class="row mb-3">
-        <div class="col-md-4">
-            <label for="cmbRunevesht" class="form-label fw-bold text-dark">نام گیرنده</label>
-            <dx:ASPxComboBox ID="cmbRunevesht" ClientInstanceName="ClientComboBox" DropDownRows="5" CallbackPageSize="5"
-                ForceDataBinding="true" TextField="Name" Width="100%" runat="server" ClientIDMode="AutoID"
-                IncrementalFilteringMode="Contains" ValueType="System.String"
-                CssClass="form-control" HorizontalAlign="Right">
-                <ItemStyle>
-                    <SelectedStyle CssClass="selectedItem" />
-                    <HoverStyle CssClass="hoveredItem" />
-                </ItemStyle>
-                <dropdownbutton imageposition="Right"></dropdownbutton>
-            </dx:ASPxComboBox>
-            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="cmbRunevesht"
-                ErrorMessage="لطفا گیرنده را انتخاب نمایدد" ForeColor="#FF33CC" InitialValue="0" ValidationGroup="c" />
-        </div>
-        <div class="col-md-4">
-            <label for="txtMatnErja" class="form-label fw-bold text-dark">متن</label>
-            <asp:TextBox ID="txtMatnErja" runat="server" TextMode="MultiLine" Height="88px"
-                CssClass="form-control" placeholder="متن ارجاع را در این قسمت بنویسید" ValidationGroup="a" />
-        </div>
-        <div class="col-md-4">
-            <label for="CmbruneveshtType" class="form-label fw-bold text-dark">جهت ارجاع</label>
-            <asp:DropDownList ID="CmbruneveshtType" runat="server" CssClass="form-select mb-2" Font-Bold="True"
-                Font-Size="Small" meta:resourcekey="cmbWorkTypResource1" />
-            <asp:Button ID="btnRunevesht" runat="server" CssClass="btn btn-primary btn-sm" Text="افزودن" ValidationGroup="c" />
-        </div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-md-12">
-            <asp:GridView ID="GridView2" runat="server" AutoGenerateColumns="False" Font-Size="10pt"
-                Width="100%" CssClass="table table-bordered table-striped text-center">
-                <AlternatingRowStyle BackColor="White" />
-                <Columns>
-                    <asp:BoundField DataField="idDtl" HeaderText="#" />
-                    <asp:BoundField DataField="girande" HeaderText="گیرنده" />
-                    <asp:BoundField DataField="matnErja" HeaderText="متن ارجاع" />
-                    <asp:BoundField DataField="runeveshtTypeValue" HeaderText="جهت" />
-                    <asp:ButtonField CommandName="del" Text="حذف" />
-                </Columns>
-                <HeaderStyle CssClass="table-dark" />
-                <RowStyle BackColor="#EFF3FB" />
-            </asp:GridView>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6"></div>
-        <div class="col-md-6 text-end">
-            <asp:Button ID="btnSaveFinal" runat="server" CssClass="btn btn-success btn-sm" Text="ذخیره و ارجاع" ValidationGroup="c" Visible="False" />
-        </div>
-    </div>
-</asp:Panel>
-
-  
-
        <br />
 
 
@@ -343,40 +404,7 @@
           </div>
          </div>
 
-        <div class="card mb-3">
-  <div class="card-header bg-primary text-white">ارجاعات</div>
-  <div class="card-body">
-     <asp:GridView ID="GridViewErja" runat="server" AutoGenerateColumns="False" 
-                                        Font-Size="10pt" TabIndex="12" Width="100%" style="color: #000000" 
-                                        CellPadding="3" ForeColor="Black" GridLines="Vertical" CssClass="table" BackColor="White" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px">
-                                        <AlternatingRowStyle BackColor="#CCCCCC" />
-                                        <Columns>
-                                            <asp:BoundField DataField="ferestande" HeaderText="فرستنده" >
-                                            <HeaderStyle HorizontalAlign="Center" />
-                                            <ItemStyle HorizontalAlign="Right" />
-                                            </asp:BoundField>
-                                            <asp:BoundField DataField="girande" HeaderText="گیرنده" />
-                                            <asp:BoundField DataField="matnErja" HeaderText="متن ارجاع">
-                                            <HeaderStyle HorizontalAlign="Center" />
-                                            <ItemStyle HorizontalAlign="Right" />
-                                            </asp:BoundField>
-                                            <asp:BoundField DataField="runeveshtTypeValue" HeaderText="جهت" />
-                                           
-                                            <asp:BoundField DataField="tarix" HeaderText="تاریخ ارجاع" />
-                                            <asp:BoundField DataField="saat" HeaderText="ساعت" />
-                                           
-                                        </Columns>
-                                        <FooterStyle BackColor="#CCCCCC" />
-                                        <HeaderStyle BackColor="Black" Font-Bold="True" ForeColor="White" />
-                                        <PagerStyle BackColor="#999999" ForeColor="Black" HorizontalAlign="Center" />
-                                        <SelectedRowStyle BackColor="#000099" Font-Bold="True" ForeColor="White" />
-                                        <SortedAscendingCellStyle BackColor="#F1F1F1" />
-                                        <SortedAscendingHeaderStyle BackColor="#808080" />
-                                        <SortedDescendingCellStyle BackColor="#CAC9C9" />
-                                        <SortedDescendingHeaderStyle BackColor="#383838" />
-                                    </asp:GridView>
-  </div>
-</div>
+        
                                                  
    
 </asp:Content>

@@ -12,7 +12,7 @@ Partial Class overhaulBrowseAdmin
         If Me.IsPostBack = False Then
             ' Session("UserId") = 1
             meno_acc()
-            load_gridAll()
+
         End If
         load_gridAll()
     End Sub
@@ -44,8 +44,14 @@ Partial Class overhaulBrowseAdmin
 
 
         Dim dt As New DataTable
-        Dim sqlstr As String
-        sqlstr = "SELECT * from overhaulBrowsVW"
+        Dim sqlstr As String = ""
+        If Session("unitID") = 19 Or Session("unitID") = 15 Then
+            sqlstr = "SELECT * from overhaulAllVW"
+        Else
+            sqlstr = "SELECT * from  overhaulAllVW where omurID = " & Session("omurID") & " "
+        End If
+
+
         dt = ClsDataTable.GetDataTable(sqlstr)
         GridWorkTable.DataSource = dt
         GridWorkTable.DataBind()
@@ -62,7 +68,9 @@ Partial Class overhaulBrowseAdmin
         If value = 1 Then
             e.Row.ForeColor = Drawing.Color.Black
             e.Row.BackColor = Drawing.Color.LightGreen
-
+        ElseIf value = 2 Then
+            e.Row.ForeColor = Drawing.Color.Black
+            e.Row.BackColor = Drawing.Color.LightYellow
         ElseIf value = 5 Then
             e.Row.ForeColor = Drawing.Color.Black
             e.Row.BackColor = System.Drawing.Color.LightPink
