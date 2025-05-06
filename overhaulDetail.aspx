@@ -6,10 +6,10 @@
 <%@ Register assembly="DevExpress.Web.ASPxGridView.v10.1.Export, Version=10.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web.ASPxGridView.Export" tagprefix="dx" %><%@ Register assembly="DevExpress.Web.ASPxEditors.v10.1" namespace="DevExpress.Web.ASPxEditors" tagprefix="dx" %>
 <%@ Register assembly="DevExpress.Web.ASPxGridView.v10.1" namespace="DevExpress.Web.ASPxGridView" tagprefix="dx" %>
 
-
  
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+    
 
     <style>
         body {
@@ -257,7 +257,7 @@
           <br />
 
 
-<asp:Panel ID="PanelRunevest" runat="server" GroupingText="ارجاع پرونده" CssClass="border rounded p-4 mt-4 shadow-sm bg-light" BackColor="#F0FFF0" Visible="False">
+<asp:Panel ID="PanelRunevest" runat="server" GroupingText="ارجاع پرونده" CssClass="border rounded p-4 mt-4 shadow-sm bg-light" BackColor="#F0FFF0">
   <div class="row g-4">
     <div class="col-md-4">
         واحد<label class="form-label fw-bold text-dark" for="cmbRunevesht"> گیرنده</label>
@@ -353,10 +353,49 @@
     </div>
 </asp:Panel>
     <br />
+    <asp:Panel ID="PanelDate" runat="server" Visible="false">
+          <div class="row">
+			<div class="col-md-8">
 
+               	<asp:Label ID="lblDate" runat="server" CssClass="control-label" Text="تاریخ شروع بکار"></asp:Label>
+              <asp:TextBox ID="txtDate" runat="server" CssClass="form-control" />
+    <br />
+   
+ <asp:Button ID="BtnStartWork" runat="server" class="btn btn-primary btn-sm w-100" Text="ثبت شروع به کار" />
+			</div>
+           <div class="col-md-4">
+                
+               </div>
+          	</div>
+
+    </asp:Panel>
+    <br />
+
+    <asp:Panel ID="PanelFileUpload" runat="server" Visible="false">
+   <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card shadow p-4 rounded-4">
+                        <h4 class="text-center mb-4"> بارگذاری مدرک HSE</h4>
+
+                        <asp:FileUpload ID="FileUpload1" runat="server" CssClass="form-control mb-3" />
+                        <asp:Button ID="btnUpload" runat="server" Text="ثبت فایل" CssClass="btn btn-primary w-100" OnClick="btnUpload_Click" />
+                        
+                        <div class="mt-3">
+                            <asp:Label ID="lblMessage" runat="server" EnableViewState="false" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </asp:Panel>
+    <br />
    <div class="card mt-4">
   <div class="card-header bg-light">
-    ثبت نظر
+          <asp:Label ID="lblNazar" runat="server" Text="ثبت نظر"></asp:Label>
   </div>
   <div class="card-body">
     <div class="mb-3">
@@ -405,8 +444,8 @@
          </div>
 
         
-                                                 
-   
+                                      
+ 
 </asp:Content>
 
 

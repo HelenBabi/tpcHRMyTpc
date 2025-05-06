@@ -148,6 +148,27 @@ Partial Class overhaulReportFrm
             Response.Redirect("overhaulDetail.aspx")
         End If
     End Sub
+    Protected Sub ASPxGridView8_RowCommand(ByVal sender As Object, ByVal e As DevExpress.Web.ASPxGridView.ASPxGridViewRowCommandEventArgs) Handles ASPxGridView8.RowCommand
+        If e.CommandArgs.CommandName = "moshahede" Then
+            'Session("fromTyp") = "admn"
+            Session("idOver") = e.CommandArgs.CommandArgument
+            Response.Redirect("overhaulDetail.aspx")
+        End If
+    End Sub
+    Protected Sub ASPxGridView9_RowCommand(ByVal sender As Object, ByVal e As DevExpress.Web.ASPxGridView.ASPxGridViewRowCommandEventArgs) Handles ASPxGridView9.RowCommand
+        If e.CommandArgs.CommandName = "moshahede" Then
+            'Session("fromTyp") = "admn"
+            Session("idOver") = e.CommandArgs.CommandArgument
+            Response.Redirect("overhaulDetail.aspx")
+        End If
+    End Sub
+    Protected Sub ASPxGridView10_RowCommand(ByVal sender As Object, ByVal e As DevExpress.Web.ASPxGridView.ASPxGridViewRowCommandEventArgs) Handles ASPxGridView10.RowCommand
+        If e.CommandArgs.CommandName = "moshahede" Then
+            'Session("fromTyp") = "admn"
+            Session("idOver") = e.CommandArgs.CommandArgument
+            Response.Redirect("overhaulDetail.aspx")
+        End If
+    End Sub
     Private Sub upStat(sqlstr As String)
         Dim cnn As New SqlConnection
         Try
@@ -192,7 +213,7 @@ Partial Class overhaulReportFrm
         Dim dt As New DataTable
         Dim sqlstr As String = ""
         'If Session("unitID") = 19 Or Session("unitID") = 15 Then
-        sqlstr = "SELECT * from overhaulAllVW where state = 1 "
+        sqlstr = "SELECT * from overhaulAllVW where state = 13 "
         'Else
         '    sqlstr = "SELECT * from  overhaulAllVW where omurID = " & Session("omurID") & " where state = 1"
         'End If
@@ -208,12 +229,33 @@ Partial Class overhaulReportFrm
 
 
     End Sub
+    Private Sub load_gridEtmam()
 
+
+        Dim dt As New DataTable
+        Dim sqlstr As String = ""
+        'If Session("unitID") = 19 Or Session("unitID") = 15 Then
+        sqlstr = "SELECT * from overhaulAllVW where state = 1 "
+        'Else
+        '    sqlstr = "SELECT * from  overhaulAllVW where omurID = " & Session("omurID") & " where state = 1"
+        'End If
+
+
+        dt = ClsDataTable.GetDataTable(sqlstr)
+        If dt.Rows.Count > 0 Then
+            ASPxGridView9.DataSource = dt
+            ASPxGridView9.DataBind()
+
+        End If
+
+
+
+    End Sub
     Private Sub load_gridPazireshNO()
         Dim dt As New DataTable
         Dim sqlstr As String = ""
         'If Session("unitID") = 19 Or Session("unitID") = 15 Then
-        sqlstr = "SELECT * from overhaulAllVW where state = -1 "
+        sqlstr = "SELECT * from overhaulAllVW where state = -13 "
         'Else
         '    sqlstr = "SELECT * from  overhaulAllVW where omurID = " & Session("omurID") & " where state = 1"
         'End If
@@ -230,7 +272,7 @@ Partial Class overhaulReportFrm
         Dim dt As New DataTable
         Dim sqlstr As String = ""
         'If Session("unitID") = 19 Or Session("unitID") = 15 Then
-        sqlstr = "SELECT * from overhaulAllVW where state = 3 "
+        sqlstr = "SELECT * from overhaulAllVW where state = -19 "
         'Else
         '    sqlstr = "SELECT * from  overhaulAllVW where omurID = " & Session("omurID") & " where state = 1"
         'End If
@@ -247,7 +289,7 @@ Partial Class overhaulReportFrm
         Dim dt As New DataTable
         Dim sqlstr As String = ""
         'If Session("unitID") = 19 Or Session("unitID") = 15 Then
-        sqlstr = "SELECT * from overhaulAllVW where state = -3 "
+        sqlstr = "SELECT * from overhaulAllVW where state = 199 "
         'Else
         '    sqlstr = "SELECT * from  overhaulAllVW where omurID = " & Session("omurID") & " where state = 1"
         'End If
@@ -264,7 +306,7 @@ Partial Class overhaulReportFrm
         Dim dt As New DataTable
         Dim sqlstr As String = ""
         'If Session("unitID") = 19 Or Session("unitID") = 15 Then
-        sqlstr = "SELECT * from overhaulAllVW where state = -2 "
+        sqlstr = "SELECT * from overhaulAllVW where state = 200 "
         'Else
         '    sqlstr = "SELECT * from  overhaulAllVW where omurID = " & Session("omurID") & " where state = 1"
         'End If
@@ -282,7 +324,7 @@ Partial Class overhaulReportFrm
         Dim dt As New DataTable
         Dim sqlstr As String = ""
         'If Session("unitID") = 19 Or Session("unitID") = 15 Then
-        sqlstr = "SELECT * from overhaulAllVW where state = 8 "
+        sqlstr = "SELECT * from overhaulAllVW where state = 19 "
         'Else
         '    sqlstr = "SELECT * from  overhaulAllVW where omurID = " & Session("omurID") & " where state = 1"
         'End If
@@ -295,7 +337,40 @@ Partial Class overhaulReportFrm
 
         End If
     End Sub
+    Private Sub load_gridHerast()
+        Dim dt As New DataTable
+        Dim sqlstr As String = ""
+        'If Session("unitID") = 19 Or Session("unitID") = 15 Then
+        sqlstr = "SELECT * from overhaulAllVW where state = 6 "
+        'Else
+        '    sqlstr = "SELECT * from  overhaulAllVW where omurID = " & Session("omurID") & " where state = 1"
+        'End If
 
+
+        dt = ClsDataTable.GetDataTable(sqlstr)
+        If dt.Rows.Count > 0 Then
+            ASPxGridView8.DataSource = dt
+            ASPxGridView8.DataBind()
+
+        End If
+    End Sub
+    Private Sub load_gridHerastToBarnamerizi()
+        Dim dt As New DataTable
+        Dim sqlstr As String = ""
+        'If Session("unitID") = 19 Or Session("unitID") = 15 Then
+        sqlstr = "SELECT * from overhaulAllVW where state = 33 "
+        'Else
+        '    sqlstr = "SELECT * from  overhaulAllVW where omurID = " & Session("omurID") & " where state = 1"
+        'End If
+
+
+        dt = ClsDataTable.GetDataTable(sqlstr)
+        If dt.Rows.Count > 0 Then
+            ASPxGridView10.DataSource = dt
+            ASPxGridView10.DataBind()
+
+        End If
+    End Sub
     Private Sub msg_box(ByVal msg As String)
         Dim sb As New StringBuilder
         msg = Replace(msg, "'", " ")
@@ -309,8 +384,15 @@ Partial Class overhaulReportFrm
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         meno_acc()
-        If Me.IsPostBack = False Then
+        
 
+       
+
+
+        If Me.IsPostBack = False Then
+            If Session("omurID") = 19 Then
+                ASPxPageControl1.ActiveTabIndex = 1
+            End If
 
             load_grid()
             load_gridPaziresh()
@@ -319,6 +401,9 @@ Partial Class overhaulReportFrm
             load_gridPazireshVahedhaNo()
             load_gridNoBarnamerizi()
             load_gridBarnameriziToUnits()
+            load_gridHerast()
+            load_gridEtmam()
+            load_gridHerastToBarnamerizi()
         End If
         'If Me.IsCallback Then
         '    loadgridall()
@@ -330,6 +415,9 @@ Partial Class overhaulReportFrm
         load_gridPazireshVahedhaNo()
         load_gridNoBarnamerizi()
         load_gridBarnameriziToUnits()
+        load_gridHerast()
+        load_gridEtmam()
+        load_gridHerastToBarnamerizi()
     End Sub
 
 
@@ -371,19 +459,31 @@ Partial Class overhaulReportFrm
                 grvExporter1.WriteXlsToResponse()
             Case 3
                 grvExporter1.GridViewID = ASPxGridView4.UniqueID
-                grvExporter1.FileName = "تایید واحدها"
+                grvExporter1.FileName = "عدم تایید برنامه ریزی"
                 grvExporter1.WriteXlsToResponse()
             Case 4
                 grvExporter1.GridViewID = ASPxGridView5.UniqueID
-                grvExporter1.FileName = "عدم تایید واحدها"
+                grvExporter1.FileName = "ارجا به واحدها توسط برنامه ریزی"
                 grvExporter1.WriteXlsToResponse()
             Case 5
                 grvExporter1.GridViewID = ASPxGridView6.UniqueID
-                grvExporter1.FileName = "عدم تایید برنامه ریزی"
+                grvExporter1.FileName = "ارجاع به برنامه ریزی توسط واحدها"
                 grvExporter1.WriteXlsToResponse()
             Case 6
                 grvExporter1.GridViewID = ASPxGridView7.UniqueID
-                grvExporter1.FileName = "ارجا به واحدها توسط برنامه ریزی"
+                grvExporter1.FileName = "ارسال به HSE"
+                grvExporter1.WriteXlsToResponse()
+            Case 7
+                grvExporter1.GridViewID = ASPxGridView8.UniqueID
+                grvExporter1.FileName = "ارسال به حراست"
+                grvExporter1.WriteXlsToResponse()
+            Case 9
+                grvExporter1.GridViewID = ASPxGridView9.UniqueID
+                grvExporter1.FileName = "لیست اتمام"
+                grvExporter1.WriteXlsToResponse()
+            Case 8
+                grvExporter1.GridViewID = ASPxGridView10.UniqueID
+                grvExporter1.FileName = "ارجاع به برنامه ریزی توسط حراست"
                 grvExporter1.WriteXlsToResponse()
         End Select
     End Sub

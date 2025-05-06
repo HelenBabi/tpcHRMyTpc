@@ -143,6 +143,8 @@
                     <dx:GridViewDataTextColumn FieldName="State" Visible="False" />
                      <dx:GridViewDataTextColumn Caption="کارتابل" FieldName="omur" VisibleIndex="25">
                      </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn Caption="تاریخ شروع به کار" FieldName="tarix" ShowInCustomizationForm="True" VisibleIndex="26">
+                            </dx:GridViewDataTextColumn>
                 </Columns>
                         <SettingsBehavior AllowFocusedRow="True" />
                         <Settings ShowFilterRow="True" ShowFilterBar="Visible" ShowGroupedColumns="True" ShowGroupPanel="True" />
@@ -242,7 +244,7 @@
                      </ContentCollection>
                  </dx:TabPage>
                  <%--تایدد نشده توسط پیمانکار--%>
-                 <dx:TabPage Text="تایید نشده پیمانکار">
+                 <dx:TabPage Text="عدم تایید پیمانکار">
                      <ContentCollection>
                            <dx:ContentControl runat="server" SupportsDisabledAttribute="True">
                                <dx:ASPxGridView ID="ASPxGridView3" runat="server" AutoGenerateColumns="False" 
@@ -329,7 +331,7 @@
                      </ContentCollection>
                  </dx:TabPage>
                  <%--تایید واحدها--%>
-                 <dx:TabPage Text="تایید واحدها">
+                 <dx:TabPage Text="عدم تایید برنامه ریزی تعمیرات">
                      <ContentCollection>
                            <dx:ContentControl runat="server" SupportsDisabledAttribute="True">
                                <dx:ASPxGridView ID="ASPxGridView4" runat="server" AutoGenerateColumns="False" 
@@ -416,7 +418,7 @@
                      </ContentCollection>
                  </dx:TabPage>
                  <%--عدم تایید واحدها--%>
-                 <dx:TabPage Text="عدم تایید واحدها">
+                 <dx:TabPage Text="ارجاع به واحدها توسط برنامه ریزی">
                      <ContentCollection>
                            <dx:ContentControl runat="server" SupportsDisabledAttribute="True">
                                <dx:ASPxGridView ID="ASPxGridView5" runat="server" AutoGenerateColumns="False" 
@@ -503,7 +505,7 @@
                      </ContentCollection>
                  </dx:TabPage>
                  <%--عدم تایید برنامه ریزی--%> 
-                 <dx:TabPage Text="عدم تایید برنامه ریزی">
+                 <dx:TabPage Text="ارجاع به برنامه ریزی توسط واحدها">
                      <ContentCollection>
                            <dx:ContentControl runat="server" SupportsDisabledAttribute="True">
                                <dx:ASPxGridView ID="ASPxGridView6" runat="server" AutoGenerateColumns="False" 
@@ -590,7 +592,7 @@
                      </ContentCollection>
                  </dx:TabPage>
                  <%--ارجا به واحدها توسط برنامه ریزی--%>
-                 <dx:TabPage Text="ارجا به واحدها توسط برنامه ریزی">
+                 <dx:TabPage Text="ارسال به HSE">
                      <ContentCollection>
                            <dx:ContentControl runat="server" SupportsDisabledAttribute="True">
                                <dx:ASPxGridView ID="ASPxGridView7" runat="server" AutoGenerateColumns="False" 
@@ -669,13 +671,283 @@
                         <SettingsBehavior AllowFocusedRow="True" />
                         <Settings ShowFilterRow="True" ShowFilterBar="Visible" ShowGroupedColumns="True" ShowGroupPanel="True" />
                     </dx:ASPxGridView>
-
+<%--ارسال به حراست--%>
+                               
                               
 
 
                                </dx:ContentControl>
                      </ContentCollection>
                  </dx:TabPage>
+                 <%--ارسال به حراست--%>
+                 <dx:TabPage Text="ارسال به حراست">
+                     <ContentCollection>
+                           <dx:ContentControl runat="server" SupportsDisabledAttribute="True">
+                               <dx:ASPxGridView ID="ASPxGridView8" runat="server" AutoGenerateColumns="False" 
+                        KeyFieldName="Id" ClientIDMode="AutoID"  OnHtmlDataCellPrepared="ASPxGridView1_HtmlDataCellPrepared"  Width="100%">
+                        <settingsbehavior allowfocusedrow="True" AutoFilterRowInputDelay="12000"/>
+                        <settings showfilterrow="True" ShowHorizontalScrollBar="True"/>
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" />
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" />
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" />
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" />
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" />
+                        <Columns>
+                     <dx:GridViewDataTextColumn Caption="کد پیگیری" FieldName="Id" 
+                            UnboundType="Integer" VisibleIndex="0">
+                            <DataItemTemplate>
+                                <asp:LinkButton ID="LinkButton15" runat="server" 
+                                    CommandArgument='<%# Eval("Id")%>' CommandName='<%# "moshahede"%>' 
+                                    Text='<%# Eval("Id")%> ' CssClass="btn btn-light btn-sm"></asp:LinkButton>
+                            </DataItemTemplate>
+                            <HeaderStyle HorizontalAlign="Center" />
+                            <cellstyle horizontalalign="Center">
+                            </cellstyle>
+                        </dx:GridViewDataTextColumn>
+                       <dx:GridViewDataTextColumn Caption="کد ملی" FieldName="Nationality" 
+                           
+                            UnboundType="Integer" VisibleIndex="0" Width="150px">
+                            <DataItemTemplate>
+                                <asp:LinkButton ID="LinkButton16" runat="server" 
+                                     Text='<%# Eval("Nationality")%> '
+                                    CommandArgument='<%# Eval("Id")%>' CommandName='<%# "moshahede"%>' 
+                                   CssClass="btn btn-link btn-sm"></asp:LinkButton>
+                            </DataItemTemplate>
+                            <HeaderStyle HorizontalAlign="Center" />
+                            <cellstyle horizontalalign="Center">
+                            </cellstyle>
+                        </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn Caption="نام" FieldName="FirstName" VisibleIndex="1" />
+                    <dx:GridViewDataTextColumn Caption="نام خانوادگی" FieldName="LastName" VisibleIndex="2" />
+                    <dx:GridViewDataTextColumn Caption="نام پدر" FieldName="FatherName" VisibleIndex="3" />
+                                        <dx:GridViewDataTextColumn Caption="شناسنامه" FieldName="shSh" VisibleIndex="4" />
+                    <dx:GridViewDataTextColumn Caption="تولد" FieldName="BirthDay" VisibleIndex="5" />
+                    <dx:GridViewDataTextColumn Caption="بانک" FieldName="BankCardNo" VisibleIndex="6" />
+                    <dx:GridViewDataTextColumn Caption="شماره حساب" FieldName="IBAN" VisibleIndex="7" />
+                    <dx:GridViewDataTextColumn Caption="نوع بیمه" FieldName="bime" VisibleIndex="9" />
+                    <dx:GridViewDataTextColumn Caption="شماره بیمه" FieldName="SSN" VisibleIndex="8" />
+<dx:GridViewDataTextColumn FieldName="Mobile" ShowInCustomizationForm="True" Caption="موبایل" VisibleIndex="10"></dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn Caption="تلفن" FieldName="Tell" VisibleIndex="11" />
+                    <dx:GridViewDataTextColumn Caption="کدپستی" FieldName="PostalCode" VisibleIndex="12" />
+                    <dx:GridViewDataTextColumn Caption="مدرک" FieldName="madrak" VisibleIndex="13" />
+                    <dx:GridViewDataTextColumn Caption="رشته" FieldName="reshte" VisibleIndex="14" />
+                     <dx:GridViewDataTextColumn Caption="گرایش" FieldName="EducationalOrientation" VisibleIndex="15">
+                     </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn Caption="تاهل" FieldName="martialStatus" VisibleIndex="16" />
+                    <dx:GridViewDataTextColumn Caption="وظیفه" FieldName="MilitaryName" VisibleIndex="17" />
+                    <dx:GridViewDataTextColumn Caption="ایثارگری" FieldName="isargari" VisibleIndex="18" />
+                    <dx:GridViewDataTextColumn Caption="سابقه اورهال" FieldName="overhalHistory" VisibleIndex="19" />
+                    <dx:GridViewDataTextColumn Caption="سمت اورهال قبلی" FieldName="JobPosition" VisibleIndex="20" />
+                    <dx:GridViewDataTextColumn Caption="استان" FieldName="province" VisibleIndex="21" />
+                    
+                     <dx:GridViewDataTextColumn Caption="شهر" FieldName="city" VisibleIndex="22">
+                     </dx:GridViewDataTextColumn>
+                     <dx:GridViewDataTextColumn Caption="آدرس" FieldName="Address" ShowInCustomizationForm="True" VisibleIndex="23">
+                     </dx:GridViewDataTextColumn>
+                     <dx:GridViewDataTextColumn Caption="وضعیت" FieldName="Title" ShowInCustomizationForm="True" VisibleIndex="24">
+                     </dx:GridViewDataTextColumn>
+                    
+                    <dx:GridViewDataTextColumn FieldName="State" Visible="False" />
+                     <dx:GridViewDataTextColumn Caption="کارتابل" FieldName="omur" VisibleIndex="25">
+                     </dx:GridViewDataTextColumn>
+                </Columns>
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" ShowFilterBar="Visible" ShowGroupedColumns="True" ShowGroupPanel="True" />
+                    </dx:ASPxGridView>
+
+                               
+                              
+
+
+                               </dx:ContentControl>
+                     </ContentCollection>
+                 </dx:TabPage>
+                 <dx:TabPage Text="ارسال به برنامه ریزی توسط حراست">
+                     <ContentCollection>
+                           <dx:ContentControl runat="server" SupportsDisabledAttribute="True">
+                               <dx:ASPxGridView ID="ASPxGridView10" runat="server" AutoGenerateColumns="False" 
+                        KeyFieldName="Id" ClientIDMode="AutoID"  OnHtmlDataCellPrepared="ASPxGridView1_HtmlDataCellPrepared"  Width="100%">
+                        <settingsbehavior allowfocusedrow="True" AutoFilterRowInputDelay="12000"/>
+                        <settings showfilterrow="True" ShowHorizontalScrollBar="True"/>
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" />
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" />
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" />
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" />
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" />
+                        <Columns>
+                     <dx:GridViewDataTextColumn Caption="کد پیگیری" FieldName="Id" 
+                            UnboundType="Integer" VisibleIndex="0">
+                            <DataItemTemplate>
+                                <asp:LinkButton ID="LinkButton19" runat="server" 
+                                    CommandArgument='<%# Eval("Id")%>' CommandName='<%# "moshahede"%>' 
+                                    Text='<%# Eval("Id")%> ' CssClass="btn btn-light btn-sm"></asp:LinkButton>
+                            </DataItemTemplate>
+                            <HeaderStyle HorizontalAlign="Center" />
+                            <cellstyle horizontalalign="Center">
+                            </cellstyle>
+                        </dx:GridViewDataTextColumn>
+                       <dx:GridViewDataTextColumn Caption="کد ملی" FieldName="Nationality" 
+                           
+                            UnboundType="Integer" VisibleIndex="0" Width="150px">
+                            <DataItemTemplate>
+                                <asp:LinkButton ID="LinkButton20" runat="server" 
+                                     Text='<%# Eval("Nationality")%> '
+                                    CommandArgument='<%# Eval("Id")%>' CommandName='<%# "moshahede"%>' 
+                                   CssClass="btn btn-link btn-sm"></asp:LinkButton>
+                            </DataItemTemplate>
+                            <HeaderStyle HorizontalAlign="Center" />
+                            <cellstyle horizontalalign="Center">
+                            </cellstyle>
+                        </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn Caption="نام" FieldName="FirstName" VisibleIndex="1" />
+                    <dx:GridViewDataTextColumn Caption="نام خانوادگی" FieldName="LastName" VisibleIndex="2" />
+                    <dx:GridViewDataTextColumn Caption="نام پدر" FieldName="FatherName" VisibleIndex="3" />
+                                        <dx:GridViewDataTextColumn Caption="شناسنامه" FieldName="shSh" VisibleIndex="4" />
+                    <dx:GridViewDataTextColumn Caption="تولد" FieldName="BirthDay" VisibleIndex="5" />
+                    <dx:GridViewDataTextColumn Caption="بانک" FieldName="BankCardNo" VisibleIndex="6" />
+                    <dx:GridViewDataTextColumn Caption="شماره حساب" FieldName="IBAN" VisibleIndex="7" />
+                    <dx:GridViewDataTextColumn Caption="نوع بیمه" FieldName="bime" VisibleIndex="9" />
+                    <dx:GridViewDataTextColumn Caption="شماره بیمه" FieldName="SSN" VisibleIndex="8" />
+<dx:GridViewDataTextColumn FieldName="Mobile" ShowInCustomizationForm="True" Caption="موبایل" VisibleIndex="10"></dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn Caption="تلفن" FieldName="Tell" VisibleIndex="11" />
+                    <dx:GridViewDataTextColumn Caption="کدپستی" FieldName="PostalCode" VisibleIndex="12" />
+                    <dx:GridViewDataTextColumn Caption="مدرک" FieldName="madrak" VisibleIndex="13" />
+                    <dx:GridViewDataTextColumn Caption="رشته" FieldName="reshte" VisibleIndex="14" />
+                     <dx:GridViewDataTextColumn Caption="گرایش" FieldName="EducationalOrientation" VisibleIndex="15">
+                     </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn Caption="تاهل" FieldName="martialStatus" VisibleIndex="16" />
+                    <dx:GridViewDataTextColumn Caption="وظیفه" FieldName="MilitaryName" VisibleIndex="17" />
+                    <dx:GridViewDataTextColumn Caption="ایثارگری" FieldName="isargari" VisibleIndex="18" />
+                    <dx:GridViewDataTextColumn Caption="سابقه اورهال" FieldName="overhalHistory" VisibleIndex="19" />
+                    <dx:GridViewDataTextColumn Caption="سمت اورهال قبلی" FieldName="JobPosition" VisibleIndex="20" />
+                    <dx:GridViewDataTextColumn Caption="استان" FieldName="province" VisibleIndex="21" />
+                    
+                     <dx:GridViewDataTextColumn Caption="شهر" FieldName="city" VisibleIndex="22">
+                     </dx:GridViewDataTextColumn>
+                     <dx:GridViewDataTextColumn Caption="آدرس" FieldName="Address" ShowInCustomizationForm="True" VisibleIndex="23">
+                     </dx:GridViewDataTextColumn>
+                     <dx:GridViewDataTextColumn Caption="وضعیت" FieldName="Title" ShowInCustomizationForm="True" VisibleIndex="24">
+                     </dx:GridViewDataTextColumn>
+                    
+                    <dx:GridViewDataTextColumn FieldName="State" Visible="False" />
+                     <dx:GridViewDataTextColumn Caption="کارتابل" FieldName="omur" VisibleIndex="25">
+                     </dx:GridViewDataTextColumn>
+                             <dx:GridViewDataTextColumn Caption="تاریخ شروع به کار" FieldName="tarix" ShowInCustomizationForm="True" VisibleIndex="26">
+                            </dx:GridViewDataTextColumn>
+                </Columns>
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" ShowFilterBar="Visible" ShowGroupedColumns="True" ShowGroupPanel="True" />
+                    </dx:ASPxGridView>
+
+                               
+                              
+
+
+                               </dx:ContentControl>
+                     </ContentCollection>
+                 </dx:TabPage>
+                 <dx:TabPage Text="اتمام">
+                     <ContentCollection>
+                           <dx:ContentControl runat="server" SupportsDisabledAttribute="True">
+                               <dx:ASPxGridView ID="ASPxGridView9" runat="server" AutoGenerateColumns="False" 
+                        KeyFieldName="Id" ClientIDMode="AutoID"  OnHtmlDataCellPrepared="ASPxGridView1_HtmlDataCellPrepared"  Width="100%">
+                        <settingsbehavior allowfocusedrow="True" AutoFilterRowInputDelay="12000"/>
+                        <settings showfilterrow="True" ShowHorizontalScrollBar="True"/>
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" />
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" />
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" />
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" />
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" />
+                        <Columns>
+                     <dx:GridViewDataTextColumn Caption="کد پیگیری" FieldName="Id" 
+                            UnboundType="Integer" VisibleIndex="0">
+                            <DataItemTemplate>
+                                <asp:LinkButton ID="LinkButton17" runat="server" 
+                                    CommandArgument='<%# Eval("Id")%>' CommandName='<%# "moshahede"%>' 
+                                    Text='<%# Eval("Id")%> ' CssClass="btn btn-light btn-sm"></asp:LinkButton>
+                            </DataItemTemplate>
+                            <HeaderStyle HorizontalAlign="Center" />
+                            <cellstyle horizontalalign="Center">
+                            </cellstyle>
+                        </dx:GridViewDataTextColumn>
+                       <dx:GridViewDataTextColumn Caption="کد ملی" FieldName="Nationality" 
+                           
+                            UnboundType="Integer" VisibleIndex="0" Width="150px">
+                            <DataItemTemplate>
+                                <asp:LinkButton ID="LinkButton18" runat="server" 
+                                     Text='<%# Eval("Nationality")%> '
+                                    CommandArgument='<%# Eval("Id")%>' CommandName='<%# "moshahede"%>' 
+                                   CssClass="btn btn-link btn-sm"></asp:LinkButton>
+                            </DataItemTemplate>
+                            <HeaderStyle HorizontalAlign="Center" />
+                            <cellstyle horizontalalign="Center">
+                            </cellstyle>
+                        </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn Caption="نام" FieldName="FirstName" VisibleIndex="1" />
+                    <dx:GridViewDataTextColumn Caption="نام خانوادگی" FieldName="LastName" VisibleIndex="2" />
+                    <dx:GridViewDataTextColumn Caption="نام پدر" FieldName="FatherName" VisibleIndex="3" />
+                                        <dx:GridViewDataTextColumn Caption="شناسنامه" FieldName="shSh" VisibleIndex="4" />
+                    <dx:GridViewDataTextColumn Caption="تولد" FieldName="BirthDay" VisibleIndex="5" />
+                    <dx:GridViewDataTextColumn Caption="بانک" FieldName="BankCardNo" VisibleIndex="6" />
+                    <dx:GridViewDataTextColumn Caption="شماره حساب" FieldName="IBAN" VisibleIndex="7" />
+                    <dx:GridViewDataTextColumn Caption="نوع بیمه" FieldName="bime" VisibleIndex="9" />
+                    <dx:GridViewDataTextColumn Caption="شماره بیمه" FieldName="SSN" VisibleIndex="8" />
+<dx:GridViewDataTextColumn FieldName="Mobile" ShowInCustomizationForm="True" Caption="موبایل" VisibleIndex="10"></dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn Caption="تلفن" FieldName="Tell" VisibleIndex="11" />
+                    <dx:GridViewDataTextColumn Caption="کدپستی" FieldName="PostalCode" VisibleIndex="12" />
+                    <dx:GridViewDataTextColumn Caption="مدرک" FieldName="madrak" VisibleIndex="13" />
+                    <dx:GridViewDataTextColumn Caption="رشته" FieldName="reshte" VisibleIndex="14" />
+                     <dx:GridViewDataTextColumn Caption="گرایش" FieldName="EducationalOrientation" VisibleIndex="15">
+                     </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn Caption="تاهل" FieldName="martialStatus" VisibleIndex="16" />
+                    <dx:GridViewDataTextColumn Caption="وظیفه" FieldName="MilitaryName" VisibleIndex="17" />
+                    <dx:GridViewDataTextColumn Caption="ایثارگری" FieldName="isargari" VisibleIndex="18" />
+                    <dx:GridViewDataTextColumn Caption="سابقه اورهال" FieldName="overhalHistory" VisibleIndex="19" />
+                    <dx:GridViewDataTextColumn Caption="سمت اورهال قبلی" FieldName="JobPosition" VisibleIndex="20" />
+                    <dx:GridViewDataTextColumn Caption="استان" FieldName="province" VisibleIndex="21" />
+                    
+                     <dx:GridViewDataTextColumn Caption="شهر" FieldName="city" VisibleIndex="22">
+                     </dx:GridViewDataTextColumn>
+                     <dx:GridViewDataTextColumn Caption="آدرس" FieldName="Address" ShowInCustomizationForm="True" VisibleIndex="23">
+                     </dx:GridViewDataTextColumn>
+                     <dx:GridViewDataTextColumn Caption="وضعیت" FieldName="Title" ShowInCustomizationForm="True" VisibleIndex="24">
+                     </dx:GridViewDataTextColumn>
+                    
+                    <dx:GridViewDataTextColumn FieldName="State" Visible="False" />
+                     <dx:GridViewDataTextColumn Caption="کارتابل" FieldName="omur" VisibleIndex="25">
+                     </dx:GridViewDataTextColumn>
+                             <dx:GridViewDataTextColumn Caption="تاریخ شروع به کار" FieldName="tarix" ShowInCustomizationForm="True" VisibleIndex="26">
+                            </dx:GridViewDataTextColumn>
+                             <dx:GridViewDataTextColumn Caption="چارت" FieldName="chart" ShowInCustomizationForm="True" VisibleIndex="26">
+                            </dx:GridViewDataTextColumn>
+                </Columns>
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" ShowFilterBar="Visible" ShowGroupedColumns="True" ShowGroupPanel="True" />
+                    </dx:ASPxGridView>
+
+                               
+                              
+
+
+                               </dx:ContentControl>
+                     </ContentCollection>
+                 </dx:TabPage>
+
              </TabPages>
            
     </dx:ASPxPageControl>
