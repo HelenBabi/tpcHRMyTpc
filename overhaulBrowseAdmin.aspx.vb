@@ -45,11 +45,11 @@ Partial Class overhaulBrowseAdmin
 
         Dim dt As New DataTable
         Dim sqlstr As String = ""
-        If Session("unitID") = 19 Or Session("unitID") = 15 Then
-            sqlstr = "SELECT * from overhaulAllVW"
-        Else
-            sqlstr = "SELECT * from  overhaulAllVW where omurID = " & Session("omurID") & " "
-        End If
+        'If Session("unitID") = 19 Or Session("unitID") = 15 Then
+        '    sqlstr = "SELECT * from overhaulAllVW"
+        'Else
+        sqlstr = "SELECT * from  overhaulAllVW where omurID = " & Session("omurID") & " "
+        'End If
 
 
         dt = ClsDataTable.GetDataTable(sqlstr)

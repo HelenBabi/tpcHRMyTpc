@@ -7,7 +7,7 @@ Public Class user_login
 
         Dim dt As New DataTable
         Dim sqlstr As String
-        sqlstr = "SELECT       madrak + ' ' + reshte as madrakReshte, postname,ID, nam, family,UserPic,codePersoneli,pass,serviceNo,supervizer,UnitsCode,typ,shift,isResort,jens,modir,omurID,erja,okCalncel FROM personel  WHERE        (codePersoneli = " & name_ & ") AND (pass = N'" & pass_ & "') AND (CodeClosed = 0)"
+        sqlstr = "SELECT       madrak + ' ' + reshte as madrakReshte, postname,ID, nam, family,UserPic,codePersoneli,pass,serviceNo,supervizer,UnitsCode,typ,shift,isResort,jens,modir,omurID,erja,ok,sms,calncel FROM personel  WHERE        (codePersoneli = " & name_ & ") AND (pass = N'" & pass_ & "') AND (CodeClosed = 0)"
 
         dt = ClsDataTable.GetDataTable(sqlstr)
         Return dt

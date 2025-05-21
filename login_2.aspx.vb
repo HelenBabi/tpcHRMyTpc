@@ -53,7 +53,12 @@ Partial Class light_login2
                 Session("jens") = dt.Rows(0).Item("jens").ToString
 
                 Session("erja") = dt.Rows(0).Item("erja").ToString
-                Session("okCalncel") = dt.Rows(0).Item("okCalncel").ToString
+                Session("ok") = dt.Rows(0).Item("ok").ToString
+
+                Session("calncel") = dt.Rows(0).Item("calncel").ToString
+
+                Session("sms") = dt.Rows(0).Item("sms").ToString
+
                 Dim sqlstr2 As String
                 sqlstr2 = "SELECT         chartName     FROM chartTbl WHERE        (codePersoneli = " & dt.Rows(0).Item("codePersoneli").ToString.Trim & ")"
                 Dim dtp As New DataTable

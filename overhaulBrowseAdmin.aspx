@@ -44,19 +44,11 @@
                     EnableCallBacks="False" KeyFieldName="Id"  Width="100%" 
                     ClientIDMode="AutoID">
 
-                    <ClientSideEvents FocusedRowChanged="function(s, e) {
-
-}" />
-                
-                <SettingsBehavior AllowFocusedRow="True" />
-
 <ClientSideEvents FocusedRowChanged="function(s, e) {
 
 }"></ClientSideEvents>
 
 <SettingsBehavior AllowFocusedRow="True"></SettingsBehavior>
-
-                    <Settings ShowFilterRow="True" ShowHorizontalScrollBar="True" ShowGroupPanel="True" />
 
                     <ClientSideEvents FocusedRowChanged="function(s, e) {
 
@@ -70,6 +62,14 @@
 
 }" />
 
+                    <SettingsBehavior AllowFocusedRow="True" AutoFilterRowInputDelay="12000" />
+
+<Settings ShowFilterRow="True"></Settings>
+
+                    <ClientSideEvents FocusedRowChanged="function(s, e) {
+
+}" />
+                
                 <Columns>
                      <dx:GridViewDataTextColumn Caption="کد پیگیری" FieldName="Id" 
                             UnboundType="Integer" VisibleIndex="0">
@@ -100,39 +100,39 @@
                     <dx:GridViewDataTextColumn Caption="نام پدر" FieldName="FatherName" VisibleIndex="3" />
                                         <dx:GridViewDataTextColumn Caption="شناسنامه" FieldName="shSh" VisibleIndex="4" />
                     <dx:GridViewDataTextColumn Caption="تولد" FieldName="BirthDay" VisibleIndex="5" />
-                    <dx:GridViewDataTextColumn Caption="بانک" FieldName="BankCardNo" VisibleIndex="6" />
-                    <dx:GridViewDataTextColumn Caption="شماره حساب" FieldName="IBAN" VisibleIndex="7" />
+                    <dx:GridViewDataTextColumn Caption="بانک" FieldName="BankCardNo" VisibleIndex="6" Visible="False" />
+                    <dx:GridViewDataTextColumn Caption="شماره حساب" FieldName="IBAN" VisibleIndex="7" Visible="False" />
                     <dx:GridViewDataTextColumn Caption="نوع بیمه" FieldName="bime" VisibleIndex="9" />
-                    <dx:GridViewDataTextColumn Caption="شماره بیمه" FieldName="SSN" VisibleIndex="8" />
+                    <dx:GridViewDataTextColumn Caption="شماره بیمه" FieldName="SSN" VisibleIndex="8" Visible="False" />
 <dx:GridViewDataTextColumn FieldName="Mobile" ShowInCustomizationForm="True" Caption="موبایل" VisibleIndex="10"></dx:GridViewDataTextColumn>
-                    <dx:GridViewDataTextColumn Caption="تلفن" FieldName="Tell" VisibleIndex="11" />
-                    <dx:GridViewDataTextColumn Caption="کدپستی" FieldName="PostalCode" VisibleIndex="12" />
+                    <dx:GridViewDataTextColumn Caption="تلفن" FieldName="Tell" VisibleIndex="11" Visible="False" />
+                    <dx:GridViewDataTextColumn Caption="کدپستی" FieldName="PostalCode" VisibleIndex="12" Visible="False" />
                     <dx:GridViewDataTextColumn Caption="مدرک" FieldName="madrak" VisibleIndex="13" />
                     <dx:GridViewDataTextColumn Caption="رشته" FieldName="reshte" VisibleIndex="14" />
                      <dx:GridViewDataTextColumn Caption="گرایش" FieldName="EducationalOrientation" VisibleIndex="15">
                      </dx:GridViewDataTextColumn>
                     <dx:GridViewDataTextColumn Caption="تاهل" FieldName="martialStatus" VisibleIndex="16" />
                     <dx:GridViewDataTextColumn Caption="وظیفه" FieldName="MilitaryName" VisibleIndex="17" />
-                    <dx:GridViewDataTextColumn Caption="ایثارگری" FieldName="isargari" VisibleIndex="18" />
+                    <dx:GridViewDataTextColumn Caption="ایثارگری" FieldName="isargari" VisibleIndex="18" Visible="False" />
                     <dx:GridViewDataTextColumn Caption="سابقه اورهال" FieldName="overhalHistory" VisibleIndex="19" />
                     <dx:GridViewDataTextColumn Caption="سمت اورهال قبلی" FieldName="JobPosition" VisibleIndex="20" />
                     <dx:GridViewDataTextColumn Caption="استان" FieldName="province" VisibleIndex="21" />
                     
                      <dx:GridViewDataTextColumn Caption="شهر" FieldName="city" VisibleIndex="22">
                      </dx:GridViewDataTextColumn>
-                     <dx:GridViewDataTextColumn Caption="آدرس" FieldName="Address" ShowInCustomizationForm="True" VisibleIndex="23">
+                     <dx:GridViewDataTextColumn Caption="آدرس" FieldName="Address" ShowInCustomizationForm="True" VisibleIndex="23" Visible="False">
                      </dx:GridViewDataTextColumn>
-                     <dx:GridViewDataTextColumn Caption="وضعیت" FieldName="Title" ShowInCustomizationForm="True" VisibleIndex="24">
+                     <dx:GridViewDataTextColumn Caption="وضعیت" FieldName="Title" ShowInCustomizationForm="True" VisibleIndex="24" Visible="False">
                      </dx:GridViewDataTextColumn>
                     
                     <dx:GridViewDataTextColumn FieldName="State" Visible="False" />
-                     <dx:GridViewDataTextColumn Caption="کارتابل" FieldName="omur" VisibleIndex="25">
+                     <dx:GridViewDataTextColumn Caption="کارتابل" FieldName="omur" VisibleIndex="25" Visible="False">
                      </dx:GridViewDataTextColumn>
                 </Columns>
 
-                    <SettingsBehavior AllowFocusedRow="True" AutoFilterRowInputDelay="12000" />
+                <SettingsBehavior AllowFocusedRow="True" />
 
-<Settings ShowFilterRow="True"></Settings>
+                    <Settings ShowFilterRow="True" ShowHorizontalScrollBar="True" ShowGroupPanel="True" />
 
 <SettingsText GroupPanel="فيلد مورد نظر را جهت گروهبندي ,در اين محل قرار دهيد"></SettingsText>
 

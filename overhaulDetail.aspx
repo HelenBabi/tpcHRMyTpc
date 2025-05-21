@@ -9,7 +9,128 @@
  
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-    
+
+<script type="text/javascript">
+    function printCard() {
+        var fullName = '<%= fullName %>';
+        var personnelCode = '<%= personnelCode %>';
+        var photoPath = '<%= photoPath %>';
+        var signaturePath = '<%= signaturePath %>';
+        var expirationDate = '<%= expirationDate %>';
+        var html = `
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+      body {
+            margin: 0;
+            padding: 0;
+          font-family: Tahoma, sans-serif;
+      }
+        .container {
+            display: flex;
+            width: 16cm;
+            height: 9cm;
+            border: 1px solid black;
+            box-sizing: border-box;
+            direction: rtl;
+        }
+        .back, .front {
+            width: 50%;
+            padding: 0.5cm;
+            box-sizing: border-box;
+            border-left: 1px solid black;
+            position: relative;
+        }
+        .back {
+            font-size: 12px;
+            line-height: 1.7;
+        }
+        .back strong {
+            display: inline-block;
+            margin-top: 0.3cm;
+        }
+        .front {
+            text-align: center;
+        }
+        .photo {
+            width: 3cm;
+            height: 4cm;
+            border: 1px solid black;
+            margin: 0 auto 0.3cm;
+            object-fit: cover;
+        }
+        .info {
+            text-align: right;
+            font-size: 12px;
+            margin-top: 0.2cm;
+            padding: 0 0.2cm;
+        }
+        .red {
+            color: red;
+            font-weight: bold;
+        }
+        .signature {
+            margin-top: 0.5cm;
+            text-align: right;
+        }
+        .signature img {
+            width: 3cm;
+            height: auto;
+            display: block;
+            margin-top: 0.2cm;
+        }
+                @media print {
+                    body {
+                        margin: 0;
+                    }
+                }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="back">
+                <strong>کارت تردد موقت برای تعمیرات کوتاه مدت</strong><br/><br/>
+                ۱. این کارت فقط برای تردد در زمان اورهال صادر شده و ارزش دیگری ندارد.<br/>
+                ۲. هرگونه سواستفاده احتمالی به عهده گیرنده و دارنده کارت می‌باشد.<br/>
+                ۳. در صورت مفقود شدن کارت، مراتب را فوراً به واحد حراست اطلاع دهید.<br/>
+                ۴. از یابنده تقاضا می‌شود کارت را به صندوق پستی ۵۱۷۴۵-۳۵۴ ارسال نماید.<br/><br/>
+                <strong>تلفن‌های داخلی ضروری مجتمع:</strong><br/>
+        حراست: ۱۱۰ - آتش‌نشانی: ۱۱۲ - اورژانس: ۱۱۵
+                </div>
+                <div class="front">
+                    <strong>کارت تردد موقت برای تعمیرات کوتاه مدت</strong>
+                    <img src="${photoPath}" alt="عکس" class="photo" />
+                    <div class="info">
+                        <div><strong>شماره پرسنلی:</strong> ${personnelCode}</div>
+                         <br />
+                        <div><strong>نام:</strong> ${fullName}</div>
+                         <br />
+                        <div><strong class="red">تاریخ انقضا:</strong> ${expirationDate}</div>
+                        <div class="signature">
+                            <strong>امضا:</strong>
+                            <img src="${signaturePath}" alt="امضا" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                window.onload = function () {
+                    window.print();
+                    setTimeout(() => { window.close(); }, 500);
+    }
+    <\/script>
+</body>
+</html>`;
+
+    var win = window.open('', '', 'width=800,height=600');
+    win.document.open();
+    win.document.write(html);
+    win.document.close();
+    }
+</script>
+
+
 
     <style>
         body {
@@ -138,7 +259,7 @@
   </div>
 </div>
          <!-- دکمه چاپ -->
-       <%-- <div class="no-print">
+    <%--    <div class="no-print">
             <asp:Button ID="btnPrint" runat="server" Text="چاپ فرم" CssClass="btn btn-success"
                 OnClientClick="window.print(); return false;" />
         </div>--%>
@@ -216,7 +337,8 @@
             <td><asp:Label ID="JobPosition" runat="server" /></td>
             <td>وضعیت</td>
             <td><asp:Label ID="lblStatus" runat="server" BackColor="#FFFF66" /></td>
-           
+            <td>شیفت</td>
+            <td><asp:Label ID="lblShift" runat="server" BackColor="#FFFF66" /></td>
         </tr>
         <tr>
             <td>استان</td>
@@ -241,19 +363,123 @@
                 </div>
          <br />
          <div class="col-md-3">
-              <asp:Button ID="btnOk" runat="server" CssClass="btn btn-success btn-sm w-100" Text="تایید می‌شود" />
+              <asp:Button ID="btnOk" runat="server" CssClass="btn btn-success btn-sm w-100" Text="تایید می‌شود" Visible="False" />
                 </div>
          <br />
          <div class="col-md-3">
-              <asp:Button ID="BtnCancel" runat="server" CssClass="btn btn-danger btn-sm w-100" Text="تایید نمی‌شود" />
+              <asp:Button ID="BtnCancel" runat="server" CssClass="btn btn-danger btn-sm w-100" Text="تایید نمی‌شود" Visible="False" />
                 </div>
          <div class="col-md-3">
+                <asp:Button ID="btnHse" runat="server" CssClass="btn btn-success btn-sm w-100" Text="ارسال به HSE" Visible="false"  />
                  <asp:HiddenField ID="hdn_tmp" runat="server" />
                 </div>
          </div>
-    
+     <br />
+       <asp:Panel ID="PanelMadarek" runat="server" Visible="false" BorderStyle="Solid" GroupingText="کنترل مدارک">
+               <div class="row">
+                <div class="col-md-3" style="direction:ltr">
+                    <asp:CheckBox ID="CheckBoxMadarek" runat="server"  Text="مدارک کامل است" AutoPostBack="True" />
+                 	
+               </div>
+			<div class="col-md-3">
+                               	<asp:Label ID="Label11" runat="server"   CssClass="control-label"  Text="کدام مدرک ناقص است؟"></asp:Label>
+                <asp:DropDownList ID="cmbmadarek" runat="server"  Width="100%" Height="50px"  >
+                    <asp:ListItem Value="1">عکس پرسنلی</asp:ListItem>
+                    <asp:ListItem Value="2"> تصویر کارت ملی </asp:ListItem>
+                     <asp:ListItem Value="3">صفحه اول شناسنامه</asp:ListItem>
+                    <asp:ListItem Value="4"> صفحه توضیحات شناسنامه </asp:ListItem>
+                    <asp:ListItem Value="5">آخرین مدرک تحصیلی</asp:ListItem>
+                    <asp:ListItem Value="6"> گواهی عدم سوپیشینه </asp:ListItem>
+                     <asp:ListItem Value="7">گواهی خدمت یا معافیت یا کارت دانشجویی</asp:ListItem>
+                    <asp:ListItem Value="8"> کارت سلامت </asp:ListItem>
+                                </asp:DropDownList>
+      
+ 
+			</div>
+         
+              <div class="col-md-6">
+                                <div class="mt-2">
+        <asp:Button ID="Button2" runat="server" CssClass="btn btn-primary btn-sm w-100" Text="افزودن" ValidationGroup="c" />
+      </div>
+                  </div>
+          	</div>
+           <div class="row"
+               >
+                 <div class="col-md-6">
+                <div class="card-body">
+     <asp:GridView ID="gridMadrak" runat="server" AutoGenerateColumns="False" Font-Size="10pt"
+        Width="100%" CssClass="table table-bordered table-hover text-center">
+        <AlternatingRowStyle BackColor="White" />
+        <Columns>
+          <asp:BoundField DataField="idDtl" HeaderText="#" />
+          <asp:BoundField DataField="madrakName" HeaderText="نوع مدرک" />
+            <asp:BoundField DataField="tarix" HeaderText="تاریخ" />
+          <asp:BoundField DataField="saat" HeaderText="ساعت" />
+          <asp:ButtonField CommandName="del" Text="حذف" />
+        </Columns>
+        <HeaderStyle CssClass="table-dark" />
+        <RowStyle BackColor="#EFF3FB" />
+      </asp:GridView>
+  </div>
 
+  </div>
+               <div class="col-md-6">
+       
+</div>
+           </div>
+       
 
+    </asp:Panel>
+        <br />
+
+     <asp:Panel ID="PanelSms" runat="server" Visible="false">
+          <div class="row">
+			<div class="col-md-3">
+
+               	<asp:Label ID="Label1" runat="server" CssClass="control-label"  Text="تاریخ مصاحبه"></asp:Label>
+              <asp:TextBox ID="mosahebeDate" runat="server" CssClass="form-control" Width="100px"  />
+ 
+
+			</div>
+              	<div class="col-md-2" >
+                               	<asp:Label ID="Label5" runat="server" CssClass="control-label"  Text="ساعت مصاحبه"></asp:Label>
+                <asp:DropDownList ID="cmbMosahebeDate" runat="server" Width="100px" style="direction:ltr">
+                    <asp:ListItem Value="1">8-12</asp:ListItem>
+                    <asp:ListItem Value="2">14-18</asp:ListItem>
+                                </asp:DropDownList>
+      
+ 
+			</div>
+               <div class="col-md-2">
+                   <asp:Button ID="btnSms" runat="server" class="btn btn-primary btn-sm w-100" Text="ایجاد متن پیامک" Width="150px" />
+                  </div>
+
+           <div class="col-md-5">
+         <label for="txterja" class="form-label fw-bold text-dark"></label>
+      <asp:TextBox ID="txtSms" runat="server" Height="200px"
+        CssClass="form-control" placeholder="دکمه ایجاد متن پیامک را کلیک نمایید " ValidationGroup="a" Width="100%" TextMode="MultiLine"  />
+        
+        </div>
+             
+          	</div>
+
+    </asp:Panel>
+      <asp:Panel ID="PanelDate" runat="server" Visible="false">
+          <div class="row">
+			<div class="col-md-8">
+
+               	<asp:Label ID="lblDate" runat="server" CssClass="control-label"  Text="تاریخ شروع بکار"></asp:Label>
+              <asp:TextBox ID="txtDate" runat="server" CssClass="form-control"  />
+    <br />
+   
+ <asp:Button ID="BtnStartWork" runat="server" class="btn btn-primary btn-sm w-100" Text="ثبت شروع به کار" />
+			</div>
+           <div class="col-md-4">
+                
+               </div>
+          	</div>
+
+    </asp:Panel>
           <br />
 
 
@@ -281,7 +507,7 @@
     </div>
        <div class="col-md-4">
                <asp:Label ID="lblruneveshtType" runat="server" Text="چارت پیشنهادی"></asp:Label>
-      <dx:ASPxComboBox ID="CmbruneveshtType" ClientInstanceName="ClientComboBox" DropDownRows="5" CallbackPageSize="5"
+      <dx:ASPxComboBox ID="CmbruneveshtType" ClientInstanceName="ClientComboBox" DropDownRows="10" CallbackPageSize="5"
         ForceDataBinding="true" TextField="Name" Width="100%" runat="server" ClientIDMode="AutoID"
         IncrementalFilteringMode="Contains" ValueType="System.String"
         CssClass="form-control" HorizontalAlign="Right">
@@ -294,8 +520,17 @@
       <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="CmbruneveshtType"
         ErrorMessage="لطفا جارت پیشنهادی را انتخاب نمایید" ForeColor="#FF33CC" InitialValue="0" ValidationGroup="c" />
     </div>
-    
+    <div class="row">
+    <div class="col-md-6">
+         <label for="txterja" class="form-label fw-bold text-dark"></label>
+      <asp:TextBox ID="txtMatnErjaa" runat="server" Height="50px"
+        CssClass="form-control" placeholder="متن  را در این قسمت بنویسید" ValidationGroup="a" Width="100%" Visible="False" />
+        
+        </div>
+          <div class="col-md-6">
 
+        </div>
+        </div>
   
   </div>
 
@@ -353,42 +588,154 @@
     </div>
 </asp:Panel>
     <br />
-    <asp:Panel ID="PanelDate" runat="server" Visible="false">
+  
+        <br />
+    <asp:Panel ID="PanelEmeni" runat="server" Visible="false">
           <div class="row">
-			<div class="col-md-8">
+			<div class="col-md-4">
 
-               	<asp:Label ID="lblDate" runat="server" CssClass="control-label" Text="تاریخ شروع بکار"></asp:Label>
-              <asp:TextBox ID="txtDate" runat="server" CssClass="form-control" />
+               	<asp:Label ID="Label4" runat="server" CssClass="control-label"  Text="نمره آزمون"></asp:Label>
+              <asp:TextBox ID="txtNomre" runat="server" CssClass="form-control"  TextMode="Number" />
     <br />
    
- <asp:Button ID="BtnStartWork" runat="server" class="btn btn-primary btn-sm w-100" Text="ثبت شروع به کار" />
+ <asp:Button ID="btnEmeni" runat="server" class="btn btn-primary btn-sm w-100" Text="ثبت نمره آزمون" />
 			</div>
            <div class="col-md-4">
+                
+               </div>
+               <div class="col-md-4">
+                
+               </div>
+          	</div>
+
+    </asp:Panel>
+          <br />
+    <asp:Panel ID="PanelHR" runat="server" Visible="false">
+          <div class="row">
+			<div class="col-md-4">
+
+               	<asp:Label ID="Label6" runat="server" CssClass="control-label"  Text="کد پرسنلی"></asp:Label>
+              <asp:TextBox ID="codepersoneliTxt" runat="server" CssClass="form-control"  TextMode="Number" MaxLength="6" />
+    <br />
+   
+ <asp:Button ID="BtnHr" runat="server" class="btn btn-primary btn-sm w-100" Text="ثبت کدپرسنلی" />
+			</div>
+           <div class="col-md-4">
+                
+               </div>
+               <div class="col-md-4">
                 
                </div>
           	</div>
 
     </asp:Panel>
     <br />
+   
+    <br />
+    <asp:Panel ID="PanelHerasat" runat="server" Visible="false">
+          <div class="row">
+            <div class="col-md-4">
+                 	<asp:Label ID="Label7" runat="server" CssClass="control-label"  Text="تاریخ انقضای کارت"></asp:Label>
+              <asp:TextBox ID="expiretxt" runat="server" CssClass="form-control"  />
+               </div>
+              <div class="col-md-4">
+                  <asp:Button ID="btnExpire" runat="server" class="btn btn-primary btn-sm w-100" Text="ثبت تاریخ انقضا" />
+                  </div>
+                 <div class="col-md-4">
+                
+                         <asp:Button ID="btnPrintCard" runat="server" class="btn btn-warning btn-sm w-100" Text="چاپ کارت" OnClientClick="printCard(); return false;" />
 
+                     <button onclick="printCards()">چاپ کارت‌ها</button>
+
+               </div>
+          	</div>
+        
+    </asp:Panel>
+    <br />
+       <asp:Panel ID="PanelHse" runat="server" Visible="false" BorderStyle="Solid">
+           <div class="row"
+               >
+                 <div class="col-md-6">
+                <div class="card-body">
+     <asp:GridView ID="GridHse" runat="server" AutoGenerateColumns="False" 
+                                        Font-Size="10pt" TabIndex="12" Width="100%" style="color: #000000" 
+                                        CellPadding="3" ForeColor="Black" GridLines="Vertical" CssClass="table" BackColor="White" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px">
+                                        <AlternatingRowStyle BackColor="#CCCCCC" />
+                                        <Columns>
+                                            <asp:BoundField DataField="tarix" HeaderText="تاریخ" >
+                                            <HeaderStyle HorizontalAlign="Center" />
+                                            <ItemStyle HorizontalAlign="Right" />
+                                            </asp:BoundField>
+                                            <asp:BoundField DataField="shifName" HeaderText="تابم" />
+                                                                                      
+                                            <asp:BoundField DataField="countt" HeaderText="تعداد">
+                                            <HeaderStyle HorizontalAlign="Center" />
+                                            <ItemStyle HorizontalAlign="Right" />
+                                            </asp:BoundField>
+                                         
+                                           
+                                        </Columns>
+                                        <FooterStyle BackColor="#CCCCCC" />
+                                        <HeaderStyle BackColor="Black" Font-Bold="True" ForeColor="White" />
+                                        <PagerStyle BackColor="#999999" ForeColor="Black" HorizontalAlign="Center" />
+                                        <SelectedRowStyle BackColor="#000099" Font-Bold="True" ForeColor="White" />
+                                        <SortedAscendingCellStyle BackColor="#F1F1F1" />
+                                        <SortedAscendingHeaderStyle BackColor="#808080" />
+                                        <SortedDescendingCellStyle BackColor="#CAC9C9" />
+                                        <SortedDescendingHeaderStyle BackColor="#383838" />
+                                    </asp:GridView>
+  </div>
+
+  </div>
+               <div class="col-md-6">
+</div>
+           </div>
+          <div class="row">
+                <div class="col-md-3">
+                 	<asp:Label ID="Label3" runat="server" CssClass="control-label"  Text="تاریخ کلاس" ></asp:Label>
+              <asp:TextBox ID="txtDateKelas" runat="server" CssClass="form-control"  Width="100px" Height="50px"/>
+               </div>
+			<div class="col-md-3">
+                               	<asp:Label ID="Label2" runat="server" CssClass="control-label"  Text="تایم کلاس"></asp:Label>
+                <asp:DropDownList ID="cmbKelas" runat="server"  Width="100px" Height="50px" >
+                    <asp:ListItem Value="1">ساعت 8</asp:ListItem>
+                    <asp:ListItem Value="2"> ساعت 14</asp:ListItem>
+                                </asp:DropDownList>
+      
+ 
+			</div>
+         
+              <div class="col-md-6">
+                  <asp:Button ID="BtnHseSave" runat="server" class="btn btn-success btn-sm w-100" Text="ثبت و ارجاع به ایمنی" />
+                  </div>
+          	</div>
+
+    </asp:Panel>
+    
+    <br />
     <asp:Panel ID="PanelFileUpload" runat="server" Visible="false">
-   <div class="container mt-5">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="card shadow p-4 rounded-4">
-                        <h4 class="text-center mb-4"> بارگذاری مدرک HSE</h4>
 
-                        <asp:FileUpload ID="FileUpload1" runat="server" CssClass="form-control mb-3" />
-                        <asp:Button ID="btnUpload" runat="server" Text="ثبت فایل" CssClass="btn btn-primary w-100" OnClick="btnUpload_Click" />
-                        
-                        <div class="mt-3">
-                            <asp:Label ID="lblMessage" runat="server" EnableViewState="false" />
-                        </div>
-                    </div>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow p-4 rounded-4">
+                <%--<h4 class="text-center mb-4"> بارگذاری مدارک</h4>--%>
+
+                <label>آپلود کارت سلامت:</label>
+                <asp:FileUpload ID="FileUploadHealth" runat="server" CssClass="form-control mb-3" />
+
+                <label>آپلود برگه معاینه:</label>
+                <asp:FileUpload ID="FileUploadCheckup" runat="server" CssClass="form-control mb-3" />
+
+                <asp:Button ID="btnUpload" runat="server" Text="ثبت فایل‌" CssClass="btn btn-primary w-100" OnClick="btnUpload_Click" />
+
+                <div class="mt-3">
+                    <asp:Label ID="lblMessage" runat="server" EnableViewState="false" />
                 </div>
             </div>
         </div>
-
+    </div>
+</div>
 
 
     </asp:Panel>
@@ -440,6 +787,7 @@
                                  <asp:HiddenField ID="dat" runat="server" />
                                  <asp:HiddenField ID="hdnType" runat="server" />
                                  <asp:HiddenField ID="tim" runat="server" />
+          
           </div>
          </div>
 
