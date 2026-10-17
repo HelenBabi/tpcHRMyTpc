@@ -324,7 +324,4 @@ Partial Class productPersonelUnit
     End Sub
 
    
-    Protected Sub ibtnxl_Click(sender As Object, e As ImageClickEventArgs) Handles ibtnxl.Click
-        grvExporter1.WriteXlsxToResponse()
-    End Sub
 End Class

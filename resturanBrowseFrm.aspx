@@ -28,36 +28,24 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
 
-  
-
-
-    <div class="row">
+      <div class="row">
        
 
-			<div class="col-md-12">
+			<div class="col-md-6">
                
              
                        <asp:Button ID="ibtnExit" runat="server" class="btn btn-warning btn-sm waves-effect waves-light" Text="برگشت" />
-                    <asp:ImageButton ID="ibtnxl" runat="server" Height="48px" 
-                        ImageUrl="~/Icons/exel.JPG" ToolTip="استخراج اطلاعات به اکسل" 
-                        Width="48px" />
-                    <asp:ImageButton ID="ibtnPrint" runat="server" Height="48px" 
-                        ImageUrl="~/Icons/Print.png" ToolTip="چاپ" Width="48px" 
-                        ValidationGroup="b" Visible="False" />
-                    <asp:ImageButton ID="ibtnDeactived" runat="server" 
-                        Height="48px" ImageUrl="~/Icons/reload.png" 
-                        ToolTip="بازخوانی کدهای غیر فعال" Width="48px" ValidationGroup="b" Visible="False" />
-                    <asp:ImageButton ID="ibtnHistory" runat="server" Height="48px" 
-                        ImageUrl="~/Icons/history.png" ToolTip="تاریخچه تغییرات" 
-                        Width="48px" ValidationGroup="b" Visible="False" />
-                    <asp:ImageButton ID="ibtnDelete" runat="server" Height="48px" 
-                        ImageUrl="~/Icons/Delete.png" ToolTip="حذف" Width="48px" 
-                        ValidationGroup="a" Visible="False" />
-                    <asp:ImageButton ID="ibtnCancel" runat="server" Enabled="False" Height="48px" 
-                        ImageUrl="~/Icons/Cancel2.png" ToolTip="انصراف" Width="48px" 
-                        ValidationGroup="b" Visible="False" />
+                   <!-- دکمه خروجی اکسل -->
+
                 
              			    			</div>
+          <div class="col-md-6">
+              <asp:Button ID="btnExportExcel" runat="server" 
+    Text="📊 خروجی اکسل" 
+    CssClass="btn btn-success" 
+    OnClick="btnExportExcel_Click"
+    Width="200px" Height="32px" />
+              </div>
               
       </div>
 
@@ -69,7 +57,7 @@
                     dir="ltr" style="width: 120px" readonly="readonly"/>
 			</div>
            <div class="col-md-6">
-                 
+                       <asp:Button ID="Button1" runat="server" class="btn btn-warning btn-sm waves-effect waves-light" Text="برگشت" />
                </div>
           	</div>
 			    <div class="row">			
@@ -94,17 +82,20 @@
                                                         <ItemStyle HorizontalAlign="Center" />
                                                         </asp:BoundField>
                                                        
+                                                        <asp:BoundField DataField="tarix" HeaderText="تاریخ" />
+                                                       
                                                     </Columns>
                                                     <RowStyle Font-Size="Medium" />
                                                 </asp:GridView>
+                  <asp:Label ID="lblCnt" runat="server" CssClass="control-label" BackColor="#FFFFCC" ForeColor="Black"></asp:Label>
+                   	<asp:Label ID="lblTotal" runat="server" CssClass="control-label" BackColor="#FFFF99" ForeColor="Black"></asp:Label>
             
 		</div>
     </div>
     <br />
      <div class="row">
 			<div class="col-md-12">
-<asp:Label ID="lblCnt" runat="server" CssClass="control-label" ></asp:Label>
-                   	<asp:Label ID="lblTotal" runat="server" CssClass="control-label" ></asp:Label>
+
                 </div>
          </div>
          <br />
@@ -113,20 +104,7 @@
                 <dx:ASPxGridView ID="ASPxGrvHead" runat="server" AutoGenerateColumns="False" 
                         ClientIDMode="AutoID" KeyFieldName="CardId" Width="100%">
 
-                        <settings showfilterrow="True" />
-
-                        <clientsideevents focusedrowchanged="function(s, e) {
-
-}" />
-
-                        <settingsbehavior allowfocusedrow="True" AutoFilterRowInputDelay="120000" />
-
 <Settings ShowFilterRow="True" ShowGroupPanel="True"></Settings>
-
-                        <settingstext grouppanel="فيلد مورد نظر را جهت گروهبندي ,در اين محل قرار دهيد" />
-
-                        <settingsdetail allowonlyonemasterrowexpanded="True" isdetailgrid="True" 
-                            showdetailrow="True" />
 
 <ClientSideEvents FocusedRowChanged="function(s, e) {
 
@@ -141,6 +119,18 @@
 <SettingsDetail ShowDetailRow="True" IsDetailGrid="True" AllowOnlyOneMasterRowExpanded="True"></SettingsDetail>
 
                     <ClientSideEvents FocusedRowChanged="function(s, e) {
+
+}" />
+
+                    <SettingsBehavior AllowFocusedRow="True" />
+
+                        <settings showfilterrow="True" showgrouppanel="True" ShowHeaderFilterButton="True" />
+
+                    <SettingsText GroupPanel="فيلد مورد نظر را جهت گروهبندي ,در اين محل قرار دهيد" />
+
+                    <settingsdetail ShowDetailButtons="False" />
+
+                        <clientsideevents focusedrowchanged="function(s, e) {
 
 }" />
 
@@ -205,16 +195,17 @@
                             </dx:GridViewDataTextColumn>
                         </Columns>
 
-                    <SettingsBehavior AllowFocusedRow="True" />
+                        <settingsbehavior allowfocusedrow="True" AutoFilterRowInputDelay="120000" />
 
                         <settingspager pagesize="20">
                         </settingspager>
 
-                        <settings showfilterrow="True" showgrouppanel="True" ShowHeaderFilterButton="True" />
+                        <settings showfilterrow="True" />
 
-                    <SettingsText GroupPanel="فيلد مورد نظر را جهت گروهبندي ,در اين محل قرار دهيد" />
+                        <settingstext grouppanel="فيلد مورد نظر را جهت گروهبندي ,در اين محل قرار دهيد" />
 
-                    <settingsdetail ShowDetailButtons="False" />
+                        <settingsdetail allowonlyonemasterrowexpanded="True" isdetailgrid="True" 
+                            showdetailrow="True" />
 
                         <styles>
                             <detailrow backcolor="#CCFFCC">

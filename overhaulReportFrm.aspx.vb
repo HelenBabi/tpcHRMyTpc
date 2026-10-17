@@ -307,7 +307,7 @@ Partial Class overhaulReportFrm
         Dim dt As New DataTable
         Dim sqlstr As String = ""
         'If Session("unitID") = 19 Or Session("unitID") = 15 Then
-        sqlstr = "SELECT * from overhaulAllVW where state = 106 ORDER BY FirstName"
+        sqlstr = "SELECT * from overhaulHerastVW  ORDER BY codePersoneli"
         'Else
         '    sqlstr = "SELECT * from  overhaulAllVW where omurID = " & Session("omurID") & " "
         'End If

@@ -75,7 +75,7 @@
                             Text='<%# Eval("idTour") %>'></asp:LinkButton>
                     </DataItemTemplate>
                 </dx:GridViewDataTextColumn>
-                <dx:GridViewDataTextColumn Caption="زمان" FieldName="magsad" VisibleIndex="2" />
+                <dx:GridViewDataTextColumn Caption="مکان و زمان" FieldName="magsad" VisibleIndex="2" />
                 <dx:GridViewDataCheckColumn Caption="غیر فعال" FieldName="CodeClosed" VisibleIndex="3" />
             </Columns>
         </dx:ASPxGridView>

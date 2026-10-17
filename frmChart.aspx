@@ -115,7 +115,7 @@
         </div>
                 <div class="div_grid">
                     <dx:ASPxPageControl ID="ASPxPageControl1" runat="server" ActiveTabIndex="0" 
-                        ClientIDMode="AutoID" Width="930px">
+                        ClientIDMode="AutoID" Width="100%">
                         <TabPages>
                             <dx:TabPage Text="گزارش درقالب نمودار">
                                 <ContentCollection>
@@ -139,55 +139,38 @@
 <Shadow Visible="True"></Shadow>
                                             </legend>
                                             <seriesserializable>
-                                                <cc1:Series ArgumentDataMember="BuildingName" Name="سرويس در كارگاه" 
-                                                    ValueDataMembersSerializable="ss">
-                                                    <viewserializable><cc1:StackedBarSeriesView Color="250, 192, 192, 255" Transparency="5"></cc1:StackedBarSeriesView></viewserializable>
-                                                    <labelserializable><cc1:StackedBarSeriesLabel Visible="False"><fillstyle><optionsserializable><cc1:SolidFillOptions /></optionsserializable></fillstyle></cc1:StackedBarSeriesLabel></labelserializable>
+                                                <cc1:Series ArgumentDataMember="dorehayeGozrande" Name="Series 1" 
+                                                    ValueDataMembersSerializable="summ" LegendText="دوره های برگزار شده">
+                                                    <viewserializable><cc2:SideBySideBarSeriesView></cc2:SideBySideBarSeriesView></viewserializable>
+                                                    <labelserializable><cc2:SideBySideBarSeriesLabel LineVisible="True"><fillstyle><optionsserializable><cc2:SolidFillOptions /></optionsserializable></fillstyle></cc2:SideBySideBarSeriesLabel></labelserializable>
                                                     <pointoptionsserializable><cc1:PointOptions></cc1:PointOptions></pointoptionsserializable>
                                                     <legendpointoptionsserializable><cc1:PointOptions></cc1:PointOptions></legendpointoptionsserializable>
                                                 </cc1:Series>
-                                                <cc1:Series ArgumentDataMember="BuildingName" Name="ريموت" 
-                                                    ValueDataMembersSerializable="rr">
-                                                    <viewserializable><cc1:StackedBarSeriesView></cc1:StackedBarSeriesView></viewserializable>
-                                                    <labelserializable><cc1:StackedBarSeriesLabel Visible="False"><fillstyle><optionsserializable><cc1:SolidFillOptions /></optionsserializable></fillstyle></cc1:StackedBarSeriesLabel></labelserializable>
-                                                    <pointoptionsserializable><cc1:PointOptions></cc1:PointOptions></pointoptionsserializable>
-                                                    <legendpointoptionsserializable><cc1:PointOptions></cc1:PointOptions></legendpointoptionsserializable>
-                                                </cc1:Series>
-                                                <cc1:Series ArgumentDataMember="BuildingName" Name="سرویس در محل" 
-                                                    ValueDataMembersSerializable="mahal">
-                                                    <viewserializable><cc1:StackedBarSeriesView></cc1:StackedBarSeriesView></viewserializable>
-                                                    <labelserializable><cc1:StackedBarSeriesLabel Visible="False"><fillstyle><optionsserializable><cc1:SolidFillOptions /></optionsserializable></fillstyle></cc1:StackedBarSeriesLabel></labelserializable>
-                                                    <pointoptionsserializable><cc1:PointOptions></cc1:PointOptions></pointoptionsserializable>
-                                                    <legendpointoptionsserializable><cc1:PointOptions></cc1:PointOptions></legendpointoptionsserializable>
-                                                </cc1:Series>
-                                                <cc1:Series ArgumentDataMember="BuildingName" Name="سرویس دوره ای" 
-                                                    ValueDataMembersSerializable="dorei">
-                                                    <viewserializable><cc1:StackedBarSeriesView></cc1:StackedBarSeriesView></viewserializable>
-                                                    <labelserializable><cc1:StackedBarSeriesLabel Visible="False"><fillstyle><optionsserializable><cc1:SolidFillOptions /></optionsserializable></fillstyle></cc1:StackedBarSeriesLabel></labelserializable>
-                                                    <pointoptionsserializable><cc1:PointOptions></cc1:PointOptions></pointoptionsserializable>
-                                                    <legendpointoptionsserializable><cc1:PointOptions></cc1:PointOptions></legendpointoptionsserializable>
-                                                </cc1:Series>
-                                                <cc1:Series ArgumentDataMember="BuildingName" Name="شبكه" 
-                                                    ValueDataMembersSerializable="tshbk">
-                                                    <viewserializable><cc1:StackedBarSeriesView></cc1:StackedBarSeriesView></viewserializable>
-                                                    <labelserializable><cc1:StackedBarSeriesLabel Visible="False"><fillstyle><optionsserializable><cc1:SolidFillOptions /></optionsserializable></fillstyle></cc1:StackedBarSeriesLabel></labelserializable>
-                                                    <pointoptionsserializable><cc1:PointOptions></cc1:PointOptions></pointoptionsserializable>
-                                                    <legendpointoptionsserializable><cc1:PointOptions></cc1:PointOptions></legendpointoptionsserializable>
-                                                </cc1:Series>
-                                                <cc1:Series ArgumentDataMember="BuildingName" Name="Passive" 
-                                                    ValueDataMembersSerializable="pass">
-                                                    <viewserializable><cc1:StackedBarSeriesView Color="0, 192, 192"></cc1:StackedBarSeriesView></viewserializable>
-                                                    <labelserializable><cc1:StackedBarSeriesLabel><fillstyle><optionsserializable><cc1:SolidFillOptions /></optionsserializable></fillstyle></cc1:StackedBarSeriesLabel></labelserializable>
-                                                    <pointoptionsserializable><cc1:PointOptions></cc1:PointOptions></pointoptionsserializable>
-                                                    <legendpointoptionsserializable><cc1:PointOptions></cc1:PointOptions></legendpointoptionsserializable>
-                                                </cc1:Series>
-                                                <cc1:Series ArgumentDataMember="saxteman" Name="تعداد سيستم" 
-                                                    ValueDataMembersSerializable="tedadsystem" Visible="False">
-                                                    <viewserializable><cc1:SideBySideBarSeriesView></cc1:SideBySideBarSeriesView></viewserializable>
-                                                    <labelserializable><cc1:SideBySideBarSeriesLabel LineVisible="True"><fillstyle><optionsserializable><cc1:SolidFillOptions /></optionsserializable></fillstyle></cc1:SideBySideBarSeriesLabel></labelserializable>
-                                                    <pointoptionsserializable><cc1:PointOptions></cc1:PointOptions></pointoptionsserializable>
-                                                    <legendpointoptionsserializable><cc1:PointOptions></cc1:PointOptions></legendpointoptionsserializable>
-                                                </cc1:Series>
+                                               
+                                                <cc2:Series ArgumentDataMember="dorehayeGozrande" Name="Series 2" ValueDataMembersSerializable="summ">
+                                                    <viewserializable>
+                                                        <cc2:SideBySideBarSeriesView>
+                                                        </cc2:SideBySideBarSeriesView>
+                                                    </viewserializable>
+                                                    <labelserializable>
+                                                        <cc2:SideBySideBarSeriesLabel LineVisible="True">
+                                                            <fillstyle>
+                                                                <optionsserializable>
+                                                                    <cc2:SolidFillOptions />
+                                                                </optionsserializable>
+                                                            </fillstyle>
+                                                        </cc2:SideBySideBarSeriesLabel>
+                                                    </labelserializable>
+                                                    <pointoptionsserializable>
+                                                        <cc2:PointOptions>
+                                                        </cc2:PointOptions>
+                                                    </pointoptionsserializable>
+                                                    <legendpointoptionsserializable>
+                                                        <cc2:PointOptions>
+                                                        </cc2:PointOptions>
+                                                    </legendpointoptionsserializable>
+                                                </cc2:Series>
+                                               
                                             </seriesserializable>
                                             <seriestemplate seriespointssorting="Descending" 
                                                 seriespointssortingkey="Value_1">
@@ -209,66 +192,10 @@
                                     </dx:ContentControl>
                                 </ContentCollection>
                             </dx:TabPage>
-                            <dx:TabPage Text="گزارش در قالب جدول">
-                                <ContentCollection>
-                                    <dx:ContentControl runat="server" SupportsDisabledAttribute="True">
-                                        <dx:ASPxGridView ID="grdServic" runat="server" AutoGenerateColumns="False" 
-                                            ClientIDMode="AutoID" KeyFieldName="BuildingCode" Width="400px">
-                                            <Columns>
-                                                <dx:GridViewDataTextColumn Caption="نام ساختمان" FieldName="BuildingName" 
-                                                    ShowInCustomizationForm="True" VisibleIndex="1">
-                                                    <HeaderStyle HorizontalAlign="Center" />
-                                                    <CellStyle HorizontalAlign="Right">
-                                                    </CellStyle>
-                                                </dx:GridViewDataTextColumn>
-                                                <dx:GridViewDataTextColumn Caption="تعداد" FieldName="tedad" 
-                                                    ShowInCustomizationForm="True" VisibleIndex="2">
-                                                    <HeaderStyle HorizontalAlign="Center" />
-                                                    <CellStyle HorizontalAlign="Center">
-                                                    </CellStyle>
-                                                </dx:GridViewDataTextColumn>
-                                            </Columns>
-                                            <SettingsPager PageSize="20">
-                                            </SettingsPager>
-                                            <Settings ShowFilterRow="True" />
-                                            <SettingsDetail IsDetailGrid="True" ShowDetailRow="True" 
-                                                AllowOnlyOneMasterRowExpanded="True" />
-
-<Settings ShowFilterRow="True"></Settings>
-
-<SettingsDetail ShowDetailRow="True" IsDetailGrid="True" AllowOnlyOneMasterRowExpanded="True"></SettingsDetail>
-
-                                            <Templates>
-                                                <DetailRow>
-                                                    <dx:ASPxGridView ID="grdFarei" runat="server" AutoGenerateColumns="False" 
-                                                        KeyFieldName="WorkTypeCode" 
-                                    OnBeforePerformDataSelect="grdFarei_BeforePerformDataSelect" ClientIDMode="AutoID" Width="400px">
-                                                        <Columns>
-                                                            <dx:GridViewDataTextColumn Caption="نوع سرويس" FieldName="WorkTypeName" 
-                                                                VisibleIndex="0">
-                                                                <HeaderStyle HorizontalAlign="Center" />
-                                                                <cellstyle horizontalalign="Center">
-                                                                </cellstyle>
-                                                            </dx:GridViewDataTextColumn>
-                                                            <dx:GridViewDataTextColumn Caption="تعداد" FieldName="tedad2" VisibleIndex="1">
-                                                                <HeaderStyle HorizontalAlign="Center" />
-                                                                <cellstyle horizontalalign="Center">
-                                                                </cellstyle>
-                                                            </dx:GridViewDataTextColumn>
-                                                        </Columns>
-                                                        <settingspager pagesize="20" visible="False">
-                                                        </settingspager>
-                                                        <settings showfilterrow="True" />
-                                                    </dx:ASPxGridView>
-                                                </DetailRow>
-                                            </Templates>
-                                        </dx:ASPxGridView>
-                                    </dx:ContentControl>
-                                </ContentCollection>
-                            </dx:TabPage>
-                            <dx:TabPage Text="تعداد ثبت نام">
+                            <dx:TabPage>
                                 <contentcollection>
                                     <dx:ContentControl runat="server" SupportsDisabledAttribute="True">
+<asp:Chart ID="Chart1" runat=server><Series><asp:Series Name="Series1"></asp:Series></Series><ChartAreas><asp:ChartArea Name="ChartArea1"></asp:ChartArea></ChartAreas></asp:Chart>
                                     </dx:ContentControl>
                                 </contentcollection>
                             </dx:TabPage>

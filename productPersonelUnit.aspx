@@ -221,11 +221,7 @@
       
              <div class="row">
 			<div class="col-md-3">
-              
-                <dx:ASPxGridViewExporter ID="grvExporter1" runat="server" 
-                    GridViewID="ASPxGrvHead">
-                </dx:ASPxGridViewExporter>
-                           
+                                                    
                 </div>
                 <div class="col-md-3">
                 </div>

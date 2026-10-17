@@ -28,6 +28,30 @@ Public Class ClsDataTable
         Return dt
 
     End Function
+
+    ' ✅ متد جدید برای کوئری با پارامتر
+    Public Shared Function GetDataTable(ByVal sql As String, ByVal params As Dictionary(Of String, Object)) As DataTable
+        Dim dt As New DataTable()
+        Try
+            Using cnn As New SqlConnection(ClsConnection.GetConn)
+                Using cmd As New SqlCommand(sql, cnn)
+                    ' اضافه کردن پارامترها
+                    For Each kvp As KeyValuePair(Of String, Object) In params
+                        cmd.Parameters.AddWithValue(kvp.Key, kvp.Value)
+                    Next
+
+                    Using da As New SqlDataAdapter(cmd)
+                        da.Fill(dt)
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+            Throw New Exception("خطا در خواندن داده: " & ex.Message)
+        End Try
+        Return dt
+    End Function
+
+
     Public Shared Function GetDataTableAbzar(ByVal sqlstr As String) As DataTable
         Dim cnn As New SqlConnection
         Dim da As SqlDataAdapter

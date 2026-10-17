@@ -9,6 +9,8 @@ Public Class CardData
     Public Property ExpirationDate As String
     Public Property shift As String
     Public Property omur As String
+    Public Property tarixStart As String
+
 
 End Class
 

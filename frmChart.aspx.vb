@@ -17,8 +17,8 @@ Partial Class frmChart
             'Dim b As String = ClsDateTime.GetDateNow
             'ClientScript.RegisterStartupScript(Me.GetType(), "OpenWin", "<script>openNewWin('" & a & "','" & b & "')</script>")
 
+            load_kargah2()
 
-            load_grd()
         End If
         'grdsaxteman_load()
 
@@ -101,12 +101,12 @@ Partial Class frmChart
             dateE1 = dateE
         End If
         load_kargah2()
-        load_remot2()
-        load_mahal2()
-        load_dorei2()
-        load_grd2()
-        load_shabake2()
-        load_Passive()
+        'load_remot2()
+        'load_mahal2()
+        'load_dorei2()
+        'load_grd2()
+        'load_shabake2()
+        'load_Passive()
         ClientScript.RegisterStartupScript(Me.GetType(), "OpenWin", "<script>openNewWin('" & datS & "','" & dateE & "')</script>")
     End Sub
     Private Sub load_shabake2()
@@ -126,16 +126,11 @@ Partial Class frmChart
 
     Private Sub load_kargah2()
         Dim sqlstr As String
-        sqlstr = "SELECT     COUNT(tblWorkHdr.WorkTypeCode) AS ss, tblBuilding.BuildingName " & _
-                 " FROM         tblBuilding INNER JOIN " & _
-                  "    tblSystem ON tblBuilding.BuildingCode = tblSystem.BuildingCode INNER JOIN " & _
-                   "   tblWorkHdr ON tblSystem.SystemCode = tblWorkHdr.SystemCode " & _
-                   " GROUP BY tblWorkHdr.WorkTypeCode, tblBuilding.BuildingName, tblWorkHdr.WorkDateE " & _
-                   " HAVING      (tblWorkHdr.WorkTypeCode = 1) AND (tblWorkHdr.WorkDateE >= '" & datS1 & "' AND tblWorkHdr.WorkDateE <= '" & dateE1 & "') "
+        sqlstr = "SELECT        TOP (20) SUM(saat) AS summ, dorehayeGozrande        FROM trnPersonelDoreTbl GROUP BY dorehayeGozrande"
         Dim dtS As New DataTable
         dtS = ClsDataTable.GetDataTable(sqlstr)
 
-        WebChartControl1.Series.Item(0).DataSource = dtS
+        WebChartControl1.Series.Item(1).DataSource = dtS
         WebChartControl1.DataBind()
     End Sub
 
@@ -211,31 +206,7 @@ Partial Class frmChart
 
     End Sub
 
-    Private Sub load_grd()
-        Dim sqlstr As String
-        sqlstr = "SELECT     COUNT(tblWorkHdr.WorkTypeCode) AS tedad, tblBuilding.BuildingName, tblBuilding.BuildingCode " & _
-"FROM         tblBuilding INNER JOIN " & _
- "                     tblSystem ON tblBuilding.BuildingCode = tblSystem.BuildingCode INNER JOIN " & _
-  "                    tblWorkHdr ON tblSystem.SystemCode = tblWorkHdr.SystemCode " & _
-"GROUP BY tblBuilding.BuildingName, tblBuilding.BuildingCode"
-        Dim dtS As New DataTable
-        dtS = ClsDataTable.GetDataTable(sqlstr)
-        grdServic.DataSource = dtS
-        grdServic.DataBind()
-    End Sub
-    Private Sub load_grd2()
-        Dim sqlstr As String
-        sqlstr = "SELECT     COUNT(tblWorkHdr.WorkTypeCode) AS tedad, tblBuilding.BuildingName, tblBuilding.BuildingCode " & _
-                    " FROM         tblBuilding INNER JOIN " & _
-                      " tblSystem ON tblBuilding.BuildingCode = tblSystem.BuildingCode INNER JOIN " & _
-                      " tblWorkHdr ON tblSystem.SystemCode = tblWorkHdr.SystemCode " & _
-" GROUP BY tblBuilding.BuildingName, tblBuilding.BuildingCode, tblWorkHdr.WorkDateE " & _
-" HAVING      (tblWorkHdr.WorkDateE >= '" & datS1 & "' AND tblWorkHdr.WorkDateE <= '" & dateE1 & "')"
-        Dim dtS As New DataTable
-        dtS = ClsDataTable.GetDataTable(sqlstr)
-        grdServic.DataSource = dtS
-        grdServic.DataBind()
-    End Sub
+   
  
     Protected Sub grdFarei_BeforePerformDataSelect(ByVal sender As Object, ByVal e As System.EventArgs)
         Dim idd As Integer

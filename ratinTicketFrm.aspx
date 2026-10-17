@@ -5,7 +5,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
        <div class="row">
 
-			<h5>لطفا فرم ارزیابی ذیل را جهت ارایه خدمات بهتر تکمیل فرمایید</h5>
+			<h5>rrلطفا فرم ارزیابی ذیل را جهت ارایه خدمات بهتر تکمیل فرمایید</h5>
 
                       </div>
     <br />

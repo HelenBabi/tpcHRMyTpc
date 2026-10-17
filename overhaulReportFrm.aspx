@@ -1,7 +1,6 @@
 ﻿<%@ Page Title="" Language="VB" MasterPageFile="~/dabir.master" AutoEventWireup="false" CodeFile="overhaulReportFrm.aspx.vb" Inherits="overhaulReportFrm" %>
 
 <%@ Register assembly="DevExpress.Web.v10.1, Version=10.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web.ASPxTabControl" tagprefix="dx" %>
-
 <%@ Register assembly="DevExpress.Web.v10.1, Version=10.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web.ASPxClasses" tagprefix="dx" %>
 <%@ Register assembly="DevExpress.Web.ASPxGridView.v10.1.Export, Version=10.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web.ASPxGridView.Export" tagprefix="dx" %>
 <%@ Register assembly="DevExpress.Web.ASPxEditors.v10.1, Version=10.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web.ASPxEditors" tagprefix="dx" %>
@@ -11,7 +10,6 @@
 <%@ Register assembly="DevExpress.Web.v10.1" namespace="DevExpress.Web.ASPxTabControl" tagprefix="dx" %>
 <%@ Register assembly="DevExpress.Web.v10.1" namespace="DevExpress.Web.ASPxClasses" tagprefix="dx" %>
 <%@ Register assembly="DevExpress.Web.ASPxGridView.v10.1" namespace="DevExpress.Web.ASPxGridView" tagprefix="dx" %>
-
 <%@ Register assembly="DevExpress.Web.ASPxGridView.v10.1.Export" namespace="DevExpress.Web.ASPxGridView.Export" tagprefix="dx" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
@@ -110,17 +108,26 @@
                             <cellstyle horizontalalign="Center">
                             </cellstyle>
                         </dx:GridViewDataTextColumn>
-                             <dx:GridViewDataTextColumn Caption="وضعیت" FieldName="Title" ShowInCustomizationForm="True" VisibleIndex="1">
+                               <dx:GridViewDataTextColumn Caption="کد پرسنلی" FieldName="codePersoneli" ShowInCustomizationForm="True" VisibleIndex="2" >
+                                       <HeaderStyle HorizontalAlign="Center" />
+                            <cellstyle horizontalalign="Center">
+                            </cellstyle>
+                            </dx:GridViewDataTextColumn>
+                             <dx:GridViewDataTextColumn Caption="تاریخ شروع بکار" FieldName="tarix" ShowInCustomizationForm="True" VisibleIndex="3">
+                            </dx:GridViewDataTextColumn>
+                                <dx:GridViewDataTextColumn Caption="تاریخ تسویه" FieldName="tarixEnd" ShowInCustomizationForm="True" VisibleIndex="4">
+                            </dx:GridViewDataTextColumn>
+                             <dx:GridViewDataTextColumn Caption="وضعیت" FieldName="Title" ShowInCustomizationForm="True" VisibleIndex="4">
                      </dx:GridViewDataTextColumn>
                     
                     <dx:GridViewDataTextColumn FieldName="State" Visible="False" />
                     
-                    <dx:GridViewDataTextColumn Caption="نام" FieldName="FirstName" VisibleIndex="3" />
-                    <dx:GridViewDataTextColumn Caption="نام خانوادگی" FieldName="LastName" VisibleIndex="4" />
-                             <dx:GridViewDataTextColumn Caption="کارتابل" FieldName="omur" VisibleIndex="5">
+                    <dx:GridViewDataTextColumn Caption="نام" FieldName="FirstName" VisibleIndex="5" />
+                    <dx:GridViewDataTextColumn Caption="نام خانوادگی" FieldName="LastName" VisibleIndex="6" />
+                             <dx:GridViewDataTextColumn Caption="کارتابل" FieldName="omur" VisibleIndex="7">
                      </dx:GridViewDataTextColumn>
-                    <dx:GridViewDataTextColumn Caption="نام پدر" FieldName="FatherName" VisibleIndex="6" />
-                                        <dx:GridViewDataTextColumn Caption="شناسنامه" FieldName="shSh" VisibleIndex="7" />
+                    <dx:GridViewDataTextColumn Caption="نام پدر" FieldName="FatherName" VisibleIndex="8" />
+                                        <dx:GridViewDataTextColumn Caption="شناسنامه" FieldName="shSh" VisibleIndex="9" />
                     <dx:GridViewDataTextColumn Caption="تولد" FieldName="BirthDay" VisibleIndex="7" />
                     <dx:GridViewDataTextColumn Caption="بانک" FieldName="BankCardNo" VisibleIndex="8" />
                     <dx:GridViewDataTextColumn Caption="شماره حساب" FieldName="IBAN" VisibleIndex="9" />
@@ -1221,10 +1228,6 @@
                         <Settings ShowFilterRow="True" ShowFilterBar="Visible" ShowGroupedColumns="True" ShowGroupPanel="True" />
                     </dx:ASPxGridView>
 
-                               
-                              
-
-
                                </dx:ContentControl>
                      </ContentCollection>
                  </dx:TabPage>
@@ -1303,7 +1306,7 @@
                     <dx:GridViewDataTextColumn FieldName="State" Visible="False" />
                      <dx:GridViewDataTextColumn Caption="کارتابل" FieldName="omur" VisibleIndex="25">
                      </dx:GridViewDataTextColumn>
-                             <dx:GridViewDataTextColumn Caption="تاریخ شروع به کار" FieldName="tarix" ShowInCustomizationForm="True" VisibleIndex="26">
+                             <dx:GridViewDataTextColumn Caption="تاریخ شروع بکار" FieldName="tarix" ShowInCustomizationForm="True" VisibleIndex="26">
                             </dx:GridViewDataTextColumn>
                              <dx:GridViewDataTextColumn Caption="چارت" FieldName="chart" ShowInCustomizationForm="True" VisibleIndex="26">
                             </dx:GridViewDataTextColumn>
@@ -1347,7 +1350,7 @@
                         </dx:GridViewDataTextColumn>
                        <dx:GridViewDataTextColumn Caption="کد ملی" FieldName="Nationality" 
                            
-                            UnboundType="Integer" VisibleIndex="0" Width="150px">
+                            UnboundType="Integer" VisibleIndex="1" Width="150px">
                             <DataItemTemplate>
                                 <asp:LinkButton ID="LinkButton30" runat="server" 
                                      Text='<%# Eval("Nationality")%> '
@@ -1358,13 +1361,22 @@
                             <cellstyle horizontalalign="Center">
                             </cellstyle>
                         </dx:GridViewDataTextColumn>
-                    <dx:GridViewDataTextColumn Caption="نام" FieldName="FirstName" VisibleIndex="1" />
-                    <dx:GridViewDataTextColumn Caption="نام خانوادگی" FieldName="LastName" VisibleIndex="2" />
-                    <dx:GridViewDataTextColumn Caption="نام پدر" FieldName="FatherName" VisibleIndex="3" />
-                                        <dx:GridViewDataTextColumn Caption="شناسنامه" FieldName="shSh" VisibleIndex="4" />
-                    <dx:GridViewDataTextColumn Caption="تولد" FieldName="BirthDay" VisibleIndex="5" />
-                    <dx:GridViewDataTextColumn Caption="بانک" FieldName="BankCardNo" VisibleIndex="6" />
-                    <dx:GridViewDataTextColumn Caption="شماره حساب" FieldName="IBAN" VisibleIndex="7" />
+                                <dx:GridViewDataTextColumn Caption="کد پرسنلی" FieldName="codePersoneli" ShowInCustomizationForm="True" VisibleIndex="2" >
+                                       <HeaderStyle HorizontalAlign="Center" />
+                            <cellstyle horizontalalign="Center">
+                            </cellstyle>
+                            </dx:GridViewDataTextColumn>
+                              <dx:GridViewDataTextColumn Caption="تاریخ شروع بکار" FieldName="tarixStart" ShowInCustomizationForm="True" VisibleIndex="3">
+                            </dx:GridViewDataTextColumn>
+                                                           <dx:GridViewDataTextColumn Caption="تاریخ تسویه" FieldName="tarixEnd" ShowInCustomizationForm="True" VisibleIndex="4">
+                            </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn Caption="نام" FieldName="FirstName" VisibleIndex="5" />
+                    <dx:GridViewDataTextColumn Caption="نام خانوادگی" FieldName="LastName" VisibleIndex="6" />
+                    <dx:GridViewDataTextColumn Caption="نام پدر" FieldName="FatherName" VisibleIndex="7" />
+                                        <dx:GridViewDataTextColumn Caption="شناسنامه" FieldName="shSh" VisibleIndex="8" />
+                    <dx:GridViewDataTextColumn Caption="تولد" FieldName="BirthDay" VisibleIndex="7" />
+                    <dx:GridViewDataTextColumn Caption="بانک" FieldName="BankCardNo" VisibleIndex="8" />
+                    <dx:GridViewDataTextColumn Caption="شماره حساب" FieldName="IBAN" VisibleIndex="9" />
                     <dx:GridViewDataTextColumn Caption="نوع بیمه" FieldName="bime" VisibleIndex="9" />
                     <dx:GridViewDataTextColumn Caption="شماره بیمه" FieldName="SSN" VisibleIndex="8" />
 <dx:GridViewDataTextColumn FieldName="Mobile" ShowInCustomizationForm="True" Caption="موبایل" VisibleIndex="10"></dx:GridViewDataTextColumn>
@@ -1389,13 +1401,14 @@
                      </dx:GridViewDataTextColumn>
                     
                     <dx:GridViewDataTextColumn FieldName="State" Visible="False" />
-                     <dx:GridViewDataTextColumn Caption="کارتابل" FieldName="omur" VisibleIndex="25">
+                     <dx:GridViewDataTextColumn Caption="امور" FieldName="omur" VisibleIndex="25">
                      </dx:GridViewDataTextColumn>
-                             <dx:GridViewDataTextColumn Caption="تاریخ شروع به کار" FieldName="tarix" ShowInCustomizationForm="True" VisibleIndex="26">
+                           
+                               <dx:GridViewDataTextColumn Caption="واحد" FieldName="unit" ShowInCustomizationForm="True" VisibleIndex="26">
                             </dx:GridViewDataTextColumn>
-                             <dx:GridViewDataTextColumn Caption="چارت" FieldName="chart" ShowInCustomizationForm="True" VisibleIndex="26">
+                             <dx:GridViewDataTextColumn Caption="چارت" FieldName="chart" ShowInCustomizationForm="True" VisibleIndex="27">
                             </dx:GridViewDataTextColumn>
-                             <dx:GridViewDataTextColumn Caption="کد پرسنلی" FieldName="codePersoneli" ShowInCustomizationForm="True" VisibleIndex="27">
+                           <dx:GridViewDataTextColumn Caption="دستمزد ساعتی/ریال" FieldName="Price" ShowInCustomizationForm="True" VisibleIndex="28">
                             </dx:GridViewDataTextColumn>
                 </Columns>
                         <SettingsBehavior AllowFocusedRow="True" />
@@ -1412,13 +1425,6 @@
                   
          </div>
 
-       
-  
-             
-
-         
-
-         
                     
                 </ContentTemplate>
             </asp:UpdatePanel>

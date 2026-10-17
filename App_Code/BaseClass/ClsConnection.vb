@@ -10,7 +10,7 @@ Public Class ClsConnection
         ' Dim mypassword As String = "123321"
         Dim mypassword As String = ConfigurationManager.AppSettings("mypassword")
         Dim connectString As String = "Data Source=" & myserver_address & ";Initial Catalog=" & mydatabase & ";Persist Security Info=True;User ID=" & myuser & _
-        ";Password=" & mypassword & ";"
+        ";Password=" & mypassword & " ;"
         Return (connectString)
     End Function
     Public Shared Function GetConnHerasat() As String

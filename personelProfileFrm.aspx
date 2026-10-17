@@ -107,7 +107,7 @@
                     CssClass="form-control"></asp:TextBox>
         </div>      
              <div class="col-md-3">
-             <asp:Label ID="Label29" runat="server" CssClass="control-label" Text="شماره مسلسل شناسنامه "></asp:Label>
+             <asp:Label ID="Label29" runat="server" CssClass="control-label" Text="سری شناسنامه "></asp:Label>
               <asp:TextBox ID="shMosalsalsh" runat="server"  
                                             CssClass="form-control"></asp:TextBox>
 				        </div>

@@ -1,0 +1,22 @@
+2026-06-26 13:16:34 - SSO login failed for user: 829732
+2026-06-26 13:16:34 - SSO login failed for user: 829732
+2026-06-26 13:16:46 - SSO login failed for user: 829732
+2026-06-26 13:16:46 - SSO login failed for user: 829732
+2026-06-26 13:18:49 - SSO login failed for user: 324
+2026-06-26 13:18:49 - SSO login failed for user: 324
+2026-06-26 13:18:49 - SSO login failed for user: 324
+2026-06-26 13:18:49 - SSO login failed for user: 324
+2026-06-26 13:21:28 - SSO login failed for user: 829732
+2026-06-26 13:21:28 - SSO login failed for user: 829732
+2026-06-26 13:26:04 - SSO login failed for user: IT05
+2026-06-26 13:26:04 - SSO login failed for user: IT05
+2026-06-26 13:26:08 - SSO login failed for user: IT05
+2026-06-26 13:26:08 - SSO login failed for user: IT05
+2026-06-27 09:30:27 - SSO login failed for user: it05
+2026-06-27 09:30:27 - SSO login failed for user: it05
+2026-07-23 15:45:52 - GetEmployeeIdByMobile Error: Error converting data type nvarchar to numeric.
+2026-07-23 15:47:45 - GetEmployeeIdByMobile Error: Error converting data type nvarchar to numeric.
+2026-07-23 15:48:17 - GetEmployeeIdByMobile Error: Error converting data type nvarchar to numeric.
+2026-07-23 15:51:13 - GetEmployeeIdByMobile Error: Error converting data type nvarchar to numeric.
+2026-07-23 15:53:50 - GetEmployeeIdByMobile Error: Error converting data type nvarchar to numeric.
+2026-07-23 15:54:13 - GetEmployeeIdByMobile Error: Error converting data type nvarchar to numeric.

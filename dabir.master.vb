@@ -1,4 +1,5 @@
-﻿Imports System.Data
+﻿
+Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Diagnostics
 Partial Class light_MasterPage
@@ -20,10 +21,10 @@ Partial Class light_MasterPage
         ltrDate.Text = dds.getdatee
 
 
-      
+
         '''''''''''''''''''''''''''''''load person_detail
 
-     
+
         'Image_pp.ImageUrl = Session("ax")
         ltr_family.Text = Session("lname") & " " & Session("fname")
         'Label_fname.Text = Session("fname")
@@ -40,7 +41,7 @@ Partial Class light_MasterPage
         Dim STR_MENU As String = ""
         Dim STR_CTH As String = """"
         Dim sum_unmenu As String
-     
+
         If dt.Rows.Count > 0 Then
 
             If Session("super_vizer") = 0 Then
@@ -95,7 +96,7 @@ Partial Class light_MasterPage
                 End If
             Next
 
-          
+
 
         End If
         sel_noti()
@@ -115,5 +116,30 @@ Partial Class light_MasterPage
     Protected Sub Imagenoti_Click(sender As Object, e As ImageClickEventArgs) Handles Imagenoti.Click
         Response.Redirect("jobManagementBrowseFrm.aspx")
     End Sub
-End Class
 
+    Protected Sub btnLogout_Click(sender As Object, e As EventArgs)
+        ' پاک کردن تمام سشن‌ها
+    
+
+        ' پاک کردن کوکی اگر دارید
+        If Request.Cookies("ASP.NET_SessionId") IsNot Nothing Then
+            Dim myCookie As New HttpCookie("ASP.NET_SessionId")
+            myCookie.Expires = DateTime.Now.AddDays(-1D)
+            Response.Cookies.Add(myCookie)
+        End If
+        If Session("fromLogin") = "1" Then
+            Session.Clear()
+            Session.Abandon()
+            Response.Redirect("http://192.168.30.10:9090/sso/portal", True)
+            Context.ApplicationInstance.CompleteRequest()
+        Else
+            Session.Clear()
+            Session.Abandon()
+            Response.Redirect("login_2.aspx", True)
+            Context.ApplicationInstance.CompleteRequest()
+        End If
+        ' هدایت به صفحه لاگین
+       
+    End Sub
+
+End Class

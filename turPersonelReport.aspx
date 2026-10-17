@@ -10,6 +10,11 @@
 <%@ Register assembly="DevExpress.Web.v10.1" namespace="DevExpress.Web.ASPxTabControl" tagprefix="dx" %>
 <%@ Register assembly="DevExpress.Web.v10.1" namespace="DevExpress.Web.ASPxClasses" tagprefix="dx" %>
 <%@ Register assembly="DevExpress.Web.ASPxGridView.v10.1" namespace="DevExpress.Web.ASPxGridView" tagprefix="dx" %>
+<%@ Register assembly="DevExpress.Web.v10.1, Version=10.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
+    namespace="DevExpress.Web.ASPxPopupControl"
+    tagprefix="dx" %>
+
+<%@ Register assembly="DevExpress.Web.v10.1" namespace="DevExpress.Web.ASPxPopupControl" tagprefix="dx" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
    
@@ -22,46 +27,46 @@
     </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
 
-   
-      
-
-  
     <br />
                                  <div class="row">
-                                        <div class="col-md-2">
+                   
+ <div class="col-md-4">
+     <asp:CheckBox ID="CheckBox1" runat="server" AutoPostBack="True" Text="انتخاب همه تورها" TextAlign="Left" Visible="False" />
+                </div>
+
+          <div class="col-md-4">
+                                      
+			 	   <asp:ImageButton ID="ImageButton1" runat="server"  ImageUrl="~/Icons/exel.JPG" ToolTip="استخراج اطلاعات به اکسل" Height="25px" Width="25px"  />
+            
+		</div>
+                                                          <div class="col-md-4">
 <asp:ImageButton ID="ImageButton3" runat="server" Height="48px" 
                         ImageUrl="~/Icons/Exit.png" ToolTip="برگشت به صفحه اصلی" Width="48px" />
                 </div>
- <div class="col-md-2">
-                
-                </div>
-
-          <div class="col-md-8">
-                                      
-			 	
-            
-		</div>
         </div>
                              <br />
                                 <div class="row">
 			<div class="col-md-12">
             <table class="style1">
                 <tr>
+                  <%--   <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
+                            <ContentTemplate>--%>
                     <td style="text-align: center" class="auto-style1">
                         
-                        <asp:ImageButton ID="ImageButton1" runat="server"  ImageUrl="~/Icons/exel.JPG" ToolTip="استخراج اطلاعات به اکسل" Height="25px" Width="25px"  />
+                       
                     </td>
                     <td style="text-align: center" class="auto-style1">
-                        <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
-                            <ContentTemplate>
+                       
                                 انتخاب:
                                 <asp:DropDownList ID="DropDownList1" runat="server" AutoPostBack="True" 
                                    class="btn btn-secondary dropdown-toggle">
                                 </asp:DropDownList>
+                              
                                 <asp:Label ID="Label3" runat="server"></asp:Label>
-                            </ContentTemplate>
-                        </asp:UpdatePanel>
+                        
                     </td>
+                      <%--  </ContentTemplate>
+                        </asp:UpdatePanel>--%>
                 </tr>
                 </table>
                 </div>
@@ -70,42 +75,39 @@
       <div class="row">
 			<div class="col-md-12">
 
-          
-      
-            
-            
-            
-            <asp:UpdatePanel ID="UpdatePanel2" runat="server" UpdateMode="Conditional">
-                <ContentTemplate>
+                      
+        <%--    <asp:UpdatePanel ID="UpdatePanel2" runat="server" UpdateMode="Conditional">
+                <ContentTemplate>--%>
                     <dx:ASPxGridView ID="ASPxGridView1" runat="server" AutoGenerateColumns="False" 
                         KeyFieldName="idd" ClientIDMode="AutoID"  OnHtmlDataCellPrepared="ASPxGridView1_HtmlDataCellPrepared"  Width="100%">
                         <SettingsBehavior AllowFocusedRow="True" />
-                        <Settings ShowFilterRow="True" />
                         <SettingsBehavior AllowFocusedRow="True" />
-                        <Settings ShowFilterRow="True" />
-                        <settingsbehavior allowfocusedrow="True" />
                         <Settings ShowFilterRow="True" />
                         <SettingsBehavior AllowFocusedRow="True" />
                         <Settings ShowFilterRow="True" />
                         <SettingsBehavior AllowFocusedRow="True" />
-                        <settings showfilterrow="True" />
+                        <Settings ShowFilterRow="True" />
                         <SettingsBehavior AllowFocusedRow="True" />
                         <Settings ShowFilterRow="True" />
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" ShowFilterBar="Visible" />
+                                                  <settingsbehavior allowfocusedrow="True" />
+                        <settings showfilterrow="True" ShowHorizontalScrollBar="True" VerticalScrollBarStyle="Virtual"/>
                         <Columns>
                             <dx:GridViewDataTextColumn Caption="نام" FieldName="nam" 
-                                ShowInCustomizationForm="True" VisibleIndex="1" Width="5%">
+                                ShowInCustomizationForm="True" VisibleIndex="3" Width="5%">
                                 <HeaderStyle HorizontalAlign="Center" />
                                 <cellstyle horizontalalign="Right">
                                 </cellstyle>
                             </dx:GridViewDataTextColumn>
                             <dx:GridViewDataTextColumn Caption="نام خانوادگی" FieldName="family" 
-                                VisibleIndex="2" Width="7%">
+                                VisibleIndex="4" Width="10%">
                                 <HeaderStyle HorizontalAlign="Center" />
                                 <cellstyle horizontalalign="Right">
                                 </cellstyle>
                             </dx:GridViewDataTextColumn>
                             <dx:GridViewDataTextColumn Caption="کد پرسنل" FieldName="codePersoneli" 
-                                VisibleIndex="3" Width="5%">
+                                VisibleIndex="5" Width="5%">
                                 <HeaderStyle HorizontalAlign="Center" />
                                 <cellstyle horizontalalign="Center">
                                 </cellstyle>
@@ -116,55 +118,29 @@
                                 <cellstyle horizontalalign="Center">
                                 </cellstyle>
                             </dx:GridViewDataTextColumn>
-                            <dx:GridViewDataTextColumn Caption="محل و زمان" FieldName="magsad" VisibleIndex="4" Width="10%">
+                            <dx:GridViewDataTextColumn Caption="محل و زمان" FieldName="magsad" VisibleIndex="4" Width="15%">
                                 <HeaderStyle HorizontalAlign="Center" />
                                 <cellstyle horizontalalign="Center">
                                 </cellstyle>
                             </dx:GridViewDataTextColumn>
-                            <dx:GridViewDataTextColumn 
-                                VisibleIndex="0" Width="5%" Caption="پذیرش">
-                                <dataitemtemplate>
-                                    <asp:LinkButton ID="LinkButton1" runat="server" CommandArgument='<%# eval("idd") %>' CommandName='<%# "pazir"%>' Text="پذیرش؟" backcolor="lightgreen" ></asp:LinkButton>
-                                </dataitemtemplate>
-                                <HeaderStyle HorizontalAlign="Center" />
-                                <cellstyle horizontalalign="Center">
-                                </cellstyle>
-                            </dx:GridViewDataTextColumn>
-                            
-                              <dx:GridViewDataTextColumn 
-                                VisibleIndex="0" Width="5%" Caption="عدم پذیرش">
-                                <dataitemtemplate>
-                                    <asp:LinkButton ID="LinkButton3" runat="server" CommandArgument='<%# eval("idd") %>' CommandName='<%# "ebtal"%>' Text="عدم پذیرش بعلت کمبود سابقه؟" backcolor="orange" ></asp:LinkButton>
-                                </dataitemtemplate>
-                                  <HeaderStyle HorizontalAlign="Center" />
-                                  <cellstyle horizontalalign="Center">
-                                  </cellstyle>
-                            </dx:GridViewDataTextColumn>
-                              <dx:GridViewDataTextColumn 
-                                VisibleIndex="0" Width="5%" Caption="عدم پذیرش">
-                                <dataitemtemplate>
-                                    <asp:LinkButton ID="LinkButton2" runat="server" CommandArgument='<%# eval("idd") %>' CommandName='<%# "ebtal2"%>' Text="عدم پذیرش بعلت برنده نشدن در قرعه کشی؟" backcolor="yellow" ></asp:LinkButton>
-                                </dataitemtemplate>
-                                  <HeaderStyle HorizontalAlign="Center" />
-                                  <cellstyle horizontalalign="Center">
-                                  </cellstyle>
-                            </dx:GridViewDataTextColumn>
+                        
+
                             <dx:GridViewDataTextColumn FieldName="stat" Visible="False" VisibleIndex="6" Width="0%">
                                 <HeaderStyle HorizontalAlign="Center" />
                                 <cellstyle horizontalalign="Center">
                                 </cellstyle>
                             </dx:GridViewDataTextColumn>
-                            <dx:GridViewDataTextColumn Caption="وضعیت" FieldName="statValue" VisibleIndex="7" Width="3%">
+                            <dx:GridViewDataTextColumn Caption="وضعیت" FieldName="statValue" VisibleIndex="7" Width="5%">
                                 <HeaderStyle HorizontalAlign="Center" />
                                 <cellstyle horizontalalign="Center">
                                 </cellstyle>
                             </dx:GridViewDataTextColumn>
-                            <dx:GridViewDataTextColumn Caption="تعداد رزرو " FieldName="tedad" ShowInCustomizationForm="True" VisibleIndex="9" Width="2%">
+                            <dx:GridViewDataTextColumn Caption="تعداد درخواستی" FieldName="tedad" ShowInCustomizationForm="True" VisibleIndex="9" Width="7%">
                                 <HeaderStyle HorizontalAlign="Center" />
                                 <cellstyle horizontalalign="Center">
                                 </cellstyle>
                             </dx:GridViewDataTextColumn>
-                            <dx:GridViewDataTextColumn Caption="تعداد تحت تکفل" FieldName="tedadTakafol" ShowInCustomizationForm="True" VisibleIndex="10" Width="2%">
+                            <dx:GridViewDataTextColumn Caption="تعداد تحت تکفل" FieldName="tedadTakafol" ShowInCustomizationForm="True" VisibleIndex="7" Width="10%">
                                 <HeaderStyle HorizontalAlign="Center" />
                                 <cellstyle horizontalalign="Center">
                                 </cellstyle>
@@ -174,7 +150,7 @@
             <CellStyle HorizontalAlign="Center">
             </CellStyle>
         </dx:GridViewDataTextColumn>
-                            <dx:GridViewDataTextColumn Caption="موبایل" FieldName="mobile" VisibleIndex="12" Width="5%">
+                            <dx:GridViewDataTextColumn Caption="موبایل" FieldName="mobile" VisibleIndex="12" Width="10%">
                                 <HeaderStyle HorizontalAlign="Center" />
                                 <cellstyle horizontalalign="Center">
                                 </cellstyle>
@@ -184,7 +160,7 @@
                                 <cellstyle horizontalalign="Center">
                                 </cellstyle>
                             </dx:GridViewDataTextColumn>
-                            <dx:GridViewDataTextColumn Caption="واحد" FieldName="omur" VisibleIndex="14" Width="5%">
+                            <dx:GridViewDataTextColumn Caption="واحد" FieldName="omur" VisibleIndex="14" Width="5%" Visible="False">
                                 <HeaderStyle HorizontalAlign="Center" />
                                 <cellstyle horizontalalign="Center">
                                 </cellstyle>
@@ -194,12 +170,12 @@
                                 <cellstyle horizontalalign="Center">
                                 </cellstyle>
                             </dx:GridViewDataTextColumn>
-                            <dx:GridViewDataTextColumn Caption="توضیحات" FieldName="tozih" VisibleIndex="18" Width="10%">
+                            <dx:GridViewDataTextColumn Caption="توضیحات" FieldName="tozih" VisibleIndex="15" Width="10%">
                                 <HeaderStyle HorizontalAlign="Center" />
                                 <cellstyle horizontalalign="Right">
                                 </cellstyle>
                             </dx:GridViewDataTextColumn>
-                            <dx:GridViewDataTextColumn Name="photo" ShowInCustomizationForm="True" VisibleIndex="15" Width="5%">
+                            <dx:GridViewDataTextColumn Name="photo" ShowInCustomizationForm="True" VisibleIndex="16" Width="7%">
                                 <dataitemtemplate>
                                     <asp:Image ID="Image5" runat="server" Height="96px" Width="64px" />
                                 </dataitemtemplate>
@@ -207,13 +183,55 @@
                                 <cellstyle font-bold="False" horizontalalign="Center">
                                 </cellstyle>
                             </dx:GridViewDataTextColumn>
+                     
+          <dx:GridViewDataTextColumn Caption="سابقه" VisibleIndex="17" Width="10%">
+    <DataItemTemplate>
+        <asp:Button ID="btnShowHistory" runat="server" Text="سابقه"
+            OnClientClick='<%# "ShowPopup(""" & Eval("codePersoneli") & """); return false;" %>'
+            CssClass="btn btn-info btn-sm" />
+    </DataItemTemplate>
+    <HeaderStyle HorizontalAlign="Center" />
+    <CellStyle HorizontalAlign="Center" />
+          </dx:GridViewDataTextColumn>
+
+
+                    <dx:GridViewDataTextColumn Caption="پذیرش" VisibleIndex="17" Width="10%">
+    <DataItemTemplate>
+        <asp:Button ID="btnAccept" runat="server" Text="✔ پذیرش" 
+            CommandName="pazir" CommandArgument='<%# Eval("idd") %>'
+            CssClass="btn btn-success btn-sm" />
+    </DataItemTemplate>
+    <HeaderStyle HorizontalAlign="Center" />
+    <CellStyle HorizontalAlign="Center" />
+</dx:GridViewDataTextColumn>
+
+<dx:GridViewDataTextColumn Caption="عدم پذیرش (سابقه کم)" VisibleIndex="18" Width="10%">
+    <DataItemTemplate>
+        <asp:Button ID="btnReject1" runat="server" Text="✘ عدم پذیرش - سابقه"
+            CommandName="ebtal" CommandArgument='<%# Eval("idd") %>'
+            CssClass="btn btn-danger btn-sm" />
+    </DataItemTemplate>
+    <HeaderStyle HorizontalAlign="Center" />
+    <CellStyle HorizontalAlign="Center" />
+</dx:GridViewDataTextColumn>
+
+<dx:GridViewDataTextColumn Caption="عدم پذیرش (قرعه کشی)" VisibleIndex="19" Width="10%">
+    <DataItemTemplate>
+        <asp:Button ID="btnReject2" runat="server" Text="✘ عدم پذیرش - قرعه‌کشی"
+            CommandName="ebtal2" CommandArgument='<%# Eval("idd") %>'
+            CssClass="btn btn-warning btn-sm" />
+    </DataItemTemplate>
+    <HeaderStyle HorizontalAlign="Center" />
+    <CellStyle HorizontalAlign="Center" />
+</dx:GridViewDataTextColumn>
+
                         </Columns>
-                        <SettingsBehavior AllowFocusedRow="True" />
-                        <Settings ShowFilterRow="True" ShowFilterBar="Visible" ShowFilterRowMenu="True" ShowGroupedColumns="True" ShowGroupPanel="True" />
+                      <settingsbehavior allowfocusedrow="True" AutoFilterRowInputDelay="12000"/>
+                        <Settings ShowFilterRow="True" />
                         <settingsdetail exportmode="All" showdetailrow="True" />
                         <templates>
                             <detailrow>
-                                <dx1:ASPxGridView ID="takafolGRD" runat="server" AutoGenerateColumns="False" ClientIDMode="AutoID" EnableCallBacks="False" KeyFieldName="ID" Width="80%" OnBeforePerformDataSelect="grdFarei_BeforePerformDataSelect">
+                                <dx1:ASPxGridView ID="takafolGRD" runat="server" AutoGenerateColumns="False" ClientIDMode="AutoID"  KeyFieldName="ID" Width="100%" OnBeforePerformDataSelect="grdFarei_BeforePerformDataSelect">
                                     <clientsideevents focusedrowchanged="function(s, e) {
 
 }" />
@@ -250,22 +268,24 @@
 
 
 
-                </ContentTemplate>
-            </asp:UpdatePanel>
+            <%--    </ContentTemplate>
+            </asp:UpdatePanel>--%>
             
           <div>
                   </div>
-            
 
-       
-                
+                      
 
-               
+            <asp:PlaceHolder ID="divPersonelHistory" runat="server" />
+                <asp:PlaceHolder ID="PlaceHolder1" runat="server" />
 
-        
-  <dx:ASPxGridViewExporter ID="grvExporter1" runat="server" 
-                    GridViewID="ASPxGridView1">
-                </dx:ASPxGridViewExporter>
+
+       <dx:ASPxGridViewExporter ID="grvExporter1" runat="server" GridViewID="ASPxGridView1">
+
+</dx:ASPxGridViewExporter>
+                <dx:ASPxGridViewExporter ID="ASPxGridViewExporter1" runat="server" GridViewID="ASPxGridView2">
+
+</dx:ASPxGridViewExporter>
 
 
         <script type="text/javascript">
@@ -282,39 +302,88 @@
     </div>
 
     <br />
+    <asp:Panel ID="Panel1" runat="server" GroupingText="آمار کلی">
           <div class="row">
-			<div class="col-md-12">
+			<div class="col-md-6">
+                <dx:ASPxGridView ID="ASPxGridView2" runat="server" AutoGenerateColumns="False" 
+                        KeyFieldName="tedad" ClientIDMode="AutoID"  OnHtmlDataCellPrepared="ASPxGridView1_HtmlDataCellPrepared"  Width="100%">
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" />
+                        <settingsbehavior allowfocusedrow="True" />
+                        <Settings ShowFilterRow="True" />
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" />
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <settings showfilterrow="True" />
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" ShowFilterBar="Visible" ShowFilterRowMenu="True" ShowGroupedColumns="True" ShowGroupPanel="True" />
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" />
+                        <Columns>
 
-                <asp:GridView ID="GridView3" runat="server" AutoGenerateColumns="False"  Font-Size="10pt" style="color: #000000" TabIndex="12" Width="100%" CellPadding="3" ForeColor="Black" GridLines="Vertical" BackColor="White" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px">
-                                                    <AlternatingRowStyle BackColor="#CCCCCC" />
-                                                    <Columns>
-                                                        <asp:BoundField DataField="magsad" HeaderText="محل وزمان">
-                                                        <HeaderStyle HorizontalAlign="Center" />
-                                                        <ItemStyle HorizontalAlign="Center" />
-                                                        </asp:BoundField>
-                                                        <asp:BoundField DataField="tedad" HeaderText="تعداد پرسنل">
-                                                        <HeaderStyle HorizontalAlign="Center" />
-                                                        <ItemStyle HorizontalAlign="Center" />
-                                                        </asp:BoundField>
-                                                        <asp:BoundField DataField="tedadSabti" HeaderText="جمع تعداد رزرو" >
-                                                        <HeaderStyle HorizontalAlign="Center" />
-                                                        <ItemStyle HorizontalAlign="Center" />
-                                                        </asp:BoundField>
-                                                       
-                                                    </Columns>
-                                                    <FooterStyle BackColor="#CCCCCC" />
-                                                    <HeaderStyle BackColor="Black" Font-Bold="True" ForeColor="White" />
-                                                    <PagerStyle BackColor="#999999" ForeColor="Black" HorizontalAlign="Center" />
-                                                    <RowStyle Font-Size="Medium" />
-                                                    <SelectedRowStyle BackColor="#000099" Font-Bold="True" ForeColor="White" />
-                                                    <sortedascendingcellstyle backcolor="#F1F1F1" />
-                                                    <sortedascendingheaderstyle backcolor="Gray" />
-                                                    <sorteddescendingcellstyle backcolor="#CAC9C9" />
-                                                    <sorteddescendingheaderstyle backcolor="#383838" />
-                                                </asp:GridView>
+   <dx:GridViewDataTextColumn Caption="محل و زمان" FieldName="magsad" VisibleIndex="0" Width="30px">
+                                <HeaderStyle HorizontalAlign="Center" />
+                                <cellstyle horizontalalign="Center">
+                                </cellstyle>
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn Caption="تعداد پرسنل" FieldName="tedad" 
+                                ShowInCustomizationForm="True" VisibleIndex="1" Width="15%">
+                                <HeaderStyle HorizontalAlign="Center" />
+                                <cellstyle horizontalalign="Center">
+                                </cellstyle>
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn Caption="جمع تعداد رزرو" FieldName="tedadSabti" 
+                                VisibleIndex="2" Width="15%">
+                                <HeaderStyle HorizontalAlign="Center" />
+                                <cellstyle horizontalalign="Center">
+                                </cellstyle>
+                            </dx:GridViewDataTextColumn>
+                       
+                         
+                                                                       
+                         
+                        </Columns>
+                        <SettingsBehavior AllowFocusedRow="True" />
+                        <Settings ShowFilterRow="True" />
+                        <settingsdetail exportmode="All" />
+                        <templates>
+                            <detailrow>
+                                
+                            </detailrow>
+                        </templates>
+                    </dx:ASPxGridView>
+         
 
 </div>
+              <div class="col-md-6">
+                                                   
+			 	   <asp:ImageButton ID="ImageButton2" runat="server"  ImageUrl="~/Icons/exel.JPG" ToolTip="استخراج اطلاعات به اکسل" Height="25px" Width="25px"  />
+            	
+                  </div>
               </div>
+        </asp:Panel>
+    <br />
+    <dx:ASPxPopupControl ID="PopupHistory" runat="server" ClientInstanceName="popupHistory"
+    Width="90%" Height="90%" CloseAction="CloseButton" ShowCloseButton="true"
+    PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter"
+    HeaderText="سابقه پرسنل" Modal="True">
+    <ContentCollection>
+        <dx:PopupControlContentControl runat="server">
+            <asp:Literal ID="litHistory" runat="server" />
+            <button type="button" class="btn btn-danger" onclick="popupHistory.Hide(); return false;">بستن</button>
+        </dx:PopupControlContentControl>
+    </ContentCollection>
+</dx:ASPxPopupControl>
+
+<script type="text/javascript">
+    function ShowPopup(codePersoneli) {
+        __doPostBack('ShowHistory', codePersoneli);
+    }
+</script>
+  <!-- دکمه بستن درست‌شده -->
+<!-- دکمه بستن درست‌شده -->
+<%-- <button type="button" class="btn btn-danger" onclick="popupHistory.Hide(); return false;">بستن</button>--%>
+
 
 
 </asp:Content>

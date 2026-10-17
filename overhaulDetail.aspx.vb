@@ -17,7 +17,7 @@ Imports Ionic.Zip
 Imports System.Drawing
 Imports iTextSharp.text.pdf
 Imports iTextSharp.text
-
+Imports CrystalDecisions.Web
 
 Partial Class overhaulDetail
     Inherits System.Web.UI.Page
@@ -33,17 +33,33 @@ Partial Class overhaulDetail
     Protected expirationDate As String = "1404/01/02"
     Protected signaturePath As String = "/images/signature.jpg"
 
- 
+    Public Class CaptionInfo
+        Public Property Caption As String
+        Public Property Order As Integer
+    End Class
 
 
     Protected Sub Page_Load(sender As Object, e As System.EventArgs) Handles Me.Load
-      
+        If Session("super_vizer") = "1" Then
+            PanelRunevest.Visible = False
+            btnChartEdit.Visible = True
+            cmbRunevesht.Visible = False
+            txtMatnErja.Visible = False
+            btnRunevesht.Visible = False
+            txtMatnErja.Visible = False
+            PanelRunevest.Visible = False
+            PanelStatus.Visible = True
+            btnPrintContract.Visible = True
+            PanelHR.Visible = True
+            PanelshoruBkar.Visible = True
+            PanelPayankar.Visible = True
+            btnPrintTasviye.Visible = True
+        End If
         If Session("sms") = "True" Then
 
             PanelSms.Visible = True
 
         End If
-
 
         If Session("erja") = "True" Then
             PanelRunevest.Visible = True
@@ -72,7 +88,6 @@ Partial Class overhaulDetail
         End If
 
        
-
         If Session("omurID") = 19 Then
 
             Dim sqlstre As String = "SELECT       Id  FROM            overhaulAllVW  WHERE        ((State < 0 )  or  (State = 106) or  (State = 103)  or  (State = 102)  or  (State = 101)   or  (State = 100) or  (State = 199) or  (State = 200) or  (State = 6) or  (State = 33) or (State = 13) or (State = 15)) AND (Id = " & Session("idOver") & ") "
@@ -128,7 +143,10 @@ Partial Class overhaulDetail
 
                 BtnCancel.Visible = False
                 btnOk.Visible = False
-
+                btnPrintContract.Visible = True
+                PanelshoruBkar.Visible = True
+                PanelPayankar.Visible = True
+                btnPrintTasviye.Visible = True
             End If
         End If
         If Session("omurID") = 100 Then
@@ -140,14 +158,21 @@ Partial Class overhaulDetail
                 PanelRunevest.Visible = False
                 PanelSms.Visible = False
 
-                BtnCancel.Visible = False
+                BtnCancel.Visible = True
                 btnOk.Visible = False
                 PanelFileUpload.Visible = True
                 'btnHse.Visible = True
-
+                btnEnseraf.Visible = True
+                btnPrintContract.Visible = True
+                PanelshoruBkar.Visible = True
+                PanelPayankar.Visible = True
+                btnPrintTasviye.Visible = True
             End If
         End If
-
+        If Session("omurID") = 13 Then
+            btnPrintContract.Visible = True
+            PanelPayankar.Visible = True
+        End If
         If Session("omurID") = 6 Then
             gridHseLoad()
             PanelRunevest.Visible = False
@@ -159,7 +184,7 @@ Partial Class overhaulDetail
             PanelFileUpload.Visible = False
             btnHse.Visible = False
             PanelHse.Visible = True
-
+            btnPrintTasviye.Visible = True
 
         End If
 
@@ -250,8 +275,9 @@ Partial Class overhaulDetail
             txtDate.Text = ClsDateTime.GetDateNow()
             mosahebeDate.Text = ClsDateTime.GetDateNow()
             expiretxt.Text = ClsDateTime.GetDateNow()
-
+            txtShoruBkar.Text = ClsDateTime.GetDateNow()
             txtDateKelas.Text = ClsDateTime.GetDateNow()
+            tarixPayankar.Text = ClsDateTime.GetDateNow()
             'Dim Strh As String = "SELECT        sender, omurId, overhaulId, kartablStat         FROM overhaulKartablTbl " & _
             '         " WHERE(sender = 100) AND (kartablStat = 1) AND (omurId = 6) AND (overhaulId = " & Session("idOver") & ")"
 
@@ -283,8 +309,8 @@ Partial Class overhaulDetail
 
             load_cmbRuneveshtUsers()
             loadComboRuneveshtTyp()
-
-
+            load_cmbUnits()
+            load_cmbUnits2()
 
         End If
 
@@ -362,10 +388,7 @@ Partial Class overhaulDetail
 
         Dim sqlstr, sqlstr2, sqlstr3, sqlstr4, sqlstr5, sqlstr6, sqlstr7, str, sqlstr9 As String
 
-
-
         Dim payam As String = ""
-
 
         payam = txtNazar.Text & "عدم تایید "
 
@@ -432,25 +455,66 @@ Partial Class overhaulDetail
 
     End Sub
 
+    'Private Sub LoadImages()
+    '    Dim folder = "~/Attachment/" & Nationality.Text & "/"
+    '    ' Dim folder = "~/Attachment/1372079786/"
+    '    Dim folderPath = Server.MapPath(folder)
+    '    Dim files = Directory.GetFiles(folderPath).Take(15).ToList()
+
+    '    Dim images = files.Select(Function(f) New With {
+    '        Key .Url = ResolveUrl(folder & Path.GetFileName(f)),
+    '        Key .Name = Path.GetFileName(f),
+    '        Key .Nat = Nationality.Text
+    '    }).ToList()
+
+    '    RepeaterImages.DataSource = images
+    '    RepeaterImages.DataBind()
+    'End Sub
     Private Sub LoadImages()
         Dim folder = "~/Attachment/" & Nationality.Text & "/"
-        ' Dim folder = "~/Attachment/1372079786/"
         Dim folderPath = Server.MapPath(folder)
-        Dim files = Directory.GetFiles(folderPath).Take(10).ToList()
+        Dim files = Directory.GetFiles(folderPath).Take(15).ToList()
 
-        Dim images = files.Select(Function(f) New With {
-            Key .Url = ResolveUrl(folder & Path.GetFileName(f)),
-            Key .Name = Path.GetFileName(f),
-            Key .Nat = Nationality.Text
-        }).ToList()
+        ' تعریف عنوان فارسی و ترتیب برای هر فایل
+        Dim captions As New Dictionary(Of String, CaptionInfo) From {
+            {"IdCart.jpg", New CaptionInfo With {.Caption = " کارت ملی", .Order = 2}},
+            {"PersonalPic.jpg", New CaptionInfo With {.Caption = "عکس پرسنلی", .Order = 1}},
+            {"ShenasOne.jpg", New CaptionInfo With {.Caption = "صفحه اول شناسنامه", .Order = 3}},
+            {"ShanasDesc.jpg", New CaptionInfo With {.Caption = "صفحه توضیحات شناسنامه", .Order = 4}},
+              {"LastCertificate.jpg", New CaptionInfo With {.Caption = "مدرک تحصیلی", .Order = 5}},
+            {"BackgrounRecord.jpg", New CaptionInfo With {.Caption = "گواهی عدم سوءپیشینه", .Order = 6}},
+            {"MilitaryCardType.jpg", New CaptionInfo With {.Caption = " گواهی خدمت یا معافیت یا کارت دانشجویی", .Order = 7}},
+            {"MarriagePage.jpg", New CaptionInfo With {.Caption = " صفحه ازدواج شناسنامه", .Order = 10}},
+              {"ChildrenPage.jpg", New CaptionInfo With {.Caption = " صفحه فرزندان شناسنامه", .Order = 11}},
+          {"100_health.jpg", New CaptionInfo With {.Caption = " مدرک HSE", .Order = 8}},
+            {"100_checkup.jpg", New CaptionInfo With {.Caption = "مدرک HSE پشت", .Order = 9}}
+        }
+        ' ساخت لیست فایل‌ها با ترتیب
+        Dim images = files.Select(Function(f)
+                                      Dim fileName = Path.GetFileName(f)
+                                      Dim info As CaptionInfo = Nothing
+
+                                      If captions.TryGetValue(fileName, info) Then
+                                          ' یافت شد
+                                      Else
+                                          info = New CaptionInfo With {.Caption = fileName, .Order = 999}
+                                      End If
+
+                                      Return New With {
+                                          .Url = ResolveUrl(folder & fileName),
+                                          .Name = fileName,
+                                          .Caption = info.Caption,
+                                          .SortOrder = info.Order,
+                                          .Nat = Nationality.Text
+                                      }
+                                  End Function).OrderBy(Function(x) x.SortOrder).ToList()
 
         RepeaterImages.DataSource = images
         RepeaterImages.DataBind()
     End Sub
-
     Protected Sub btnDownloadZip_Click(sender As Object, e As EventArgs) Handles btnDownloadZip.Click
         Dim folderPath As String = Server.MapPath("~/Attachment/" & Nationality.Text & "/")
-        Dim files = Directory.GetFiles(folderPath).Take(10).ToList()
+        Dim files = Directory.GetFiles(folderPath).Take(15).ToList()
 
         Response.Clear()
         Response.BufferOutput = False
@@ -608,7 +672,44 @@ Partial Class overhaulDetail
         cmbRunevesht.DataBind()
 
     End Sub
+    Private Sub load_cmbUnits()
+        Dim dtm As New DataTable
+        Dim sqlstr As String = ""
 
+        'If Session("from") = "admin" Then
+        sqlstr = "SELECT    idUnit, unit, vis         FROM overhaulUnitTbl " & _
+                  " WHERE     (vis = 1)  ORDER BY unit"
+        'Else
+        '      sqlstr = "SELECT        nam + ' ' + family +  ' - ' + postname AS karbar, ID " & _
+        '"FROM omurTbl WHERE        (CodeClosed = 0) AND (overhaul = 1)  ORDER BY family"
+        'End If
+
+        dtm = ClsDataTable.GetDataTable(sqlstr)
+        cmbUnit.DataSource = dtm
+        cmbUnit.DataTextField = "unit"
+        cmbUnit.DataValueField = "idUnit"
+        cmbUnit.DataBind()
+
+    End Sub
+    Private Sub load_cmbUnits2()
+        Dim dtm As New DataTable
+        Dim sqlstr As String = ""
+
+        'If Session("from") = "admin" Then
+        sqlstr = "SELECT    idUnit, unit, vis         FROM overhaulUnitTbl " & _
+                  " WHERE     (vis = 1)  ORDER BY unit"
+        'Else
+        '      sqlstr = "SELECT        nam + ' ' + family +  ' - ' + postname AS karbar, ID " & _
+        '"FROM omurTbl WHERE        (CodeClosed = 0) AND (overhaul = 1)  ORDER BY family"
+        'End If
+
+        dtm = ClsDataTable.GetDataTable(sqlstr)
+        cmbUnit2.DataSource = dtm
+        cmbUnit2.DataTextField = "unit"
+        cmbUnit2.DataValueField = "idUnit"
+        cmbUnit2.DataBind()
+
+    End Sub
     Sub gridErja()
         Dim dt2 As New DataTable
 
@@ -731,7 +832,7 @@ Partial Class overhaulDetail
 
             lblShift.Text = dt.Rows(0).Item("shift").ToString()
             expirationDate = dt.Rows(0).Item("expireDateCard").ToString()
-          
+            PersonImage.ImageUrl = photoPath
 
 
         End If
@@ -752,7 +853,7 @@ Partial Class overhaulDetail
         '    Response.Redirect("overhaulBrowseSms.aspx")
         'End If
 
-        If Session("omurID") = 13 Or Session("omurID") = 19 Or Session("omurID") = 100 Then
+        If Session("omurID") = 13 Or Session("omurID") = 19 Or Session("omurID") = 100 Or Session("omurID") = 54 Then
             Response.Redirect("overhaulReportFrm.aspx")
         Else
             Response.Redirect("overhaulBrowseAdmin.aspx")
@@ -1382,7 +1483,6 @@ Partial Class overhaulDetail
                     " VALUES     (" & Session("idOver") & ", N'" & payam & "', " & Session("userid") & ", '" & saat & "')"
 
 
-
         upStat(sqlstr1)
 
         notes()
@@ -1444,13 +1544,20 @@ Partial Class overhaulDetail
         Dim sqlstrdel As String = "DELETE  FROM            overhaulStartDateTbl  WHERE        (IdOver = " & Id.Text & ")"
         upStat(sqlstrdel)
 
-        Dim sqlstr As String = "INSERT INTO overhaulStartDateTbl     (IdOver, tarix)  VALUES        (" & Id.Text & ", '" & txtDate.Text & "')"
+        Dim sqlstr As String = "INSERT INTO overhaulStartDateTbl     (IdOver, tarix,unit)  VALUES        (" & Id.Text & ", '" & txtDate.Text & "',N'" & cmbUnit.SelectedItem.Text & "')"
         upStat(sqlstr)
 
 
         Dim sqlstr1 As String = ""
+        Dim satshoru As String = ""
+        If lblShift.Text = "روزکار" Then
+            satshoru = "7:30"
+        Else
+            satshoru = "19:30"
+        End If
 
-        Dim payam As String = "با سلام لطفا در تاریخ: " & " " & txtDate.Text & " " & " از ساعت ٧.٣٠ (روزکار) ١٩.٣٠ (شبکار) با ثبت چهره در پتروشیمی تبریز شروع به کار نمایید."
+        Dim payam As String = "با سلام لطفا در تاریخ: " & " " & txtDate.Text & " " & " از ساعت  " & satshoru & "  با ثبت چهره در پتروشیمی تبریز شروع به کار نمایید." & "کد پرسنلی شما " & personnelCode
+        '& " " & "واحد شما " & " " & cmbUnit.SelectedItem.Text
 
         Dim sqlstr9 As String = "INSERT INTO smsTbl                  (mobile, message, tarix, saat)" & _
              "VALUES     ('" & Mobile.Text & "', N'" & payam & "', '" & ClsDateTime.GetDateNow() & "', '" & ClsDateTime.GetTimeNow() & "')"
@@ -1472,6 +1579,272 @@ Partial Class overhaulDetail
 
 
 
+    End Sub
+
+    Protected Sub btnChartEdit_Click(sender As Object, e As EventArgs) Handles btnChartEdit.Click
+        If CmbruneveshtType.Value = 0 Then
+            cmbRunevesht.Focus()
+            msg_box("لطفا چارت را انتخاب نمایید")
+
+            Exit Sub
+        Else
+
+            'If Val(hdn_tmp.Value) = 0 Then
+            chartEdit()
+
+        End If
+
+    End Sub
+    Private Sub chartEdit()
+
+        Dim cnn As New SqlConnection
+        cnn.ConnectionString = ClsConnection.GetConn
+        cnn.Open()
+        Dim cmm As New SqlCommand
+        Try
+            cmm.CommandText = "overhaulChartEditPrc"
+            cmm.CommandType = CommandType.StoredProcedure
+
+            cmm.Parameters.Add("@laterID", SqlDbType.Int)
+            cmm.Parameters("@laterID").Value = Id.Text
+
+            cmm.Parameters.Add("@sender", SqlDbType.Int, 10)
+            cmm.Parameters("@sender").Value = Session("userid")
+
+
+            cmm.Parameters.Add("@chartID", SqlDbType.Int, 5)
+            cmm.Parameters("@chartID").Value = Val(CmbruneveshtType.Value)
+
+            cmm.Parameters.Add("@pm", SqlDbType.NVarChar, 500)
+            cmm.Parameters("@pm").Direction = ParameterDirection.Output
+
+            cmm.Parameters.Add("@ResultCode", SqlDbType.TinyInt, 3)
+            cmm.Parameters("@ResultCode").Direction = ParameterDirection.Output
+            cmm.Connection = cnn
+
+
+
+            Dim result As Integer
+            cmm.ExecuteNonQuery()
+            result = cmm.Parameters("@ResultCode").Value
+            If result = 0 Then
+
+                Dim payam As String = " چارت ویرایش شد "
+                '& " " & "واحد شما " & " " & cmbUnit.SelectedItem.Text
+
+                Dim sqlstr1 As String = "INSERT INTO    overhaulCommentTbl ( IdOverhaul, notee, PerID, zaman) " & _
+                            " VALUES     (" & Session("idOver") & ", N'" & payam & "', " & Session("userid") & ", '" & saat & "')"
+
+
+                upStat(sqlstr1)
+                msg_box(" چارت با موفقیت ویرایش شد ")
+                notes()
+                gridErja()
+            Else
+                msg_box(cmm.Parameters("@pm").Value)
+            End If
+        Catch ex As Exception
+            msg_box(ex.Message.ToString)
+        End Try
+
+
+    End Sub
+
+    Protected Sub btnStatusChang_Click(sender As Object, e As EventArgs) Handles btnStatusChang.Click
+        Dim payam As String = " وضعیت پرونده ویرایش شد "
+        '& " " & "واحد شما " & " " & cmbUnit.SelectedItem.Text
+
+        Dim sqlstr1 As String = "INSERT INTO    overhaulCommentTbl ( IdOverhaul, notee, PerID, zaman) " & _
+                    " VALUES     (" & Session("idOver") & ", N'" & payam & "', " & Session("userid") & ", '" & saat & "')"
+
+        Dim sqlstr2 As String = " delete overhaulKartablTbl  where (overhaulId = " & Id.Text & ") "
+        Dim sqlstr3 As String = ""
+        Dim sqlstr4 As String = ""
+
+        If cmbStatus.SelectedValue = 50 Or cmbStatus.SelectedValue = 93 Then
+
+
+            sqlstr3 = "INSERT   INTO          overhaulKartablTbl( sender, omurId, overhaulId, kartablStat)         VALUES(" & Session("omurID") & "," & cmbStatus.SelectedValue & "," & Id.Text & ", 1)"
+
+            sqlstr4 = "  UPDATE RegisterOverhauls  SET   State = 199  WHERE (Id = " & Id.Text & ") "
+
+
+        Else
+
+
+            sqlstr3 = "INSERT   INTO          overhaulKartablTbl( sender, omurId, overhaulId, kartablStat)         VALUES(" & Session("omurID") & "," & cmbStatus.SelectedValue & "," & Id.Text & ", 1)"
+
+            sqlstr4 = "  UPDATE RegisterOverhauls  SET   State = " & cmbStatus.SelectedValue & "  WHERE (Id = " & Id.Text & ") "
+
+
+        End If
+
+        upStat(sqlstr1)
+        upStat(sqlstr2)
+        upStat(sqlstr3)
+        upStat(sqlstr4)
+        msg_box(" وضعیت با موفقیت ویرایش شد ")
+        notes()
+        loadItems()
+
+
+    End Sub
+
+    Protected Sub btnShoruBkar_Click(sender As Object, e As EventArgs) Handles btnShoruBkar.Click
+        Dim payam As String = " تاریخ شروع به کار ویرایش شد "
+        '& " " & "واحد شما " & " " & cmbUnit.SelectedItem.Text
+
+        Dim sqlstr1 As String = "INSERT INTO    overhaulCommentTbl ( IdOverhaul, notee, PerID, zaman) " & _
+                    " VALUES     (" & Session("idOver") & ", N'" & payam & "', " & Session("userid") & ", '" & saat & "')"
+        upStat(sqlstr1)
+
+        Dim sqlstrdel As String = "DELETE  FROM            overhaulStartDateTbl  WHERE        (IdOver = " & Id.Text & ")"
+        upStat(sqlstrdel)
+
+        Dim sqlstr As String = "INSERT INTO overhaulStartDateTbl     (IdOver, tarix,unit)  VALUES        (" & Id.Text & ", '" & txtShoruBkar.Text & "',N'" & cmbUnit2.SelectedItem.Text & "')"
+        upStat(sqlstr)
+
+       
+
+
+        msg_box(" تاریخ شروع بکار با موفقیت ویرایش شد ")
+        notes()
+        loadItems()
+    End Sub
+
+    Private Sub ExportReportToWord()
+        Dim sqlstr As String = "select * from overhaulHerastVW WHERE        (Id = " & Id.Text & ")"
+        Dim dt As New DataTable
+
+        dt = ClsDataTable.GetDataTable(sqlstr)
+
+        'Dim dt As DataTable = TryCast(Session("CardDataTable"), DataTable)
+        If dt Is Nothing OrElse dt.Rows.Count = 0 Then
+            Response.Write("داده‌ای برای نمایش وجود ندارد.")
+            Return
+        End If
+
+        Dim rpt As New ReportDocument()
+        rpt.Load(Server.MapPath("~/Reports/contract.rpt"))
+        rpt.SetDataSource(dt)
+
+        rpt.DataSourceConnections.Clear()
+
+        ' صادر کردن به Word و ارسال به Response
+        Dim stream As System.IO.Stream = rpt.ExportToStream(ExportFormatType.PortableDocFormat)
+        Response.Clear()
+        Response.Buffer = True
+        Response.ContentType = "application/pdf"
+        Response.AddHeader("Content-Disposition", "inline; filename=contract.pdf")
+        Dim buffer As Byte() = New Byte(stream.Length - 1) {}
+        stream.Read(buffer, 0, buffer.Length)
+        Response.OutputStream.Write(buffer, 0, buffer.Length)
+        Response.Flush()
+        Response.End()
+
+        ' آزادسازی منابع
+        rpt.Close()
+        rpt.Dispose()
+    End Sub
+
+    Protected Sub btnPrintContract_Click(sender As Object, e As EventArgs) Handles btnPrintContract.Click
+        ExportReportToWord()
+    End Sub
+
+    Protected Sub btnEnseraf_Click(sender As Object, e As EventArgs) Handles btnEnseraf.Click
+        Dim sqlstr, sqlstr2, sqlstr4 As String
+
+
+
+        Dim payam As String = ""
+
+
+        payam = txtNazar.Text & "انصراف پرسنل "
+
+
+        sqlstr4 = " delete overhaulKartablTbl  where (overhaulId = " & Id.Text & ") "
+        upStat(sqlstr4)
+
+        'sqlstr6 = "INSERT   INTO          overhaulKartablTbl( sender, omurId, overhaulId, kartablStat)         VALUES(" & Session("omurID") & ", 100 ," & Session("idOver") & ", 1)"
+
+        'upStat(sqlstr6)
+
+        Dim sqlstrdel As String = "DELETE  FROM            overhaulCodepersoneliTbl  WHERE        (IdOver = " & Id.Text & ")"
+        upStat(sqlstrdel)
+
+        Dim sqlstrdeld As String = "DELETE  FROM            overhaulStartDateTbl  WHERE        (IdOver = " & Id.Text & ")"
+        upStat(sqlstrdeld)
+
+
+        sqlstr = "  UPDATE RegisterOverhauls  SET   State = -200  WHERE (Id = " & Session("idOver") & ") "
+        upStat(sqlstr)
+
+        sqlstr2 = "INSERT INTO    overhaulCommentTbl ( IdOverhaul, notee, PerID, zaman) " & _
+                    " VALUES     (" & Session("idOver") & ", N'" & payam & "', " & Session("userid") & ", '" & saat & "')"
+
+        upStat(sqlstr2)
+      
+        msg_box("انصراف پرسنل")
+        notes()
+        loadItems()
+
+    End Sub
+
+    Protected Sub btnTarixPayan_Click(sender As Object, e As EventArgs) Handles btnTarixPayan.Click
+        Dim payam As String = " تاریخ پایانکار" & tarixPayankar.Text & " ثبت شد "
+        '& " " & "واحد شما " & " " & cmbUnit.SelectedItem.Text
+
+        Dim sqlstr1 As String = "INSERT INTO    overhaulCommentTbl ( IdOverhaul, notee, PerID, zaman) " & _
+                    " VALUES     (" & Session("idOver") & ", N'" & payam & "', " & Session("userid") & ", '" & saat & "')"
+        upStat(sqlstr1)
+
+        Dim sqlstrdel As String = "DELETE  FROM            overhaulEndDateTbl  WHERE        (IdOver = " & Id.Text & ")"
+        upStat(sqlstrdel)
+
+        Dim sqlstr As String = "INSERT INTO overhaulEndDateTbl     (IdOver, tarix)  VALUES        (" & Id.Text & ", '" & tarixPayankar.Text & "')"
+        upStat(sqlstr)
+
+
+
+
+        msg_box(" تاریخ پایانکار  ثبت شد ")
+        notes()
+        loadItems()
+    End Sub
+
+    Protected Sub btnPrintTasviye_Click(sender As Object, e As EventArgs) Handles btnPrintTasviye.Click
+        Dim sqlstr As String = "select * from overhaulTasvieVW WHERE        (Id = " & Id.Text & ")"
+        Dim dt As New DataTable
+
+        dt = ClsDataTable.GetDataTable(sqlstr)
+
+        'Dim dt As DataTable = TryCast(Session("CardDataTable"), DataTable)
+        If dt Is Nothing OrElse dt.Rows.Count = 0 Then
+            Response.Write("داده‌ای برای نمایش وجود ندارد.")
+            Return
+        End If
+
+        Dim rpt As New ReportDocument()
+        rpt.Load(Server.MapPath("~/Reports/accountSettlement.rpt"))
+        rpt.SetDataSource(dt)
+
+        rpt.DataSourceConnections.Clear()
+
+        ' صادر کردن به Word و ارسال به Response
+        Dim stream As System.IO.Stream = rpt.ExportToStream(ExportFormatType.PortableDocFormat)
+        Response.Clear()
+        Response.Buffer = True
+        Response.ContentType = "application/pdf"
+        Response.AddHeader("Content-Disposition", "inline; filename=accountSettlement.pdf")
+        Dim buffer As Byte() = New Byte(stream.Length - 1) {}
+        stream.Read(buffer, 0, buffer.Length)
+        Response.OutputStream.Write(buffer, 0, buffer.Length)
+        Response.Flush()
+        Response.End()
+
+        ' آزادسازی منابع
+        rpt.Close()
+        rpt.Dispose()
     End Sub
 End Class
 

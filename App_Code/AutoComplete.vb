@@ -36,4 +36,8 @@ Public Class AutoComplete
         Return txtItems.ToArray()
     End Function
 
+    Private Function Val(dbValues As String) As Integer
+        Throw New NotImplementedException
+    End Function
+
 End Class

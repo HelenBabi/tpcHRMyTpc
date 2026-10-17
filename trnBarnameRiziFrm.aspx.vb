@@ -36,7 +36,7 @@ Partial Class trnBarnameRiziFrm
         ibtnSaveNew.Visible = meno_arr(4)
         ibtnCancel.Visible = meno_arr(5)
         ibtnDelete.Visible = meno_arr(6)
-       
+
         ibtnDeactived.Visible = meno_arr(9)
 
         ibtnExit.Visible = meno_arr(11)
@@ -51,7 +51,7 @@ Partial Class trnBarnameRiziFrm
             ibtnEdit.Enabled = False
             ibtnDelete.Enabled = False
             ibtnAdd.Enabled = False
-          
+
             ibtnDeactived.Enabled = False
 
             ibtnExit.Enabled = False
@@ -63,7 +63,7 @@ Partial Class trnBarnameRiziFrm
             ibtnEdit.ImageUrl = "~/Icons/edit2.png"
             ibtnDelete.ImageUrl = "~/Icons/Delete2.png"
             ibtnAdd.ImageUrl = "~/Icons/Add2.png"
-         
+
             ibtnDeactived.ImageUrl = "~/Icons/reload2.png"
 
             ''''''''''''''''''''''''''''''''''''''''''''''''
@@ -109,7 +109,7 @@ Partial Class trnBarnameRiziFrm
             ibtnEdit.ImageUrl = "~/Icons/edit.png"
             ibtnDelete.ImageUrl = "~/Icons/Delete.png"
             ibtnAdd.ImageUrl = "~/Icons/Add.png"
-          
+
             ibtnDeactived.ImageUrl = "~/Icons/reload.png"
 
             ''''''''''''''''''''''''''''''''''''''''''''''''

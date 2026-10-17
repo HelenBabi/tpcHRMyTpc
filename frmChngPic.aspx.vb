@@ -1,256 +1,138 @@
 ﻿Imports System.Data
 Imports System.Data.SqlClient
-Imports System.Collections.Generic
 Imports System.IO
-Imports System.Linq
-Imports System.Web
-Imports System.Web.UI
-Imports System.Web.UI.WebControls
-
 
 Partial Class frmChngPic
     Inherits System.Web.UI.Page
-    Dim dt As New DataTable
+
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-        If Session("WorkType") = 50 Then
+        If Not IsPostBack Then
+            ' بررسی نشست کاربر
+            If Session("userid") Is Nothing Then
+                Response.Redirect("login.aspx")
+            End If
 
-            ibtnExit.Visible = False
+            ' بارگذاری عکس فعلی
+            LoadCurrentImage()
         End If
+    End Sub
 
-        If Me.IsPostBack = False Then
-            Session("UserId") = Session("userid")
-            ' meno_acc()
+    ' بارگذاری عکس فعلی پروفایل
+    Private Sub LoadCurrentImage()
+        Try
+            Dim codePersoneli As String = Session("codePersoneli").ToString()
+            Dim imagePath As String = Server.MapPath("~/images/person_pic/" & codePersoneli & ".jpg")
+
+            If File.Exists(imagePath) Then
+                imgPreview.ImageUrl = "~/images/person_pic/" & codePersoneli & ".jpg"
+            Else
+                imgPreview.ImageUrl = "~/images/person_pic/person.ico"
+            End If
+        Catch ex As Exception
+            imgPreview.ImageUrl = "~/images/person_pic/person.ico"
+        End Try
+    End Sub
+
+    ' ذخیره عکس جدید
+    Private Sub SaveImage()
+        Try
+            ' بررسی وجود فایل
+            If Not FileUpload1.HasFile Then
+                msg_box("❌ لطفاً یک فایل عکس انتخاب کنید")
+                Exit Sub
+            End If
+
+            ' بررسی فرمت فایل
+            Dim extension As String = Path.GetExtension(FileUpload1.FileName).ToLower()
+            Dim allowedExtensions As String() = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"}
+
+            If Not allowedExtensions.Contains(extension) Then
+                msg_box("❌ فقط فایل‌های تصویری مجاز هستند (jpg, jpeg, png, gif, bmp, webp)")
+                Exit Sub
+            End If
+
+            ' بررسی حجم فایل (حداکثر 2 مگابایت)
+            If FileUpload1.PostedFile.ContentLength > 2 * 1024 * 1024 Then
+                msg_box("❌ حجم فایل نباید بیشتر از 2 مگابایت باشد")
+                Exit Sub
+            End If
+
+            ' مسیر ذخیره‌سازی
+            Dim savePath As String = Server.MapPath("~/images/person_pic/")
+
+            ' ایجاد پوشه اگر وجود ندارد
+            If Not Directory.Exists(savePath) Then
+                Directory.CreateDirectory(savePath)
+            End If
+
+            ' ذخیره فایل با نام کد پرسنلی
+            Dim codePersoneli As String = Session("codePersoneli").ToString()
+            Dim fileName As String = codePersoneli & extension
+            Dim fullPath As String = Path.Combine(savePath, fileName)
+
+            ' حذف عکس قبلی اگر وجود دارد
+            Dim oldFiles = Directory.GetFiles(savePath, codePersoneli & ".*")
+            For Each oldFile In oldFiles
+                Try
+                    File.Delete(oldFile)
+                Catch
+                End Try
+            Next
+
+            ' ذخیره عکس جدید
+            FileUpload1.SaveAs(fullPath)
+
+            ' به‌روزرسانی پیش‌نمایش
+            imgPreview.ImageUrl = "~/images/person_pic/" & fileName
+
+            msg_box("✅ عکس پروفایل با موفقیت تغییر یافت")
+
+        Catch ex As Exception
+            msg_box("❌ خطا در ذخیره عکس: " & ex.Message)
+        End Try
+    End Sub
+
+    ' اعتبارسنجی سمت سرور
+    Protected Sub CustomValidator1_ServerValidate(source As Object, args As ServerValidateEventArgs) Handles CustomValidator1.ServerValidate
+        Try
+            If FileUpload1.HasFile Then
+                Dim extension As String = Path.GetExtension(FileUpload1.FileName).ToLower()
+                Dim allowedExtensions As String() = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"}
+
+                If allowedExtensions.Contains(extension) Then
+                    args.IsValid = True
+                Else
+                    args.IsValid = False
+                End If
+            Else
+                args.IsValid = False
+            End If
+        Catch
+            args.IsValid = False
+        End Try
+    End Sub
+
+    ' دکمه ذخیره
+    Protected Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
+        If Page.IsValid Then
+            SaveImage()
         End If
-
     End Sub
 
-
-#Region "All pages"
-
-    Private Sub meno_acc()
-        Dim meno_arr(10) As Boolean
-        ' meno_arr = ClsAccounting.meno_acc(Me.Page.ToString().Substring(4, Me.Page.ToString().Substring(4).Length - 5), Val(Session("UserId")))
-        meno_arr = ClsAccounting.meno_acc("frmChngPic.aspx", Val(Session("UserId")))
-        'ibtnAdd.Visible = meno_arr(1)
-        'ibtnEdit.Visible = meno_arr(2)
-        'ibtnSave.Visible = meno_arr(3)
-        'ibtnSaveNew.Visible = meno_arr(4)
-        'ibtnCancel.Visible = meno_arr(5)
-        'ibtnDelete.Visible = meno_arr(6)
-        'ibtnDeleted.Visible = meno_arr(7)
-        'ibtnHistory.Visible = meno_arr(8)
-        'ibtnDeactived.Visible = meno_arr(9)
-        'ibtnPrint.Visible = meno_arr(10)
-        'ibtnExit.Visible = meno_arr(11)
+    ' دکمه برگشت
+    Protected Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
+        Response.Redirect("index.aspx")
     End Sub
 
-    Private Sub enable_disable()
-        If ibtnSave.Enabled = False Then
-            ibtnSave.Enabled = True
-            ibtnSaveNew.Enabled = True
-            ibtnCancel.Enabled = True
-
-            ibtnEdit.Enabled = False
-            ibtnDelete.Enabled = False
-            ibtnAdd.Enabled = False
-            ibtnDeleted.Enabled = False
-            ibtnHistory.Enabled = False
-            ibtnDeactived.Enabled = False
-            ibtnPrint.Enabled = False
-            ibtnExit.Enabled = False
-            '''''''''''''''''''''''''''''''''''''''''
-            ibtnSave.ImageUrl = "~/Icons/save.png"
-            ibtnSaveNew.ImageUrl = "~/Icons/savenew.png"
-            ibtnCancel.ImageUrl = "~/Icons/Cancel.png"
-
-            ibtnEdit.ImageUrl = "~/Icons/edit2.png"
-            ibtnDelete.ImageUrl = "~/Icons/Delete2.png"
-            ibtnAdd.ImageUrl = "~/Icons/Add2.png"
-            ibtnDeleted.ImageUrl = "~/Icons/deleted2.png"
-            ibtnHistory.ImageUrl = "~/Icons/history2.png"
-            ibtnDeactived.ImageUrl = "~/Icons/reload2.png"
-            ibtnPrint.ImageUrl = "~/Icons/Print2.png"
-            ''''''''''''''''''''''''''''''''''''''''''''''''
-
-        Else
-            ibtnSave.Enabled = False
-            ibtnSaveNew.Enabled = False
-            ibtnCancel.Enabled = False
-
-            ibtnEdit.Enabled = True
-            ibtnDelete.Enabled = True
-            ibtnAdd.Enabled = True
-            ibtnDeleted.Enabled = True
-            ibtnHistory.Enabled = True
-            ibtnDeactived.Enabled = True
-            ibtnPrint.Enabled = True
-            ibtnExit.Enabled = True
-            '''''''''''''''''''''''''''''''''''''''''
-            ibtnSave.ImageUrl = "~/Icons/save2.png"
-            ibtnSaveNew.ImageUrl = "~/Icons/savenew2.png"
-            ibtnCancel.ImageUrl = "~/Icons/Cancel2.png"
-
-            ibtnEdit.ImageUrl = "~/Icons/edit.png"
-            ibtnDelete.ImageUrl = "~/Icons/Delete.png"
-            ibtnAdd.ImageUrl = "~/Icons/Add.png"
-            ibtnDeleted.ImageUrl = "~/Icons/deleted.png"
-            ibtnHistory.ImageUrl = "~/Icons/history.png"
-            ibtnDeactived.ImageUrl = "~/Icons/reload.png"
-            ibtnPrint.ImageUrl = "~/Icons/Print.png"
-            ''''''''''''''''''''''''''''''''''''''''''''''''
-
-
-
-            ' txt_BakhshCode.Enabled = True
-        End If
-
-    End Sub
-
-    Private Sub clear_form()
-        'txt_CurentPass.Text = ""
-        'txt_NewPass1.Text = ""
-        'txt_NewPass2.Text = ""
-
-    End Sub
-
+    ' نمایش پیغام
     Private Sub msg_box(ByVal msg As String)
         Dim sb As New StringBuilder
+        msg = Replace(msg, "'", " ")
+        msg = Replace(msg, """", " ")
         sb.Append("alert('")
         sb.Append(msg.Replace("\n", "\\n").Replace("\r", "").Replace("'", "\\'"))
         sb.Append("');")
         ScriptManager.RegisterStartupScript(Me.Page, Me.GetType(), "showalert", sb.ToString(), True)
-        ' ClientScript.RegisterStartupScript(Me.GetType(), "myalert", "alert('" + sb.ToString + "');", True)
     End Sub
 
-#End Region
-
-
-#Region "meno button"
-    Protected Sub ibtnSave_Click(ByVal sender As Object, ByVal e As System.Web.UI.ImageClickEventArgs) Handles ibtnSave.Click
-        If Page.IsValid Then
-            Call save_final()
-
-        End If
-
-
-    End Sub
-
-
-    Private Sub save_()
-        enable_disable()
-        clear_form()
-
-    End Sub
-
-    Protected Sub ibtnSaveNew_Click(ByVal sender As Object, ByVal e As System.Web.UI.ImageClickEventArgs) Handles ibtnSaveNew.Click
-        Call save_final()
-
-    End Sub
-
-    Protected Sub ibtnEdit_Click(ByVal sender As Object, ByVal e As System.Web.UI.ImageClickEventArgs) Handles ibtnEdit.Click
-        Call edit_()
-    End Sub
-    Private Sub edit_()
-        enable_disable()
-    End Sub
-    Private Sub cancel_()
-        enable_disable()
-        clear_form()
-    End Sub
-
-    Protected Sub ibtnCancel_Click(ByVal sender As Object, ByVal e As System.Web.UI.ImageClickEventArgs) Handles ibtnCancel.Click
-        Call cancel_()
-    End Sub
-
-    Protected Sub ibtnDelete_Click(ByVal sender As Object, ByVal e As System.Web.UI.ImageClickEventArgs) Handles ibtnDelete.Click
-        Call dell_()
-    End Sub
-    Private Sub dell_()
-
-        Call save_final()
-        enable_disable()
-        clear_form()
-    End Sub
-
-
-
-#End Region
-
-
-
-
-
-
-
-
-    Private Sub save_final()
-        Dim sqlstr As String
-
-        Dim cnn As New SqlConnection
-        cnn.ConnectionString = ClsConnection.GetConn
-        cnn.Open()
-        Dim cmm As New SqlCommand
-        Dim size As Integer = FileUpload1.PostedFile.ContentLength
-        size = size / 1024
-        'This is where I'd like to perform the file size check 
-
-
-        If FileUpload1.HasFile = False Then
-
-            msg_box("لطفا فایل را انتخاب کنید")
-           
-
-        Else
-            If size > 100 Then
-                msg_box("حجم فایل بیشتر از صد کیلو بایت است")
-                FileUpload1.Focus()
-                Exit Sub
-            End If
-            Dim masir As String = HttpContext.Current.Server.MapPath("~/images/person_pic/")
-
-            FileUpload1.PostedFile.SaveAs(masir & Session("codePersoneli") & ".jpg")
-
-            Dim filname As String = "images/person_pic/" & Session("codePersoneli") & ".jpg"
-            sqlstr = "UPDATE    personel  SET   UserPic = '" & filname & "'" & _
-          " WHERE(ID = " & Session("userid") & ")"
-            cmm = New SqlCommand(sqlstr, cnn)
-            cmm.ExecuteNonQuery()
-            msg_box("عكس جديد ثبت شد")
-            cnn.Close()
-
-        End If
-
-    End Sub
-
-    Private Sub var(p1 As Object)
-        Throw New NotImplementedException
-    End Sub
-
-    Private Function FileExtension() As Object
-        Throw New NotImplementedException
-    End Function
-
-
-
-
-
-    Protected Sub ibtnExit_Click(sender As Object, e As System.Web.UI.ImageClickEventArgs) Handles ibtnExit.Click
-
-     
-            Response.Redirect("index.aspx")
-    
-    End Sub
-
-    'Protected Sub CustomValidator1_ServerValidate(source As Object, args As System.Web.UI.WebControls.ServerValidateEventArgs) Handles CustomValidator1.ServerValidate
-    '    Dim myPostedFile As HttpPostedFile = FileUpload1.PostedFile
-    '    If myPostedFile IsNot Nothing AndAlso myPostedFile.ContentLength > 0 Then
-    '        Dim finfo As New FileInfo(myPostedFile.FileName)
-    '        Dim fileExtension As String = finfo.Extension.ToLower()
-    '        If fileExtension = ".gif" OrElse fileExtension = ".jpg" OrElse fileExtension = ".jpeg" OrElse fileExtension = ".png" Then
-    '            args.IsValid = True
-    '        Else
-    '            args.IsValid = False
-    '        End If
-    '    End If
-    'End Sub
 End Class

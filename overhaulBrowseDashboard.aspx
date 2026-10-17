@@ -155,28 +155,34 @@
                 <Columns>
 
                     
-                      <dx:GridViewDataTextColumn Caption="واحد" FieldName="senderr" 
+                      <dx:GridViewDataTextColumn Caption="امور" FieldName="senderr" 
                             UnboundType="Integer" VisibleIndex="0">
                                                       <HeaderStyle HorizontalAlign="Center" />
                             <cellstyle horizontalalign="Center">
                             </cellstyle>
                         </dx:GridViewDataTextColumn>
+                       <dx:GridViewDataTextColumn Caption="واحد" FieldName="unit" 
+                            UnboundType="Integer" VisibleIndex="1">
+                                                      <HeaderStyle HorizontalAlign="Center" />
+                            <cellstyle horizontalalign="Center">
+                            </cellstyle>
+                        </dx:GridViewDataTextColumn>
                      <dx:GridViewDataTextColumn Caption="چارت" FieldName="Title" 
-                            UnboundType="Integer" VisibleIndex="0">
+                            UnboundType="Integer" VisibleIndex="2">
                                                       <HeaderStyle HorizontalAlign="Center" />
                             <cellstyle horizontalalign="Center">
                             </cellstyle>
                         </dx:GridViewDataTextColumn>
                        <dx:GridViewDataTextColumn Caption="تعداد" FieldName="tedad" 
                            
-                            UnboundType="Integer" VisibleIndex="1" Width="150px">
+                            UnboundType="Integer" VisibleIndex="3" Width="150px">
                           
                             <HeaderStyle HorizontalAlign="Center" />
                             <cellstyle horizontalalign="Center">
                             </cellstyle>
                         </dx:GridViewDataTextColumn>
-                    <dx:GridViewDataTextColumn Caption="شبکار/روزکار" FieldName="shift" VisibleIndex="2" />
-                     <dx:GridViewDataTextColumn Caption="مبلغ نفرساعت" FieldName="cahrtPrice" ShowInCustomizationForm="True" VisibleIndex="3">
+                    <dx:GridViewDataTextColumn Caption="شبکار/روزکار" FieldName="shift" VisibleIndex="4" />
+                     <dx:GridViewDataTextColumn Caption="مبلغ نفرساعت" FieldName="cahrtPrice" ShowInCustomizationForm="True" VisibleIndex="5">
                      </dx:GridViewDataTextColumn>
                 </Columns>
 
@@ -240,34 +246,49 @@
 }" />
                 
                 <Columns>
-
-                              <dx:GridViewDataTextColumn Caption="واحد" FieldName="omur" 
-                            UnboundType="Integer" VisibleIndex="0">
+                       <dx:GridViewDataTextColumn Caption="کد پرسنلی" FieldName="codePersoneli" ShowInCustomizationForm="True" VisibleIndex="0" >
+                                       <HeaderStyle HorizontalAlign="Center" />
+                            <cellstyle horizontalalign="Center">
+                            </cellstyle>
+                            </dx:GridViewDataTextColumn>
+                     <dx:GridViewDataTextColumn Caption="کد پیگیری" FieldName="Id" ShowInCustomizationForm="True" VisibleIndex="1">
+                          </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn Caption="کد ملی" FieldName="Nationality" ShowInCustomizationForm="True" VisibleIndex="2">
+                           </dx:GridViewDataTextColumn>
+                      <dx:GridViewDataTextColumn Caption="نام" FieldName="FirstName" ShowInCustomizationForm="True" VisibleIndex="3">
+                     </dx:GridViewDataTextColumn>
+             <dx:GridViewDataTextColumn Caption="نام خانوادگی" FieldName="LastName" ShowInCustomizationForm="True" VisibleIndex="4">
+                                               </dx:GridViewDataTextColumn>
+                       <dx:GridViewDataTextColumn Caption="تاریخ شروع بکار" FieldName="tarixStart" ShowInCustomizationForm="True" VisibleIndex="5">
+                     </dx:GridViewDataTextColumn>
+                                 <dx:GridViewDataTextColumn Caption="وضعیت" FieldName="statTitle" ShowInCustomizationForm="True" VisibleIndex="6">
+                     </dx:GridViewDataTextColumn>
+                              <dx:GridViewDataTextColumn Caption="امور" FieldName="omur" 
+                            UnboundType="Integer" VisibleIndex="6">
+                                                      <HeaderStyle HorizontalAlign="Center" />
+                            <cellstyle horizontalalign="Center">
+                            </cellstyle>
+                        </dx:GridViewDataTextColumn>
+                      <dx:GridViewDataTextColumn Caption="واحد" FieldName="unit" 
+                            UnboundType="Integer" VisibleIndex="7">
                                                       <HeaderStyle HorizontalAlign="Center" />
                             <cellstyle horizontalalign="Center">
                             </cellstyle>
                         </dx:GridViewDataTextColumn>
                      <dx:GridViewDataTextColumn Caption="چارت" FieldName="Title" 
-                            UnboundType="Integer" VisibleIndex="0">
+                            UnboundType="Integer" VisibleIndex="8">
                                                       <HeaderStyle HorizontalAlign="Center" />
                             <cellstyle horizontalalign="Center">
                             </cellstyle>
                         </dx:GridViewDataTextColumn>
                        
-                    <dx:GridViewDataTextColumn Caption="شبکار/روزکار" FieldName="shift" VisibleIndex="2" />
-                     <dx:GridViewDataTextColumn Caption="مبلغ نفرساعت" FieldName="cahrtPrice" ShowInCustomizationForm="True" VisibleIndex="3">
+                    <dx:GridViewDataTextColumn Caption="شبکار/روزکار" FieldName="shift" VisibleIndex="9" />
+                     <dx:GridViewDataTextColumn Caption="مبلغ نفرساعت" FieldName="cahrtPrice" ShowInCustomizationForm="True" VisibleIndex="10">
                      </dx:GridViewDataTextColumn>
-                    <dx:GridViewDataTextColumn Caption="نام" FieldName="FirstName" ShowInCustomizationForm="True" VisibleIndex="4">
-                     </dx:GridViewDataTextColumn>
-             <dx:GridViewDataTextColumn Caption="نام خانوادگی" FieldName="LastName" ShowInCustomizationForm="True" VisibleIndex="5">
-                                               </dx:GridViewDataTextColumn>
-                                 <dx:GridViewDataTextColumn Caption="وضعیت" FieldName="statTitle" ShowInCustomizationForm="True" VisibleIndex="6">
-                     </dx:GridViewDataTextColumn>
-                    <dx:GridViewDataTextColumn Caption="کد پیگیری" FieldName="Id" ShowInCustomizationForm="True" VisibleIndex="7">
-                          </dx:GridViewDataTextColumn>
-                    <dx:GridViewDataTextColumn Caption="کد ملی" FieldName="Nationality" ShowInCustomizationForm="True" VisibleIndex="8">
-                           </dx:GridViewDataTextColumn>
-                     <dx:GridViewDataTextColumn Caption="تاریخ" FieldName="tarix" ShowInCustomizationForm="True" VisibleIndex="9">
+                   
+                  
+                   
+                     <dx:GridViewDataTextColumn Caption="تاریخ چارت" FieldName="tarix" ShowInCustomizationForm="True" VisibleIndex="11">
                            </dx:GridViewDataTextColumn>
                                              
                 </Columns>

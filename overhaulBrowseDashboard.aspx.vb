@@ -94,7 +94,7 @@ Partial Class overhaulBrowseDashboard
         'If Session("unitID") = 19 Or Session("unitID") = 15 Then
         '    sqlstr = "SELECT * from overhaulAllVW"
         'Else
-        sqlstr = "SELECT * from  overhaulPersonelChartVW   "
+        sqlstr = "SELECT * from  overhaulPersonelChartVW  ORDER BY codePersoneli "
         'End If
 
 

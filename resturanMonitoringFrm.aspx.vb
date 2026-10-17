@@ -19,30 +19,25 @@ Partial Class resturanMonitoringFrm
 #Region "All pages"
     Private Sub resturan1()
         Dim sqlstr As String = ""
-        Dim dt3 As New DataTable
-        Dim tarix As String = ClsDateTime.GetDateNow
-        sqlstr = "SELECT        TOP (5) idd, codePersoneli, tarix,person,radif" & _
-        " FROM resturanVW WHERE        (tarix = '" & tarix & "') AND (resturanID = 1) AND (foodTypeID = 11)" & _
-         "ORDER BY idd DESC"
-        dt3 = ClsDataTable.GetDataTable(sqlstr)
-        If dt3.Rows.Count > 0 Then
+        Dim dtb As New DataTable
+        sqlstr = "SELECT TOP (10) CardId, Date, DeviceCode, person, Id " & _
+        " FROM resturanVW         WHERE(DeviceCode = 1) ORDER BY Id DESC"
+        dtb = ClsDataTable.GetDataTableBoad5(sqlstr)
+        If dtb.Rows.Count > 0 Then
             Label1.Visible = True
-            DataList1.DataSource = dt3
+            DataList1.DataSource = dtb
             DataList1.DataBind()
         Else
             Label1.Visible = False
-
-
         End If
     End Sub
     Private Sub resturan12()
-        Dim sqlstr As String = ""
+       Dim sqlstr As String = ""
         Dim dt3 As New DataTable
-        Dim tarix As String = ClsDateTime.GetDateNow
-        sqlstr = "SELECT        TOP (5) idd, codePersoneli, tarix,person,radif" & _
-        " FROM resturanVW WHERE        (tarix = '" & tarix & "') AND (resturanID = 1) AND (foodTypeID = 12)" & _
-         "ORDER BY idd DESC"
-        dt3 = ClsDataTable.GetDataTable(sqlstr)
+
+        sqlstr = "SELECT TOP (10) CardId, Date, DeviceCode, person, Id " & _
+          " FROM resturanVW         WHERE(DeviceCode = 2) ORDER BY Id DESC"
+        dt3 = ClsDataTable.GetDataTableBoad5(sqlstr)
         If dt3.Rows.Count > 0 Then
             Label2.Visible = True
             DataList2.DataSource = dt3
@@ -54,11 +49,10 @@ Partial Class resturanMonitoringFrm
     Private Sub resturan2()
         Dim sqlstr As String = ""
         Dim dt3 As New DataTable
-        Dim tarix As String = ClsDateTime.GetDateNow
-        sqlstr = "SELECT        TOP (5) idd, codePersoneli, tarix, person,radif2" & _
-        " FROM resturanVW WHERE        (tarix = '" & tarix & "') AND (resturanID = 2) AND (foodTypeID = 21)" & _
-         "ORDER BY idd DESC"
-        dt3 = ClsDataTable.GetDataTable(sqlstr)
+
+        sqlstr = "SELECT TOP (10) CardId, Date, DeviceCode, person, Id " & _
+          " FROM resturanVW         WHERE(DeviceCode = 3) ORDER BY Id DESC"
+        dt3 = ClsDataTable.GetDataTableBoad5(sqlstr)
         If dt3.Rows.Count > 0 Then
             Label3.Visible = True
             DataList3.DataSource = dt3
@@ -68,13 +62,12 @@ Partial Class resturanMonitoringFrm
         End If
     End Sub
     Private Sub resturan22()
-        Dim sqlstr As String = ""
+      Dim sqlstr As String = ""
         Dim dt3 As New DataTable
-        Dim tarix As String = ClsDateTime.GetDateNow
-        sqlstr = "SELECT        TOP (5) idd, codePersoneli, tarix, person,radif2" & _
-        " FROM resturanVW WHERE        (tarix = '" & tarix & "') AND (resturanID = 2) AND (foodTypeID = 22)" & _
-         "ORDER BY idd DESC"
-        dt3 = ClsDataTable.GetDataTable(sqlstr)
+
+        sqlstr = "SELECT TOP (10) CardId, Date, DeviceCode, person, Id " & _
+          " FROM resturanVW         WHERE(DeviceCode = 4) ORDER BY Id DESC"
+        dt3 = ClsDataTable.GetDataTableBoad5(sqlstr)
         If dt3.Rows.Count > 0 Then
             Label4.Visible = True
             DataList4.DataSource = dt3

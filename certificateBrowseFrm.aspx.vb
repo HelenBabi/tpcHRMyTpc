@@ -36,13 +36,6 @@ Partial Class certificateBrowseFrm
     End Sub
    
 
-
-
-
-
-
-
-
     Protected Sub ASPxGrvHead_HtmlRowPrepared(sender As Object, e As DevExpress.Web.ASPxGridView.ASPxGridViewTableRowEventArgs) Handles ASPxGrvHead.HtmlRowPrepared
        If e.RowType <> DevExpress.Web.ASPxGridView.GridViewRowType.Data Then
             Return
@@ -108,14 +101,6 @@ Partial Class certificateBrowseFrm
 
     Private Sub load_grid()
 
-
-
-
-
-
-
-
-
         datS = Request.Form("datepicker")
         dateE = Request.Form("datepicker2")
         lblDateS.Text = datS
@@ -160,70 +145,7 @@ Partial Class certificateBrowseFrm
         Dim cntt As Integer = dt1.Rows.Count
         lblTotal.Text = "تعداد كل = " & cntt
     End Sub
-    '   Private Sub CntTyp()
-    '       Dim sqlstr, txtcnt As String
-    '       txtcnt = ""
-    '       sqlstr = "SELECT tblWorkHdr.WorkTypeCode, Count(tblWorkHdr.WorkTypeCode) AS CountOfWorkTypeCode, tblWorkType.WorkTypeName" & _
-    '        " FROM tblWorkHdr INNER JOIN tblWorkType ON tblWorkHdr.WorkTypeCode = tblWorkType.WorkTypeCode " & _
-    '      " WHERE (((tblWorkHdr.WorkDateE) Between '" & datS1 & "' And '" & dateE1 & "'))" & _
-    '"GROUP BY tblWorkHdr.WorkTypeCode, tblWorkType.WorkTypeName "
-
-
-    '       dt3 = ClsDataTable.GetDataTable(sqlstr)
-
-    '       Dim count_ As Integer = dt3.Rows.Count
-    '       For i As Integer = 0 To count_ - 1
-    '           txtcnt += dt3.Rows(i).Item("WorkTypeName").ToString
-    '           txtcnt += " = "
-    '           'If id_type = 1 Then
-    '           '    txtcnt += "سرويس در كارگاه="
-    '           'ElseIf id_type = 2 Then
-    '           '    txtcnt += "ريموت="
-    '           'ElseIf id_type = 3 Then
-    '           '    txtcnt += "سرویس در محل="
-    '           'ElseIf id_type = 4 Then
-    '           '    txtcnt += "سرویس دوره ای="
-    '           'End If
-    '           txtcnt += dt3.Rows(i).Item("CountOfWorkTypeCode").ToString
-    '           txtcnt += "  ;      "
-    '       Next
-    '       lblCnt.Text = txtcnt
-    '   End Sub
-
-
-    '   Private Sub CntTypnow()
-    '       Dim sqlstr, txtcnt As String
-    '       txtcnt = ""
-    '       sqlstr = "SELECT tblWorkHdr.WorkTypeCode, Count(tblWorkHdr.WorkTypeCode) AS CountOfWorkTypeCode, tblWorkType.WorkTypeName" & _
-    '        " FROM tblWorkHdr INNER JOIN tblWorkType ON tblWorkHdr.WorkTypeCode = tblWorkType.WorkTypeCode " & _
-    '      " WHERE (((tblWorkHdr.WorkDateE) Between '" & a & "' And '" & b & "'))" & _
-    '"GROUP BY tblWorkHdr.WorkTypeCode, tblWorkType.WorkTypeName "
-
-
-    '       dt3 = ClsDataTable.GetDataTable(sqlstr)
-
-    '       Dim count_ As Integer = dt3.Rows.Count
-    '       For i As Integer = 0 To count_ - 1
-    '           txtcnt += dt3.Rows(i).Item("WorkTypeName").ToString
-    '           txtcnt += " = "
-    '           'If id_type = 1 Then
-    '           '    txtcnt += "سرويس در كارگاه="
-    '           'ElseIf id_type = 2 Then
-    '           '    txtcnt += "ريموت="
-    '           'ElseIf id_type = 3 Then
-    '           '    txtcnt += "سرویس در محل="
-    '           'ElseIf id_type = 4 Then
-    '           '    txtcnt += "سرویس دوره ای="
-    '           'End If
-    '           txtcnt += dt3.Rows(i).Item("CountOfWorkTypeCode").ToString
-    '           txtcnt += "  ;      "
-    '       Next
-    '       lblCnt.Text = txtcnt
-    '   End Sub
-
-
-
-
+   
     Protected Sub ASPxGrvHead_AfterPerformCallback(sender As Object, e As DevExpress.Web.ASPxGridView.ASPxGridViewAfterPerformCallbackEventArgs) Handles ASPxGrvHead.AfterPerformCallback
         load_grid()
     End Sub
@@ -261,16 +183,12 @@ Partial Class certificateBrowseFrm
             'dt = ClsB.GetUnits(e.CommandArgs.CommandArgument.ToString(), hdn_deactivedcode.Value)
             HiddenField1.Value = e.CommandArgs.CommandArgument.ToString()
 
-           
-
         End If
     End Sub
     Private Sub printtt()
         Dim crystalReport As New ReportDocument()
 
        
-
-
         Dim sqlstr As String = " SELECT   * from perInfoGavahiVW WHERE        (new_later_num = " & HiddenField1.Value & ") "
         Dim dt As New DataTable
         dt = ClsDataTable.GetDataTable(sqlstr)

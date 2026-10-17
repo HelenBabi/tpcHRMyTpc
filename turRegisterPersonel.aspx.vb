@@ -17,9 +17,9 @@ Partial Class turRegisterPersonel
             load_grid_Service()
 
         End If
-        LblTakafolCount.Visible = True
+        'LblTakafolCount.Visible = True
 
-        LblTakafolCount.Text = GetTakafol()
+        'LblTakafolCount.Text = GetTakafol()
         loadMsg()
 
     End Sub
@@ -27,19 +27,15 @@ Partial Class turRegisterPersonel
         Dim dtm As New DataTable
         Dim sqlstr As String
 
-
-
         sqlstr = "SELECT        TOP (200) idd, valuee        FROM turMessageTbl WHERE        (CodeClosed = 0)"
         'AND (zarfiat > dbo.GetZarfiyatTur(idTour)) "
         dtm = ClsDataTable.GetDataTable(sqlstr)
         If dtm.Rows.Count > 0 Then
-            lblMsg.Text = dtm.Rows(0).Item("valuee").ToString
-
+            lblMsg.Text = dtm.Rows(0).Item("valuee").ToString.Replace(vbCrLf, "<br/>")
         Else
-            lblMsg.Text = "فعلا برنامه ای برای رزرو وجود ندارد"
-           
-
+            lblMsg.Text = "-"
         End If
+
     End Sub
     Private Sub loadCmbCityToSiteRuzkar8()
 
@@ -53,10 +49,10 @@ Partial Class turRegisterPersonel
         'AND (zarfiat > dbo.GetZarfiyatTur(idTour)) "
         dtm = ClsDataTable.GetDataTable(sqlstr)
         If dtm.Rows.Count > 0 Then
-            citytToSiteNoRuzkar.DataSource = dtm
-            citytToSiteNoRuzkar.DataTextField = "magsad"
-            citytToSiteNoRuzkar.DataValueField = "idTour"
-            citytToSiteNoRuzkar.DataBind()
+            CmbTur.DataSource = dtm
+            CmbTur.TextField = "magsad"
+            CmbTur.ValueField = "idTour"
+            CmbTur.DataBind()
             Dim i As Integer = 0
 
             'For index = 0 To dtm.Rows.Count - 1
@@ -64,11 +60,8 @@ Partial Class turRegisterPersonel
             'Next index
 
 
-
-
-
         Else
-            lblPayam.Text = "فعلا برنامه ای برای رزرو وجود ندارد"
+            'lblPayam.Text = "فعلا برنامه ای برای رزرو وجود ندارد"
             BtnAdd.Visible = False
             txtTedad.Enabled = False
             tozih.Enabled = False
@@ -100,33 +93,33 @@ Partial Class turRegisterPersonel
     End Sub
 
     Protected Sub BtnAdd_Click(sender As Object, e As EventArgs) Handles BtnAdd.Click
-        If citytToSiteNoRuzkar.SelectedValue <> 0 Then
+        If CmbTur.Value <> 0 Then
 
-            If Val(txtTedad.Text) > Val(GetTakafol() + 2) Then
-                msg_box("تعداد مجاز نمی باشد")
+            
+
+
+            Dim sqlstrr As String = ""
+            sqlstrr = "SELECT        turRefahiRegTbl.codePersonel, turRefahiRegTbl.stat " & _
+                   "FROM            turRefahiRegTbl INNER JOIN " & _
+                        " turRefahiTbl ON turRefahiRegTbl.id_tour = turRefahiTbl.idTour " & _
+                 "WHERE        (turRefahiRegTbl.codePersonel = " & Session("codePersoneli") & ") AND (turRefahiTbl.CodeClosed = 0) AND (turRefahiRegTbl.stat = 5) OR " & _
+                        " (turRefahiRegTbl.stat = 6)"
+
+            Dim dtt As New DataTable
+            dtt = ClsDataTable.GetDataTable(sqlstrr)
+            If dtt.Rows.Count >= 3 Then
+
+                msg_box("شما 3بار رزرو کرده اید")
                 Exit Sub
+
             Else
-                save_final()
+                If Val(txtTedad.Text) > Val(GetTakafol()) Then
+                    msg_box("تعداد مجاز نمی باشد")
+                    Exit Sub
+                Else
+                    save_final()
+                End If
             End If
-
-
-            'Dim sqlstrr As String = ""
-            'sqlstrr = "SELECT        turRefahiRegTbl.codePersonel, turRefahiRegTbl.stat " & _
-            '       "FROM            turRefahiRegTbl INNER JOIN " & _
-            '            " turRefahiTbl ON turRefahiRegTbl.id_tour = turRefahiTbl.idTour " & _
-            '     "WHERE        (turRefahiRegTbl.codePersonel = " & Session("codePersoneli") & ") AND (turRefahiTbl.CodeClosed = 0) AND (turRefahiRegTbl.stat = 5) OR " & _
-            '            " (turRefahiRegTbl.stat = 6)"
-
-            'Dim dtt As New DataTable
-            'dtt = ClsDataTable.GetDataTable(sqlstrr)
-            'If dtt.Rows.Count > 0 Then
-
-            '    msg_box("شما یکبار رزرو کرده اید")
-            '    Exit Sub
-
-            'Else
-
-            'End If
 
 
 
@@ -155,7 +148,7 @@ Partial Class turRegisterPersonel
 
 
             cmm.Parameters.Add("@id_tour", SqlDbType.Int, 6)
-            cmm.Parameters("@id_tour").Value = citytToSiteNoRuzkar.SelectedValue
+            cmm.Parameters("@id_tour").Value = CmbTur.Value
 
 
             cmm.Parameters.Add("@tedad", SqlDbType.Int, 6)
@@ -232,9 +225,6 @@ Partial Class turRegisterPersonel
     End Sub
 
 
-    
-
-
     Protected Sub GridView2_RowCommand(sender As Object, e As System.Web.UI.WebControls.GridViewCommandEventArgs) Handles GridView2.RowCommand
         If e.CommandName = "del" Then
          
@@ -285,48 +275,53 @@ Partial Class turRegisterPersonel
 
 
     Protected Sub lnkDelFile_Click(ByVal sender As Object, ByVal e As EventArgs)
-        Dim cnn As New SqlConnection
-        cnn.ConnectionString = ClsConnection.GetConn
-        cnn.Open()
-        Try
-            Dim cmm As New SqlCommand
 
-            cmm.CommandText = "turRefahiEbtalPrc"
-            cmm.CommandType = CommandType.StoredProcedure
+        Dim lnkbtn As LinkButton = TryCast(sender, LinkButton)
+        Dim gvrow As GridViewRow = TryCast(lnkbtn.NamingContainer, GridViewRow)
+        Dim fileid As Integer = Convert.ToInt32(GridView2.DataKeys(gvrow.RowIndex).Value.ToString())
 
-            Dim lnkbtn As LinkButton = TryCast(sender, LinkButton)
-            Dim gvrow As GridViewRow = TryCast(lnkbtn.NamingContainer, GridViewRow)
-            Dim fileid As Integer = Convert.ToInt32(GridView2.DataKeys(gvrow.RowIndex).Value.ToString())
+        Dim sqlstr As String = "select idd from turGridVW where idd= " & fileid & " and stat = 5"
+        Dim dt As New DataTable
+        dt = ClsDataTable.GetDataTable(sqlstr)
+        If dt.Rows.Count > 0 Then
+            Dim cnn As New SqlConnection
+            cnn.ConnectionString = ClsConnection.GetConn
+            cnn.Open()
+            Try
+                Dim cmm As New SqlCommand
+
+                cmm.CommandText = "turRefahiEbtalPrc"
+                cmm.CommandType = CommandType.StoredProcedure
+
+                cmm.Parameters.Add("@idd", SqlDbType.Int, 5)
+                cmm.Parameters("@idd").Value = fileid
+
+                cmm.Parameters.Add("@ipp", SqlDbType.VarChar, 50)
+                cmm.Parameters("@ipp").Value = Request.UserHostAddress
+
+                cmm.Parameters.Add("@pm", SqlDbType.NVarChar, 500)
+                cmm.Parameters("@pm").Direction = ParameterDirection.Output
+
+                cmm.Parameters.Add("@ResultCode", SqlDbType.TinyInt, 3)
+                cmm.Parameters("@ResultCode").Direction = ParameterDirection.Output
+                cmm.Connection = cnn
+
+                Dim result As Integer
+                cmm.ExecuteNonQuery()
+                result = cmm.Parameters("@ResultCode").Value
+                If result = 0 Then
+                    msg_box("  ابطال شد ")
+                    load_grid_Service()
+                Else
+                    msg_box(cmm.Parameters("@pm").Value)
+                End If
+            Catch ex As Exception
+                msg_box(ex.Message.ToString)
+            End Try
+            load_grid_Service()
+        End If
 
 
-            cmm.Parameters.Add("@idd", SqlDbType.Int, 5)
-            cmm.Parameters("@idd").Value = fileid
-
-            cmm.Parameters.Add("@ipp", SqlDbType.VarChar, 50)
-            cmm.Parameters("@ipp").Value = Request.UserHostAddress
-
-
-
-            cmm.Parameters.Add("@pm", SqlDbType.NVarChar, 500)
-            cmm.Parameters("@pm").Direction = ParameterDirection.Output
-
-            cmm.Parameters.Add("@ResultCode", SqlDbType.TinyInt, 3)
-            cmm.Parameters("@ResultCode").Direction = ParameterDirection.Output
-            cmm.Connection = cnn
-
-            Dim result As Integer
-            cmm.ExecuteNonQuery()
-            result = cmm.Parameters("@ResultCode").Value
-            If result = 0 Then
-                msg_box("  ابطال شد ")
-                load_grid_Service()
-            Else
-                msg_box(cmm.Parameters("@pm").Value)
-            End If
-        Catch ex As Exception
-            msg_box(ex.Message.ToString)
-        End Try
-        load_grid_Service()
 
     End Sub
 
@@ -341,7 +336,7 @@ Partial Class turRegisterPersonel
         '       " WHERE(turRegistStatTbl.codePersonel = " & Session("codePersoneli") & ") " & _
         '" ORDER BY turRegistStatTbl.idd DESC"
 
-        sqlstr = "SELECT       * from turGridVW WHERE codePersonel = " & Session("codePersoneli") & ""
+        sqlstr = "SELECT       * from turGridVW WHERE (codePersonel = " & Session("codePersoneli") & ") and   (stat <> 17) ORDER BY idd DESC"
 
         Dim dt As New DataTable
         dt = ClsDataTable.GetDataTable(sqlstr)
@@ -356,7 +351,7 @@ Partial Class turRegisterPersonel
     Private Function GetTakafol() As Integer
         Dim res As Integer
 
-        Dim sqlstr As String = "SELECT COUNT(*)  FROM Sponsorship  WHERE (empID = '" & Session("codePersoneli").ToString & "') "
+        Dim sqlstr As String = "SELECT sponsorshipNum  FROM personel  WHERE (codePersoneli  = " & Session("codePersoneli").ToString & ") "
         'AND (IsActive = 1) "
         'AND (credit > N'" & tarix & "')"
         res = Val(ClsDataTable.GetCommandScalar(sqlstr))

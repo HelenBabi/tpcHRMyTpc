@@ -10,128 +10,6 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
 
-<script type="text/javascript">
-    function printCard() {
-        var fullName = '<%= fullName %>';
-        var personnelCode = '<%= personnelCode %>';
-        var photoPath = '<%= photoPath %>';
-        var signaturePath = '<%= signaturePath %>';
-        var expirationDate = '<%= expirationDate %>';
-        var html = `
-<html>
-<head>
-  <meta charset="UTF-8">
-  <style>
-      body {
-            margin: 0;
-            padding: 0;
-          font-family: Tahoma, sans-serif;
-      }
-        .container {
-            display: flex;
-            width: 16cm;
-            height: 9cm;
-            border: 1px solid black;
-            box-sizing: border-box;
-            direction: rtl;
-        }
-        .back, .front {
-            width: 50%;
-            padding: 0.5cm;
-            box-sizing: border-box;
-            border-left: 1px solid black;
-            position: relative;
-        }
-        .back {
-            font-size: 12px;
-            line-height: 1.7;
-        }
-        .back strong {
-            display: inline-block;
-            margin-top: 0.3cm;
-        }
-        .front {
-            text-align: center;
-        }
-        .photo {
-            width: 3cm;
-            height: 4cm;
-            border: 1px solid black;
-            margin: 0 auto 0.3cm;
-            object-fit: cover;
-        }
-        .info {
-            text-align: right;
-            font-size: 12px;
-            margin-top: 0.2cm;
-            padding: 0 0.2cm;
-        }
-        .red {
-            color: red;
-            font-weight: bold;
-        }
-        .signature {
-            margin-top: 0.5cm;
-            text-align: right;
-        }
-        .signature img {
-            width: 3cm;
-            height: auto;
-            display: block;
-            margin-top: 0.2cm;
-        }
-                @media print {
-                    body {
-                        margin: 0;
-                    }
-                }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="back">
-                <strong>کارت تردد موقت برای تعمیرات کوتاه مدت</strong><br/><br/>
-                ۱. این کارت فقط برای تردد در زمان اورهال صادر شده و ارزش دیگری ندارد.<br/>
-                ۲. هرگونه سواستفاده احتمالی به عهده گیرنده و دارنده کارت می‌باشد.<br/>
-                ۳. در صورت مفقود شدن کارت، مراتب را فوراً به واحد حراست اطلاع دهید.<br/>
-                ۴. از یابنده تقاضا می‌شود کارت را به صندوق پستی ۵۱۷۴۵-۳۵۴ ارسال نماید.<br/><br/>
-                <strong>تلفن‌های داخلی ضروری مجتمع:</strong><br/>
-        حراست: ۱۱۰ - آتش‌نشانی: ۱۱۲ - اورژانس: ۱۱۵
-                </div>
-                <div class="front">
-                    <strong>کارت تردد موقت برای تعمیرات کوتاه مدت</strong>
-                    <img src="${photoPath}" alt="عکس" class="photo" />
-                    <div class="info">
-                        <div><strong>شماره پرسنلی:</strong> ${personnelCode}</div>
-                         <br />
-                        <div><strong>نام:</strong> ${fullName}</div>
-                         <br />
-                        <div><strong class="red">تاریخ انقضا:</strong> ${expirationDate}</div>
-                        <div class="signature">
-                            <strong>امضا:</strong>
-                            <img src="${signaturePath}" alt="امضا" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <script>
-                window.onload = function () {
-                    window.print();
-                    setTimeout(() => { window.close(); }, 500);
-    }
-    <\/script>
-</body>
-</html>`;
-
-    var win = window.open('', '', 'width=800,height=600');
-    win.document.open();
-    win.document.write(html);
-    win.document.close();
-    }
-</script>
-
-
-
     <style>
         body {
             font-family: "B Nazanin", Tahoma, sans-serif;
@@ -269,10 +147,11 @@
     <div class="print-header">
         <div class="header-title">            
 </div>
-        <%--<div class="photo-box">
+         <asp:Button ID="btnPrintTasviye" runat="server" CssClass="btn btn-info btn-sm w-100" Text="چاپ تسویه" ValidationGroup="c" Visible="False" />
+        <div class="photo-box">
             <asp:Image ID="PersonImage" runat="server" ImageUrl="~/Images/NoImage.png" />
-        </div>--%>
-        
+        </div>
+        <asp:Button ID="btnPrintContract" runat="server" CssClass="btn btn-danger btn-sm w-100" Text="چاپ قرارداد" ValidationGroup="c" Visible="False" />
     </div>
 
     <table class="info-table" style="width:100%">
@@ -350,30 +229,57 @@
         </tr>
     </table>
 </div>
-
+    
 
      <div class="row">
-			<div class="col-md-3">
-                <div class="form-check">
+		
+         <div class="col-md-4">
+              <asp:Button ID="btnOk" runat="server" CssClass="btn btn-success btn-sm w-100" Text="تایید می‌شود" Visible="False" />
+                </div>
+               <div class="col-md-4">
+              <asp:Button ID="BtnCancel" runat="server" CssClass="btn btn-danger btn-sm w-100" Text="تایید نمی‌شود" Visible="False" />
+                </div>
+         <div class="col-md-4">
+                <asp:Button ID="btnHse" runat="server" CssClass="btn btn-success btn-sm w-100" Text="ارسال به HSE" Visible="false"  />
+                 <asp:HiddenField ID="hdn_tmp" runat="server" />
+                </div>
+         </div>
+     <br />
+     <div class="row">
+			<div class="col-md-4">
+                    <div class="form-check">
             <asp:CheckBox ID="CheckBoxAttach" runat="server" CssClass="form-check-input" AutoPostBack="True" />
             <label class="form-check-label fw-bold text-dark ms-2" for="CheckBoxAttach">
                 مشاهده ضمایم
             </label>
         </div>
                 </div>
-         <br />
-         <div class="col-md-3">
-              <asp:Button ID="btnOk" runat="server" CssClass="btn btn-success btn-sm w-100" Text="تایید می‌شود" Visible="False" />
+         <div class="col-md-4">
+              <asp:Button ID="btnEnseraf" runat="server" CssClass="btn btn-warning btn-sm w-100" Text="انصراف پرسنل" Visible="False" />
                 </div>
-         <br />
-         <div class="col-md-3">
-              <asp:Button ID="BtnCancel" runat="server" CssClass="btn btn-danger btn-sm w-100" Text="تایید نمی‌شود" Visible="False" />
-                </div>
-         <div class="col-md-3">
-                <asp:Button ID="btnHse" runat="server" CssClass="btn btn-success btn-sm w-100" Text="ارسال به HSE" Visible="false"  />
-                 <asp:HiddenField ID="hdn_tmp" runat="server" />
+         <div class="col-md-4">
+
                 </div>
          </div>
+      <asp:Panel ID="PanelPayankar" runat="server" Visible="false" BorderStyle="Solid" GroupingText="تاریخ پایان کار">
+                 <div class="row"
+               >
+                       <div class="col-md-4">
+                         
+                         </div>
+       
+                 <div class="col-md-4">
+       	<asp:Label ID="Label10" runat="server" CssClass="control-label"  Text="تاریخ پایانکار"></asp:Label>
+              <asp:TextBox ID="tarixPayankar" runat="server" CssClass="form-control" Width="100px"  />
+
+  </div>
+               <div class="col-md-4">
+         <asp:Button ID="btnTarixPayan" runat="server" CssClass="btn btn-success btn-sm w-100" Text="ثبت" ValidationGroup="c" />
+</div>
+               
+           </div>
+
+      </asp:Panel>
      <br />
        <asp:Panel ID="PanelMadarek" runat="server" Visible="false" BorderStyle="Solid" GroupingText="کنترل مدارک">
                <div class="row">
@@ -397,11 +303,15 @@
  
 			</div>
          
-              <div class="col-md-6">
+              <div class="col-md-3">
                                 <div class="mt-2">
         <asp:Button ID="Button2" runat="server" CssClass="btn btn-primary btn-sm w-100" Text="افزودن" ValidationGroup="c" />
+                                    
       </div>
                   </div>
+                     <div class="col-md-3">
+                         
+                         </div>
           	</div>
            <div class="row"
                >
@@ -431,7 +341,74 @@
 
     </asp:Panel>
         <br />
+    <asp:Panel ID="PanelStatus" runat="server" Visible="false" BorderStyle="Solid" GroupingText="تغییر وضعیت">
+               <div class="row">
+                <div class="col-md-3" style="direction:ltr">
+                    
+                 	
+               </div>
+			<div class="col-md-3">
+                               	<asp:Label ID="Label8" runat="server"   CssClass="control-label"  Text="تغییر وضعیت به"></asp:Label>
+                <asp:DropDownList ID="cmbStatus" runat="server"  Width="100%" Height="50px"  >
+                    <asp:ListItem Value="6">HSE</asp:ListItem>
+                    <asp:ListItem Value="15"> ایمنی </asp:ListItem>
+                     <asp:ListItem Value="33">حراست</asp:ListItem>
+                    <asp:ListItem Value="101"> حضورغیاب </asp:ListItem>
+                    <asp:ListItem Value="102">حراست صدور کارت</asp:ListItem>
+                    <asp:ListItem Value="103"> برنامه ریزی-شروع بکار </asp:ListItem>
+                     <asp:ListItem Value="106">خدمات پشتیبانی ورفاهی-اتمام</asp:ListItem>
+                    <asp:ListItem Value="19"> تایید پیمانکار مرحله اول </asp:ListItem>
+                     <asp:ListItem Value="100">پیمانکار معاینات </asp:ListItem>
+                                <asp:ListItem Value="50">سرویس های تعمیراتی</asp:ListItem>
+                    <asp:ListItem Value="93">مکانیک و ماشینری</asp:ListItem>
+                                </asp:DropDownList>
+      
+ 
+			</div>
+         
+              <div class="col-md-3">
+                                <div class="mt-2">
+        <asp:Button ID="btnStatusChang" runat="server" CssClass="btn btn-primary btn-sm w-100" Text="ثبت" ValidationGroup="c" />
+                                    
+      </div>
+                  </div>
+                     <div class="col-md-3">
+                         
+                         </div>
+          	</div>
+      
+    </asp:Panel>
+   <br />
+    <asp:Panel ID="PanelshoruBkar" runat="server" Visible="false" BorderStyle="Solid" GroupingText="تغییر شروع بکار">
+                 <div class="row"
+               >
+                           <div class="col-md-4">
+        <label class="form-label fw-bold text-dark" for="cmbRunevesht"> واحد</label>
+<asp:DropDownList 
+    ID="cmbUnit2" 
+    runat="server" 
+    CssClass="form-control selectpicker" 
+           title="جستجو کنید..." Height="50px" >
+</asp:DropDownList>
+      <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="cmbUnit2"
+        ErrorMessage="لطفا واحد را انتخاب نمایید" ForeColor="#FF33CC" InitialValue="0" ValidationGroup="c" />
+    </div>
+                 <div class="col-md-3">
+       	<asp:Label ID="Label9" runat="server" CssClass="control-label"  Text="تاریخ شروع بکار"></asp:Label>
+              <asp:TextBox ID="txtShoruBkar" runat="server" CssClass="form-control" Width="100px"  />
 
+  </div>
+               <div class="col-md-3">
+         <asp:Button ID="btnShoruBkar" runat="server" CssClass="btn btn-success btn-sm w-100" Text="ویرایش" ValidationGroup="c" />
+</div>
+                 <div class="col-md-3">
+                         
+                         </div>
+           </div>
+
+      </asp:Panel>
+    <br />
+  
      <asp:Panel ID="PanelSms" runat="server" Visible="false">
           <div class="row">
 			<div class="col-md-3">
@@ -464,18 +441,28 @@
           	</div>
 
     </asp:Panel>
-      <asp:Panel ID="PanelDate" runat="server" Visible="false">
+      <asp:Panel ID="PanelDate" runat="server" Visible="false" BorderStyle="Solid" GroupingText="پنل شروع بکار">
           <div class="row">
-			<div class="col-md-8">
+			<div class="col-md-4">
 
                	<asp:Label ID="lblDate" runat="server" CssClass="control-label"  Text="تاریخ شروع بکار"></asp:Label>
               <asp:TextBox ID="txtDate" runat="server" CssClass="form-control"  />
-    <br />
-   
- <asp:Button ID="BtnStartWork" runat="server" class="btn btn-primary btn-sm w-100" Text="ثبت شروع به کار" />
+
 			</div>
+                  <div class="col-md-4">
+        واحد<label class="form-label fw-bold text-dark" for="cmbRunevesht"> واحد</label>
+<asp:DropDownList 
+    ID="cmbUnit" 
+    runat="server" 
+    CssClass="form-control selectpicker" 
+           title="جستجو کنید..." Height="50px" >
+</asp:DropDownList>
+      <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="cmbUnit"
+        ErrorMessage="لطفا واحد را انتخاب نمایید" ForeColor="#FF33CC" InitialValue="0" ValidationGroup="c" />
+    </div>
            <div class="col-md-4">
-                
+                   
+ <asp:Button ID="BtnStartWork" runat="server" class="btn btn-primary btn-sm w-100" Text="ثبت شروع به کار" />
                </div>
           	</div>
 
@@ -528,12 +515,12 @@
         
         </div>
           <div class="col-md-6">
-
+                <asp:Button ID="btnChartEdit" runat="server" CssClass="btn btn-danger btn-sm" Text="ویرایش چارت" ValidationGroup="c" Visible="False" />
         </div>
         </div>
   
   </div>
-
+   
   <hr class="my-4" />
 
   <div class="row mb-3">
@@ -555,8 +542,11 @@
   </div>
 
   <div class="row">
-    <div class="col-md-12 text-end">
+    <div class="col-md-6 text-end">
       <asp:Button ID="btnSaveFinal" runat="server" CssClass="btn btn-success btn-sm" Text="ذخیره و ارجاع" ValidationGroup="c" Visible="False" />
+    </div>
+        <div class="col-md-6 text-end">
+     
     </div>
   </div>
 </asp:Panel>
@@ -565,20 +555,32 @@
        <br />
      <asp:Panel ID="PanelAttach" runat="server" GroupingText="ضمایم" CssClass="border rounded p-3 mt-3" BackColor="#FFFFCC" Visible="False">
     <div class="row">
-        <asp:Repeater ID="RepeaterImages" runat="server">
-            <ItemTemplate>
-                <div class="col-md-3 col-sm-6 mb-4">
-                    <div class="card shadow-sm text-center">
-                        <img src='<%# Eval("Url") %>' class="card-img-top" style="height:150px; object-fit:cover;" />
-                        <div class="card-body p-2">
-                            <a href='<%# "DownloadImage.aspx?nat=" & Eval("Nat") & "&file=" & Eval("Name") %>' class="btn btn-sm btn-outline-primary">
-                                دانلود
-                            </a>
-                        </div>
-                    </div>
+<asp:Repeater ID="RepeaterImages" runat="server">
+    <ItemTemplate>
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card shadow-sm text-center">
+                <img src='<%# Eval("Url") %>' class="card-img-top" style="height:150px; object-fit:cover;" />
+                <div class="card-body p-2">
+                    <!-- نمایش عنوان فارسی -->
+         <div class="text-muted mb-1" style="font-size: 14px;">
+    <%# Eval("SortOrder") & ". " & Eval("Caption") %>
+</div>
+
+
+
+                    <!-- لینک دانلود -->
+                    <a href='<%# "DownloadImage.aspx?nat=" & Eval("Nat") & "&file=" & Eval("Name") %>' 
+                       class="btn btn-sm btn-outline-primary">
+                        دانلود
+                    </a>
                 </div>
-            </ItemTemplate>
-        </asp:Repeater>
+            </div>
+        </div>
+    </ItemTemplate>
+</asp:Repeater>
+
+
+
     </div>
 
     <div class="row mt-3">
@@ -787,6 +789,7 @@
                                  <asp:HiddenField ID="dat" runat="server" />
                                  <asp:HiddenField ID="hdnType" runat="server" />
                                  <asp:HiddenField ID="tim" runat="server" />
+        
           
           </div>
          </div>

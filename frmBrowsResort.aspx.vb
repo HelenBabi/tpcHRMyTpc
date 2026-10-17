@@ -13,7 +13,7 @@ Partial Class frmBrowsResort
 
         If Me.IsPostBack = False Then
             ' Session("UserId") = 1
-            ' meno_acc()
+            meno_acc()
 
             ClientScript.RegisterStartupScript(Me.GetType(), "OpenWin", "<script>openNewWin('" & a & "','" & b & "')</script>")
             loadgrdNow(a, b)
@@ -50,7 +50,7 @@ Partial Class frmBrowsResort
     Private Sub meno_acc()
         Dim meno_arr(10) As Boolean
         ' meno_arr = ClsAccounting.meno_acc(Me.Page.ToString().Substring(4, Me.Page.ToString().Substring(4).Length - 5), Val(Session("UserId")))
-        meno_arr = ClsAccounting.meno_acc("frmBrowsWorks.aspx", Val(Session("UserId")))
+        meno_arr = ClsAccounting.meno_acc("frmBrowsResort.aspx", Val(Session("UserId")))
 
     End Sub
 

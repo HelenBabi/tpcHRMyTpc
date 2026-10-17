@@ -1,0 +1,90 @@
+2026-07-12 12:15:00 - Timeout expired.  The timeout period elapsed prior to obtaining a connection from the pool.  This may have occurred because all pooled connections were in use and max pool size was reached.
+2026-07-12 12:15:19 - Timeout expired.  The timeout period elapsed prior to obtaining a connection from the pool.  This may have occurred because all pooled connections were in use and max pool size was reached.
+2026-07-22 12:30:34 - Incorrect syntax near ')'.
+2026-07-22 12:30:36 - Incorrect syntax near ')'.
+2026-07-22 12:30:52 - Incorrect syntax near ')'.
+2026-07-22 12:30:57 - Incorrect syntax near ')'.
+2026-07-22 12:31:38 - Incorrect syntax near ')'.
+2026-07-22 12:32:52 - Incorrect syntax near ')'.
+2026-08-16 13:10:17 - Keyword not supported: 'command timeout'.
+2026-08-16 13:10:17 - Keyword not supported: 'command timeout'.
+2026-08-16 13:10:19 - Keyword not supported: 'command timeout'.
+2026-08-16 13:10:19 - Keyword not supported: 'command timeout'.
+2026-08-16 13:10:20 - Keyword not supported: 'command timeout'.
+2026-08-16 13:10:20 - Keyword not supported: 'command timeout'.
+2026-08-16 13:10:22 - Keyword not supported: 'command timeout'.
+2026-08-16 13:10:22 - Keyword not supported: 'command timeout'.
+2026-08-16 13:10:29 - Keyword not supported: 'command timeout'.
+2026-08-16 13:10:29 - Keyword not supported: 'command timeout'.
+2026-08-16 13:11:22 - Keyword not supported: 'command timeout'.
+2026-08-16 13:11:22 - Keyword not supported: 'command timeout'.
+2026-08-18 10:48:44 - Incorrect syntax near ')'.
+2026-08-18 10:48:55 - Incorrect syntax near ')'.
+2026-08-18 10:48:56 - Incorrect syntax near ')'.
+2026-08-18 10:48:57 - Incorrect syntax near ')'.
+2026-08-18 10:48:58 - Incorrect syntax near ')'.
+2026-08-18 10:49:34 - Incorrect syntax near ')'.
+2026-08-18 10:49:35 - Incorrect syntax near ')'.
+2026-08-18 10:49:36 - Incorrect syntax near ')'.
+2026-08-26 17:31:51 - Incorrect syntax near ')'.
+2026-08-26 17:32:01 - Incorrect syntax near ')'.
+2026-08-26 17:32:03 - Incorrect syntax near ')'.
+2026-08-26 17:32:30 - Incorrect syntax near ')'.
+2026-08-26 17:55:51 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:55:52 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:55:52 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:55:52 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:55:52 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:55:52 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:55:53 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:55:53 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:55:54 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:55:54 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:55:54 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:55:54 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:56:12 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:56:12 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:56:12 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:56:12 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:56:40 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:56:40 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:56:40 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:56:40 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:56:40 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:56:40 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:56:41 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:56:41 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:57:37 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:57:37 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:57:38 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:57:38 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:58:16 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-08-26 17:58:16 - A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-09-13 18:59:05 - Incorrect syntax near ')'.
+2026-09-13 18:59:12 - Incorrect syntax near ')'.
+2026-09-13 18:59:21 - Incorrect syntax near ')'.
+2026-09-13 18:59:35 - Incorrect syntax near ')'.
+2026-09-13 18:59:52 - Incorrect syntax near ')'.
+2026-09-15 11:33:02 - Incorrect syntax near ')'.
+2026-09-15 11:33:05 - Incorrect syntax near ')'.
+2026-09-15 13:16:32 - ForgotPass: InsertSMS: Invalid object name 'SMS'.
+2026-09-15 13:16:33 - ForgotPass: InsertSMS: Invalid object name 'SMS'.
+2026-09-16 09:40:37 - LoadNews: Invalid object name 'SystemNews'.
+2026-09-16 09:44:14 - LoadNews: Invalid object name 'SystemNews'.
+2026-09-16 09:47:13 - LoadNews: Invalid object name 'SystemNews'.
+2026-09-16 09:48:04 - LoadNews: Invalid object name 'SystemNews'.
+2026-09-16 09:49:07 - LoadNews: Invalid object name 'SystemNews'.
+2026-09-16 09:51:18 - LoadNews: Invalid object name 'SystemNews'.
+2026-09-16 11:42:28 - LoadNews: Invalid object name 'SystemNews'.
+2026-09-16 11:42:59 - LoadNews: Invalid object name 'SystemNews'.
+2026-09-16 11:44:43 - LoadNews: Invalid object name 'SystemNews'.
+2026-09-27 14:49:10 - Incorrect syntax near ')'.
+2026-10-05 13:58:26 - Incorrect syntax near ')'.
+2026-10-05 13:58:36 - Incorrect syntax near ')'.
+2026-10-10 16:06:39 - LoadSystemMessage: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-10-10 16:06:39 - LoadNews: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+2026-10-10 16:11:15 - Incorrect syntax near ')'.
+2026-10-10 16:11:20 - Incorrect syntax near ')'.
+2026-10-11 13:00:16 - Incorrect syntax near ')'.
+2026-10-11 13:00:27 - Incorrect syntax near ')'.
+2026-10-15 12:19:12 - Incorrect syntax near ')'.

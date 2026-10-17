@@ -1,596 +1,342 @@
 ﻿Imports System.Data
-Imports System.Data.SqlClient
+Imports System.IO
 
 Partial Class fullinfo
     Inherits System.Web.UI.Page
-    Dim dtaspx As New DataTable
-    Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-        clearform()
-        load_Units()
-        load_Vahed()
-        load_nostexdam()
-        load_ellatfalli()
-        loadperson()
-
-        If Me.IsPostBack = True Then
+    Dim _source As String = ""
 
 
-            gridAmuzesh()
+    Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        If Not IsPostBack Then
+            'دریافت منبع
+
+            _source = Request.QueryString("source")
+
+            ' نمایش یا مخفی کردن دکمه برگشت به ثبت‌نام‌ها
+            btnBackToRegistrations.Visible = (_source = "registrations")
+
+            ' بررسی وجود ID در QueryString
+            If Not String.IsNullOrEmpty(Request.QueryString("ID")) Then
+                Dim personID As Integer = Convert.ToInt32(Request.QueryString("ID"))
+                ' دریافت کد پرسنلی بر اساس ID
+                LoadPersonByID(personID)
+            ElseIf Session("codepersonel") IsNot Nothing Then
+                txtCode.Text = Session("codepersonel").ToString()
+                LoadData()
+            End If
+        Else
+            ' در PostBack داده‌ها را از Session بازیابی کنید
+            If Session("TrainingDataFullInfo") IsNot Nothing Then
+                Dim dt As DataTable = DirectCast(Session("TrainingDataFullInfo"), DataTable)
+                grdTraining.DataSource = dt
+                grdTraining.DataBind()
+            End If
         End If
     End Sub
-    Private Sub clearform()
-        Image1.ImageUrl = "images/person_pic/person.ico"
-        salkar.Text = 0
-        mahkar.Text = 0
-        ruzkar.Text = 0
-        salsabege.Text = 0
-        mahsabege.Text = 0
-        ruzsabege.Text = 0
-        salzian.Text = 0
-        mahzian.Text = 0
-        ruzzian1.Text = 0
-        salsaxtno.Text = 0
-        mahsaxno.Text = 0
-        ruzsaxtno.Text = 0
 
-        salsaxtsher.Text = 0
-        mahsaxtsher.Text = 0
-        ruzsaxtsher.Text = 0
-        Panel4.Visible = True
-        Panel5.Visible = True
-        Panel6.Visible = True
-        Panel7.Visible = True
-        Panel8.Visible = True
-
-        adres.Text = ""
-        TextBox1.Text = ""
-        semat.Text = ""
-        TextBox11.Text = ""
-        TextBox20.Text = ""
-        TextBox2.Text = ""
-        TextBox9.Text = ""
-        TextBox5.Text = ""
-        codemelli.Text = ""
-        father.Text = ""
-        shsh.Text = ""
-        mahalesodur.Text = ""
-        shserial.Text = ""
-        vaziatsh.SelectedIndex = 0
-        mahaletavalod.Text = ""
-        tarixtavalod.Text = ""
-        noeestexdam.SelectedValue = 0
-        ' ellat.SelectedValue = 0
-        tarixstexdam.Text = ""
-        vaziatathol.SelectedIndex = 0
-        teldaxele.Text = ""
-        telmanzel.Text = ""
-        mobile.Text = ""
-        mazhab.SelectedIndex = 0
-        madrak.Text = ""
-        shgozarname.Text = ""
-        din.SelectedIndex = 0
-        laptopBtn.Enabled = False
-        xodroBtn.Enabled = False
-        mihmanBtn.Enabled = False
-    End Sub
-    Private Sub load_Units()
-        Dim dt As New DataTable
-        Dim cls_ As New ClsUnits
-        dt = cls_.GetAllUnitsDDL
-        CmbUnit.DataSource = dt
-        CmbUnit.DataValueField = "UnitsCode"
-        CmbUnit.DataTextField = "UnitsName"
-        CmbUnit.DataBind()
-
-    End Sub
-    Private Sub load_Vahed()
-        Dim dt As New DataTable
-        Dim sqlstrr As String = "SELECT        omurID, omur " & _
-       " FROM omurTbl WHERE        (CodeClosed = 0) ORDER BY omur"
-        dt = ClsDataTable.GetDataTable(sqlstrr)
-        CmbVahed.DataSource = dt
-        CmbVahed.DataValueField = "omurID"
-        CmbVahed.DataTextField = "omur"
-        CmbVahed.DataBind()
-
-    End Sub
-
-    Private Sub load_nostexdam()
-        Dim dt As New DataTable
-        Dim cls_ As New ClsNoStexdam
-        dt = cls_.GetAllUnitsDDL
-        noeestexdam.DataSource = dt
-        noeestexdam.DataValueField = "id"
-        noeestexdam.DataTextField = "value"
-        noeestexdam.DataBind()
-
-    End Sub
-    Private Sub load_ellatfalli()
-        Dim dt As New DataTable
-        Dim cls_ As New ClsBuilding
-        dt = cls_.GetAllBuildingDDL
-        ellat.DataSource = dt
-        ellat.DataValueField = "BuildingCode"
-        ellat.DataTextField = "BuildingName"
-        ellat.DataBind()
-
-    End Sub
-#Region "All pages"
-
-    Private Sub meno_acc()
-        Dim meno_arr(10) As Boolean
-        ' meno_arr = ClsAccounting.meno_acc(Me.Page.ToString().Substring(4, Me.Page.ToString().Substring(4).Length - 5), Val(Session("UserId")))
-        meno_arr = ClsAccounting.meno_acc("fullinfo.aspx", Val(Session("UserId")))
-
-    End Sub
-
-
-
-    Private Sub msg_box(ByVal msg As String)
-        Dim sb As New StringBuilder
-        msg = Replace(msg, "'", " ")
-        msg = Replace(msg, """", " ")
-        sb.Append("alert('")
-        sb.Append(msg.Replace("\n", "\\n").Replace("\r", "").Replace("'", "\\'"))
-        sb.Append("');")
-        ScriptManager.RegisterStartupScript(Me.Page, Me.GetType(), "showalert", sb.ToString(), True)
-        ' ClientScript.RegisterStartupScript(Me.GetType(), "myalert", "alert('" + sb.ToString + "');", True)
-    End Sub
-
-#End Region
-
-    Private Sub find_pc()
-
-        Dim ClsB_ As New ClsBrowsSystems
-        Dim dt As New DataTable
-        dt = ClsB_.GetSystems(Val(codepersonel.Text))
-
-        If dt.Rows.Count > 0 Then
-            If dt.Rows(0).Item("rack").ToString = True Then
-                msg_box("اين شماره اموال براي " & " Rack  " & "ثبت شده است")
+    ' ============================================================
+    ' بارگذاری اطلاعات بر اساس ID (برای مشاهده از صفحه ثبت‌نام)
+    ' ============================================================
+    Private Sub LoadPersonByID(personID As Integer)
+        Try
+            If personID = 0 Then
+                ShowMessage("شناسه پرسنل معتبر نیست")
+                pnlInfo.Visible = False
                 Exit Sub
             End If
-            TextBox20.Text = dt.Rows(0).Item("nam").ToString
-            TextBox2.Text = dt.Rows(0).Item("BuildingName").ToString
-            TextBox9.Text = dt.Rows(0).Item("SystemTabage").ToString
-            TextBox5.Text = dt.Rows(0).Item("UnitsName").ToString
 
-            TextBox11.Text = dt.Rows(0).Item("SystemRoom").ToString
-            TextBox1.Text = dt.Rows(0).Item("SystemRoomNum").ToString
+            ' دریافت کد پرسنلی بر اساس ID
+            Dim sql As String = "SELECT codepersoneli FROM personel WHERE ID = " & personID
+            Dim dt As DataTable = ClsDataTable.GetDataTable(sql)
 
-
-            ' txt_vaziat.Text = dt.Rows(0).Item("CodeClosed").ToString
-            'Button1.Enabled = True
-        Else
-            msg_box("سيستمي با اين شماره اموال موجود نيست")
-            TextBox2.Text = ""
-            TextBox9.Text = ""
-            TextBox5.Text = ""
-            TextBox20.Text = ""
-            TextBox11.Text = ""
-            TextBox1.Text = ""
-
-
-            DataGridView1.DataBind()
-
-
-            'Button1.Enabled = False
-            Exit Sub
-        End If
-        If dt.Rows(0).Item("CodeClosed").ToString = True Then
-            msg_box("اين سيستم رده خارج شده است")
-
-        Else
-
-        End If
-
-    End Sub
-
-    Protected Sub ImageButton1_Click(sender As Object, e As System.Web.UI.ImageClickEventArgs) Handles ImageButton1.Click
-        lblellat.Visible = False
-        tarixDisabled.Visible = False
-        lblellattarix.Visible = False
-        ellat.Visible = False
-        If codepersonel.Text = "" Then
-            msg_box("کد پرسنلی را وارد کنید")
-
-            codepersonel.Focus()
-            Exit Sub
-        End If
-
-        salkar.Text = 0
-        mahkar.Text = 0
-        ruzkar.Text = 0
-        salsabege.Text = 0
-        mahsabege.Text = 0
-        ruzsabege.Text = 0
-        salzian.Text = 0
-        mahzian.Text = 0
-        ruzzian1.Text = 0
-        salsaxtno.Text = 0
-        mahsaxno.Text = 0
-        ruzsaxtno.Text = 0
-
-        salsaxtsher.Text = 0
-        mahsaxtsher.Text = 0
-        ruzsaxtsher.Text = 0
-        Panel4.Visible = True
-        Panel5.Visible = True
-        Panel6.Visible = True
-        Panel7.Visible = True
-        Panel8.Visible = True
-
-        adres.Text = ""
-        ' tarixDisabled.Text = ""
-        semat.Text = ""
-
-        ' ChbActiveCode.Checked = False
-        ' txtPcUserName.Text = ""
-        ' txtPcUserFamili.Text = ""
-        codemelli.Text = ""
-        father.Text = ""
-        shsh.Text = ""
-        mahalesodur.Text = ""
-        shserial.Text = ""
-        vaziatsh.SelectedIndex = 0
-        mahaletavalod.Text = ""
-        tarixtavalod.Text = ""
-        noeestexdam.SelectedValue = 0
-        ' ellat.SelectedValue = 0
-        tarixstexdam.Text = ""
-        vaziatathol.SelectedIndex = 0
-        teldaxele.Text = ""
-        telmanzel.Text = ""
-        mobile.Text = ""
-        mazhab.SelectedIndex = 0
-        madrak.Text = ""
-        shgozarname.Text = ""
-        din.SelectedIndex = 0
-
-        loadperson()
-
-
-
-    End Sub
-
-    Private Sub loadperson()
-        Dim dsh2 As New DataTable
-        codepersonel.Text = Session("codepersonel")
-        Image1.ImageUrl = "images/person_pic/" & codepersonel.Text & ".jpg"
-        Dim sqlstr As String
-
-        sqlstr = "SELECT     personel.*, tblUnits.UnitsName  " & _
-                   " FROM         personel INNER JOIN " & _
-                      "tblUnits ON personel.UnitsCode = tblUnits.UnitsCode " & _
-                          " WHERE     (personel.codepersoneli = " & codepersonel.Text & ") "
-        dsh2 = ClsDataTable.GetDataTable(sqlstr)
-        If dsh2.Rows.Count > 0 Then
-
-            TextBox2.Text = dsh2.Rows(0).Item("nam").ToString & " " & dsh2.Rows(0).Item("family").ToString
-            TextBox5.Text = dsh2.Rows(0).Item("tarixestexdam").ToString
-            TextBox9.Text = dsh2.Rows(0).Item("postname").ToString
-            TextBox20.Text = dsh2.Rows(0).Item("codebime").ToString
-            TextBox11.Text = dsh2.Rows(0).Item("madrak").ToString
-            TextBox1.Text = dsh2.Rows(0).Item("reshte").ToString
-            perid.Text = dsh2.Rows(0).Item("ID").ToString
-            CmbVahed.SelectedValue = dsh2.Rows(0).Item("omurID").ToString
-            CmbUnit.SelectedValue = dsh2.Rows(0).Item("UnitsCode").ToString
-            'End If
-            codemelli.Text = dsh2.Rows(0).Item("codeMelli").ToString
-            father.Text = dsh2.Rows(0).Item("father").ToString
-            shsh.Text = dsh2.Rows(0).Item("shsh").ToString
-            mahalesodur.Text = dsh2.Rows(0).Item("mahalesodur").ToString
-            shserial.Text = dsh2.Rows(0).Item("shserial").ToString
-
-            mahaletavalod.Text = dsh2.Rows(0).Item("mahaletavalod").ToString
-            tarixtavalod.Text = dsh2.Rows(0).Item("tarixtavalod").ToString
-
-
-            tarixstexdam.Text = dsh2.Rows(0).Item("tarixestexdam").ToString
-            vaziatathol.SelectedValue = dsh2.Rows(0).Item("vaziattahol").ToString
-            teldaxele.Text = dsh2.Rows(0).Item("teldaxeli").ToString
-            telmanzel.Text = dsh2.Rows(0).Item("telmanzel").ToString
-            mobile.Text = dsh2.Rows(0).Item("mobile").ToString
-            mazhab.SelectedValue = dsh2.Rows(0).Item("mazhab").ToString
-            madrak.Text = dsh2.Rows(0).Item("madrak").ToString
-            shgozarname.Text = dsh2.Rows(0).Item("shgozarname").ToString
-            din.SelectedValue = dsh2.Rows(0).Item("din").ToString
-            semat.Text = dsh2.Rows(0).Item("postname").ToString
-
-            adres.Text = dsh2.Rows(0).Item("adres").ToString
-
-            noeestexdam.SelectedValue = dsh2.Rows(0).Item("typ").ToString
-
-            If dsh2.Rows(0).Item("CodeClosed").ToString = True Then
-                msg_box("اين پرسنل غیرفعال شده است")
-                lblellat.Visible = True
-                tarixDisabled.Visible = True
-                lblellattarix.Visible = True
-                ellat.Visible = True
-
-                tarixDisabled.Text = dsh2.Rows(0).Item("tarixDisable").ToString
-                ellat.SelectedValue = dsh2.Rows(0).Item("ellatevaziat").ToString
+            If dt.Rows.Count = 0 Then
+                ShowMessage("پرسنلی با این شناسه یافت نشد")
+                pnlInfo.Visible = False
+                Exit Sub
             End If
 
+            Dim codePersonel As String = dt.Rows(0)("codepersoneli").ToString()
+            txtCode.Text = codePersonel
+            LoadData()
 
+        Catch ex As Exception
+            ShowMessage("خطا در بارگذاری اطلاعات: " & ex.Message)
+            pnlInfo.Visible = False
+        End Try
+    End Sub
 
-
-
-            loadGrid()
-            loadGridTakafol()
-            loadsabege()
-            loadzian()
-            loadkarkard()
-            loadziansherkati()
-            loadziansherkatiNO()
-            'cheklaptop()
-            'chekMihman()
-            'chekxodro()
-            gridAmuzesh()
-
+    ' برگشت به صفحه قبل
+    Protected Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
+        ' اگر از صفحه ثبت‌نام آمده، به آن برگردد
+        If _source = "registrations" Then
+            Response.Redirect("CourseRegistrations.aspx")
         Else
-            'MsgBox("کد پرسنلی مورد نظر در پایگاه داده موجود نمی باشد")
-            msg_box("کد پرسنلی مورد نظر در پایگاه داده موجود نمی باشد")
+            Response.Redirect("index.aspx")
         End If
     End Sub
-    Private Sub chekMihman()
-        Dim dsh2 As New DataTable
 
-        Dim sqlstr As String
+    ' برگشت به صفحه مدیریت ثبت‌نام‌ها
+    Protected Sub btnBackToRegistrations_Click(sender As Object, e As EventArgs) Handles btnBackToRegistrations.Click
+        Response.Redirect("CourseRegistrations.aspx")
+    End Sub
 
-        sqlstr = "SELECT  mizbanId from tblResort where mizbanId = " & perid.Text & " "
-        dsh2 = ClsDataTable.GetDataTableHerasat(sqlstr)
-        If dsh2.Rows.Count > 0 Then
-            mihmanBtn.Enabled = True
-            mihmanBtn.Text = dsh2.Rows.Count & " " & "نفر ملاقات کننده دارد"
-            mihmanBtn.Font.Bold = True
+    ' جستجو
+    Protected Sub btnSearch_Click(sender As Object, e As EventArgs) Handles btnSearch.Click
+        If txtCode.Text.Trim() = "" Then
+            ShowMessage("لطفاً کد پرسنلی را وارد کنید")
+            Exit Sub
+        End If
+        LoadData()
+    End Sub
+
+    ' بارگذاری اصلی اطلاعات
+    Private Sub LoadData()
+        Try
+            Dim codePersonel As Integer = Val(txtCode.Text)
+
+            If codePersonel = 0 Then
+                ShowMessage("کد پرسنلی معتبر نیست")
+                pnlInfo.Visible = False
+                Exit Sub
+            End If
+
+            ' دریافت اطلاعات پرسنل
+            Dim sqlPerson As String = "SELECT * FROM personel WHERE codepersoneli = " & codePersonel
+            Dim dtPerson As DataTable = ClsDataTable.GetDataTable(sqlPerson)
+
+            If dtPerson.Rows.Count = 0 Then
+                ShowMessage("پرسنلی با این کد یافت نشد")
+                pnlInfo.Visible = False
+                Exit Sub
+            End If
+
+            Dim row As DataRow = dtPerson.Rows(0)
+            Dim perId As Integer = Val(row("ID").ToString())
+            Dim codeMeli As String = row("codeMelli").ToString()
+
+            ' نمایش اطلاعات پایه
+            lblCode.Text = codePersonel.ToString()
+            lblName.Text = row("nam").ToString() & " " & row("family").ToString()
+            lblCodeMeli.Text = codeMeli
+            lblBime.Text = row("codebime").ToString()
+            lblDateEmploy.Text = row("tarixestexdam").ToString()
+            lblPost.Text = row("postname").ToString()
+            lblMadrak.Text = row("madrak").ToString()
+            lblReshte.Text = row("reshte").ToString()
+
+            ' بارگذاری عکس
+            LoadImage(codePersonel)
+
+            ' بارگذاری سوابق آموزشی
+            LoadTrainingRecords(codePersonel)
+
+            ' بارگذاری مدارک
+            LoadFiles(codeMeli)
+
+            ' بارگذاری آمار
+            LoadStatistics(perId)
+
+            ' نمایش پنل
+            pnlInfo.Visible = True
+
+        Catch ex As Exception
+            ShowMessage("خطا: " & ex.Message)
+            pnlInfo.Visible = False
+        End Try
+    End Sub
+
+    ' بارگذاری عکس
+    Private Sub LoadImage(codePersonel As Integer)
+        Try
+            Dim imgPath As String = Server.MapPath("~/images/person_pic/" & codePersonel & ".jpg")
+            If File.Exists(imgPath) Then
+                imgPerson.ImageUrl = "~/images/person_pic/" & codePersonel & ".jpg"
+            Else
+                imgPerson.ImageUrl = "~/images/person_pic/person.ico"
+            End If
+        Catch
+            imgPerson.ImageUrl = "~/images/person_pic/person.ico"
+        End Try
+    End Sub
+
+    ' بارگذاری سوابق آموزشی با DevExpress GridView
+    Private Sub LoadTrainingRecords(codePersonel As Integer)
+        Try
+            Dim sql As String = "SELECT idd, onvan, dorehayeGozrande, mojriDore, mahalEjra, " &
+                               "tarixShoru, tarixPayan, RUZ, saat FROM trnPersonelDoreTbl " &
+                               "WHERE codePersoneli = " & codePersonel & " ORDER BY tarixShoru DESC"
+
+            Dim dt As DataTable = ClsDataTable.GetDataTable(sql)
+
+            ' ذخیره DataTable در Session برای استفاده در PostBack
+            Session("TrainingDataFullInfo") = dt
+
+            grdTraining.DataSource = dt
+            grdTraining.DataBind()
+
+        Catch ex As Exception
+            'grdTraining.DataSource = Nothing
+            'grdTraining.DataBind()
+            'Session("TrainingDataFullInfo") = Nothing
+        End Try
+    End Sub
+
+    'Private Sub LoadTrainingRecords(codePersonel As Integer)
+    '    Try
+    '        Dim sql As String = "SELECT onvan, dorehayeGozrande, mojriDore, mahalEjra, " &
+    '                           "tarixShoru, tarixPayan FROM trnPersonelDoreTbl " &
+    '                           "WHERE codePersoneli = " & codePersonel & " ORDER BY tarixShoru DESC"
+
+    '        Dim dt As DataTable = ClsDataTable.GetDataTable(sql)
+    '        grdTraining.DataSource = dt
+    '        grdTraining.DataBind()
+    '    Catch ex As Exception
+    '        grdTraining.DataSource = Nothing
+    '        grdTraining.DataBind()
+    '    End Try
+    'End Sub
+
+    ' رویداد تغییر صفحه Grid
+    Protected Sub grdTraining_PageIndexChanged(sender As Object, e As EventArgs) Handles grdTraining.PageIndexChanged
+        ' بارگذاری مجدد داده‌ها از Session
+        If Session("TrainingDataFullInfo") IsNot Nothing Then
+            Dim dt As DataTable = DirectCast(Session("TrainingDataFullInfo"), DataTable)
+            grdTraining.DataSource = dt
+            grdTraining.DataBind()
         Else
-            mihmanBtn.Enabled = False
-            mihmanBtn.Text = "ملاقات کننده ندارد"
-            mihmanBtn.Font.Bold = False
+            ' اگر داده‌ها در Session نبود، دوباره بارگذاری کن
+            If Not String.IsNullOrEmpty(txtCode.Text) Then
+                LoadTrainingRecords(Val(txtCode.Text))
+            End If
         End If
-
-
     End Sub
 
-    Private Sub chekxodro()
-        Dim dsh2 As New DataTable
-
-        Dim sqlstr As String
-
-        sqlstr = "SELECT  perid from xodroMojavez where perid = " & perid.Text & " "
-        dsh2 = ClsDataTable.GetDataTableHerasat(sqlstr)
-        If dsh2.Rows.Count > 0 Then
-            xodroBtn.Enabled = True
-            xodroBtn.Text = "مجوز خودرو دارد"
-            xodroBtn.Font.Bold = True
-        Else
-            xodroBtn.Enabled = False
-            xodroBtn.Text = "مجوز خودرو ندارد"
-            xodroBtn.Font.Bold = False
+    ' رویداد DataBinding Grid
+    Protected Sub grdTraining_DataBinding(sender As Object, e As EventArgs) Handles grdTraining.DataBinding
+        ' اگر داده‌ها خالی بودند، از Session بارگذاری کن
+        If grdTraining.DataSource Is Nothing Then
+            If Session("TrainingDataFullInfo") IsNot Nothing Then
+                Dim dt As DataTable = DirectCast(Session("TrainingDataFullInfo"), DataTable)
+                grdTraining.DataSource = dt
+            ElseIf Not String.IsNullOrEmpty(txtCode.Text) Then
+                LoadTrainingRecords(Val(txtCode.Text))
+            End If
         End If
-
-
     End Sub
 
-    Private Sub cheklaptop()
-        Dim dsh2 As New DataTable
+    ' بارگذاری مدارک آپلود شده
+    Private Sub LoadFiles(codeMeli As String)
+        Try
+            If String.IsNullOrEmpty(codeMeli) Then
+                rptFiles.Visible = False
+                lblNoFiles.Visible = True
+                Return
+            End If
 
-        Dim sqlstr As String
+            Dim folderPath As String = Server.MapPath("~/Attachment/TRN/" & codeMeli & "/")
 
-        sqlstr = "SELECT  * from labtop where codepersoneli = " & codepersonel.Text & " "
-        dsh2 = ClsDataTable.GetDataTableHerasat(sqlstr)
-        If dsh2.Rows.Count > 0 Then
-            laptopBtn.Enabled = True
-            laptopBtn.Text = "مجوز لپ تاپ دارد"
-            laptopBtn.Font.Bold = True
-        Else
-            laptopBtn.Enabled = False
-            laptopBtn.Text = "مجوز لپ تاپ ندارد"
-            laptopBtn.Font.Bold = False
-        End If
+            If Not Directory.Exists(folderPath) Then
+                rptFiles.Visible = False
+                lblNoFiles.Visible = True
+                Return
+            End If
 
+            Dim files = Directory.GetFiles(folderPath).ToList()
 
+            If files.Count = 0 Then
+                rptFiles.Visible = False
+                lblNoFiles.Visible = True
+                Return
+            End If
+
+            Dim fileList As New List(Of Object)
+            For Each file In files
+                Dim fileName = Path.GetFileName(file)
+                Dim ext = Path.GetExtension(file).ToLower()
+                Dim isImage As Boolean = (ext = ".jpg" OrElse ext = ".jpeg" OrElse ext = ".png" OrElse ext = ".gif" OrElse ext = ".bmp" OrElse ext = ".webp")
+
+                fileList.Add(New With {
+                    .Url = ResolveUrl("~/Attachment/TRN/" & codeMeli & "/" & fileName),
+                    .FileName = fileName,
+                    .IsImage = isImage
+                })
+            Next
+
+            rptFiles.DataSource = fileList
+            rptFiles.DataBind()
+            rptFiles.Visible = True
+            lblNoFiles.Visible = False
+
+        Catch ex As Exception
+            rptFiles.Visible = False
+            lblNoFiles.Visible = True
+        End Try
     End Sub
 
-    Protected Sub mihmanBtn_Click(sender As Object, e As EventArgs) Handles mihmanBtn.Click
-        Dim furl As String = "personelResort.aspx?PwhereSTR=" & Val(perid.Text) & ""
-        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "OPEN_WINDOW", "window.open( '" + furl + "', null, 'height=600,width=970,status=yes,toolbar=yes,menubar=no,location=no,zoom=100%');", True)
+    ' بارگذاری آمار سوابق
+    Private Sub LoadStatistics(perId As Integer)
+        Try
+            ' سابقه کار از جدول savabeg
+            Dim sqlKar As String = "SELECT " &
+                                   "ISNULL(SUM(CAST(karkardSal AS INT)), 0) AS sal, " &
+                                   "ISNULL(SUM(CAST(karkardMah AS INT)), 0) AS mah, " &
+                                   "ISNULL(SUM(CAST(karkardDay AS INT)), 0) AS ruz " &
+                                   "FROM savabeg WHERE perID = " & perId
+
+            Dim dtKar As DataTable = ClsDataTable.GetDataTable(sqlKar)
+            If dtKar.Rows.Count > 0 Then
+                Dim totalMonths As Integer = Val(dtKar.Rows(0)("mah").ToString())
+                Dim totalYears As Integer = Val(dtKar.Rows(0)("sal").ToString())
+                Dim totalDays As Integer = Val(dtKar.Rows(0)("ruz").ToString())
+
+                totalMonths += totalYears * 12
+                totalYears = totalMonths \ 12
+                totalMonths = totalMonths Mod 12
+
+                lblSalKar.Text = totalYears.ToString()
+                lblMahKar.Text = totalMonths.ToString()
+                lblRuzKar.Text = totalDays.ToString()
+            End If
+
+            ' سختی کار
+            Dim sqlSakhti As String = "SELECT " &
+                                      "ISNULL(SUM(CAST(s.karkardSal AS INT)), 0) AS sal, " &
+                                      "ISNULL(SUM(CAST(s.karkardMah AS INT)), 0) AS mah, " &
+                                      "ISNULL(SUM(CAST(s.karkardDay AS INT)), 0) AS ruz " &
+                                      "FROM savabeg s " &
+                                      "INNER JOIN mashaghel m ON s.onvan = m.id " &
+                                      "WHERE s.perID = " & perId & " AND m.saxt = 1"
+
+            Dim dtSakhti As DataTable = ClsDataTable.GetDataTable(sqlSakhti)
+            If dtSakhti.Rows.Count > 0 Then
+                Dim totalMonths As Integer = Val(dtSakhti.Rows(0)("mah").ToString())
+                Dim totalYears As Integer = Val(dtSakhti.Rows(0)("sal").ToString())
+
+                totalMonths += totalYears * 12
+                totalYears = totalMonths \ 12
+
+                lblSalSakhti.Text = totalYears.ToString()
+            End If
+
+        Catch ex As Exception
+            lblSalKar.Text = "0"
+            lblMahKar.Text = "0"
+            lblRuzKar.Text = "0"
+            lblSalSakhti.Text = "0"
+        End Try
     End Sub
 
-    Protected Sub ImageButton2_Click(sender As Object, e As ImageClickEventArgs) Handles ImageButton2.Click
-        Response.Redirect("index.aspx")
+    ' کوتاه کردن متن
+    Public Function CutText(text As String, maxLen As Integer) As String
+        If String.IsNullOrEmpty(text) Then Return ""
+        If text.Length <= maxLen Then Return text
+        Return text.Substring(0, maxLen - 3) & "..."
+    End Function
+
+    ' نمایش پیغام
+    Private Sub ShowMessage(msg As String)
+        Dim script As String = "alert('" & msg.Replace("'", " ") & "');"
+        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "msg", script, True)
     End Sub
-
-    Protected Sub laptopBtn_Click(sender As Object, e As EventArgs) Handles laptopBtn.Click
-        Dim furl As String = "personelLapTop.aspx?PwhereSTR=" & Val(codepersonel.Text) & ""
-        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "OPEN_WINDOW", "window.open( '" + furl + "', null, 'height=350,width=970,status=yes,toolbar=yes,menubar=no,location=no,zoom=100%');", True)
-    End Sub
-
-    Protected Sub xodroBtn_Click(sender As Object, e As EventArgs) Handles xodroBtn.Click
-
-        Dim furl As String = "personelXodro.aspx?PwhereSTR=" & Val(perid.Text) & ""
-        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "OPEN_WINDOW", "window.open( '" + furl + "', null, 'height=250,width=970,status=yes,toolbar=yes,menubar=no,location=no,zoom=100%');", True)
-    End Sub
-
-
-    Private Sub loadGrid()
-
-
-
-        Dim sqlstr As String
-
-        sqlstr = "SELECT     savabeg.id, savabeg.tarixshoru, savabeg.tarixpayan, savabeg.karkardSal + '-' + savabeg.karkardMah + '-' + savabeg.karkardDay AS karkard, " & _
-                     " savabeg.sabegeSal + '-' + savabeg.sabegeMah + '-' + savabeg.sabegeDay AS sabege, savabeg.tozih, mashaghel.postname, sazman.sazmanName,  " & _
-                     " saxtzian.value, mashaghel.saxt , sherkatiType.value AS sherkati  " & _
-                    " FROM         savabeg INNER JOIN " & _
-                     " mashaghel ON savabeg.onvan = mashaghel.id INNER JOIN " & _
-                     " personel ON savabeg.perID = personel.ID INNER JOIN " & _
-                     " sazman ON savabeg.sazman = sazman.id INNER JOIN " & _
-                     " saxtzian ON mashaghel.saxt = saxtzian.id  INNER JOIN " & _
-                     "  sherkatiType ON sazman.sherkati = sherkatiType.id " & _
-                     " WHERE(personel.codePersoneli = " & codepersonel.Text & ") " & _
-                    " ORDER BY savabeg.tarixshoru"
-
-        Dim dt As New DataTable
-        dt = ClsDataTable.GetDataTable(sqlstr)
-        DataGridView1.DataSource = dt
-        DataGridView1.DataBind()
-
-
-
-
-    End Sub
-    Private Sub loadGridTakafol()
-
-
-
-        Dim sqlstr As String
-
-        sqlstr = "SELECT     id,empID, fstName, Name, birthday, credit, perid, Expr1 " & _
-       " FROM vwTakfol WHERE     (empID = '" & codepersonel.Text & "')"
-
-
-        Dim dt As New DataTable
-        dt = ClsDataTable.GetDataTable(sqlstr)
-        takafolGRD.DataSource = dt
-        takafolGRD.DataBind()
-
-
-
-
-    End Sub
-    Private Sub loadkarkard()
-
-
-        Dim dts As New DataTable
-        Dim sqlstr As String
-
-        sqlstr = "SELECT     dbo.GetYearsCountKar(perID) AS sal, dbo.GetMounthsCountKar(perID) AS mah, dbo.GetDaysCountKar(perID) AS ruz " & _
-       " FROM savabeg         WHERE(perid = " & perid.Text & ")"
-
-        dts = ClsDataTable.GetDataTable(sqlstr)
-        If dts.Rows.Count > 0 Then
-            salkar.Text = dts.Rows(0).Item("sal").ToString
-            mahkar.Text = dts.Rows(0).Item("mah").ToString
-            ruzkar.Text = dts.Rows(0).Item("ruz").ToString
-        End If
-
-
-    End Sub
-
-    Private Sub loadsabege()
-
-
-        Dim dts As New DataTable
-        Dim sqlstr As String
-
-        sqlstr = "SELECT     dbo.GetYearsCount(perID) AS sal, dbo.GetMounthsCount(perID) AS mah, dbo.GetDaysCount(perID) AS ruz " & _
-       " FROM savabeg         WHERE(perid = " & perid.Text & ")"
-
-        dts = ClsDataTable.GetDataTable(sqlstr)
-        If dts.Rows.Count > 0 Then
-            salsabege.Text = dts.Rows(0).Item("sal").ToString
-            mahsabege.Text = dts.Rows(0).Item("mah").ToString
-            ruzsabege.Text = dts.Rows(0).Item("ruz").ToString
-        End If
-
-
-    End Sub
-    Private Sub loadzian()
-
-
-        Dim dts As New DataTable
-        Dim sqlstr As String
-
-        sqlstr = "SELECT     dbo.GetYearsCountSaxt(savabeg.perID) AS sal, dbo.GetMounthsCountSaxt(savabeg.perID) AS mah, dbo.GetDaysCountSaxt(savabeg.perID) AS ruz " & _
-      " FROM         savabeg INNER JOIN    mashaghel ON savabeg.onvan = mashaghel.id " & _
-           " WHERE(savabeg.perID = " & perid.Text & ") And (mashaghel.saxt = 1)"
-
-        dts = ClsDataTable.GetDataTable(sqlstr)
-        If dts.Rows.Count > 0 Then
-            salzian.Text = dts.Rows(0).Item("sal").ToString
-            mahzian.Text = dts.Rows(0).Item("mah").ToString
-            ruzzian1.Text = dts.Rows(0).Item("ruz").ToString
-        End If
-
-
-    End Sub
-
-    Private Sub loadziansherkati()
-
-
-        Dim dts As New DataTable
-        Dim sqlstr As String
-
-        sqlstr = "SELECT     dbo.GetYearsCountSaxtsherkati(savabeg.perID) AS sal, dbo.GetMounthsCountSaxtsherkati(savabeg.perID) AS mah, dbo.GetDaysCountSaxtSherkati(savabeg.perID) AS ruz " & _
-      " FROM         savabeg INNER JOIN    mashaghel ON savabeg.onvan = mashaghel.id " & _
-           " WHERE(savabeg.perID = " & perid.Text & ") And (mashaghel.saxt = 1)"
-
-        dts = ClsDataTable.GetDataTable(sqlstr)
-        If dts.Rows.Count > 0 Then
-            salsaxtsher.Text = dts.Rows(0).Item("sal").ToString
-            mahsaxtsher.Text = dts.Rows(0).Item("mah").ToString
-            ruzsaxtsher.Text = dts.Rows(0).Item("ruz").ToString
-        End If
-
-
-    End Sub
-
-    Private Sub loadziansherkatiNO()
-
-
-        Dim dts As New DataTable
-        Dim sqlstr As String
-
-        sqlstr = "SELECT     dbo.GetYearsCountSaxtsherkatiNo(savabeg.perID) AS sal, dbo.GetMounthsCountSaxtsherkatiNo(savabeg.perID) AS mah, dbo.GetDaysCountSaxtSherkatiNo(savabeg.perID) AS ruz " & _
-      " FROM         savabeg INNER JOIN    mashaghel ON savabeg.onvan = mashaghel.id " & _
-           " WHERE(savabeg.perID = " & perid.Text & ") And (mashaghel.saxt = 1)"
-
-        dts = ClsDataTable.GetDataTable(sqlstr)
-        If dts.Rows.Count > 0 Then
-            salsaxtno.Text = dts.Rows(0).Item("sal").ToString
-            mahsaxno.Text = dts.Rows(0).Item("mah").ToString
-            ruzsaxtno.Text = dts.Rows(0).Item("ruz").ToString
-        End If
-
-
-    End Sub
-
-    Private Sub clear_form()
-        TextBox2.Text = ""
-
-        TextBox20.Text = ""
-
-        TextBox11.Text = ""
-        TextBox1.Text = ""
-        TextBox9.Text = ""
-        TextBox5.Text = ""
-
-        DataGridView1.DataBind()
-
-    End Sub
-
-
-
-    Private Sub gridAmuzesh()
-        Dim sqlStr As String = "select * from trnPersonelDoreTbl WHERE        (codePersoneli = " & codepersonel.Text & ")"
-        Dim dt As New DataTable
-        dt = ClsDataTable.GetDataTable(sqlStr)
-        trnGrid.DataSource = dt
-        trnGrid.DataBind()
-    End Sub
-
-
-
-
-
-
-
-
-
-
-
-
 
 End Class
