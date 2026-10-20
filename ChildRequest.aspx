@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="ثبت درخواست فرزندان ممتاز" Language="VB" MasterPageFile="~/dabir.master" 
     AutoEventWireup="false" CodeFile="ChildRequest.aspx.vb" Inherits="ChildRequest" 
-    EnableEventValidation="false" %>
+    EnableEventValidation="false" MaintainScrollPositionOnPostback="true" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <style type="text/css">
@@ -63,7 +63,22 @@
         .chr-history-card .chr-hist-row strong { color: #2c3e50; }
         .chr-history-card .chr-hist-comment { font-size: 11px; color: #6c757d; }
 
-        /* ===== Upload ===== */
+        .chr-guide-box { background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 2px solid #0ea5e9; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .chr-guide-title { font-size: 16px; font-weight: 800; color: #0c4a6e; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .chr-guide-steps { display: flex; flex-direction: column; gap: 10px; }
+        .chr-guide-step { display: flex; align-items: flex-start; gap: 12px; background: #fff; border-radius: 10px; padding: 12px 15px; border-right: 4px solid #0ea5e9; box-shadow: 0 2px 6px rgba(14,165,233,0.1); }
+        .chr-guide-step .step-number { background: #0ea5e9; color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+        .chr-guide-step .step-text { font-size: 13px; color: #0c4a6e; line-height: 1.8; }
+        .chr-guide-step .step-text strong { color: #0284c7; }
+
+        .chr-identity-merged-panel { background: #fff; border: 2px solid #e91e63; border-radius: 12px; padding: 20px; margin-bottom: 15px; }
+        .chr-identity-merged-panel .panel-title { font-size: 14px; font-weight: 700; color: #880e4f; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .chr-identity-merged-panel .file-upload-row { display: flex; gap: 15px; flex-wrap: wrap; }
+        .chr-identity-merged-panel .file-upload-item { flex: 1; min-width: 250px; background: #fce4ec; border-radius: 10px; padding: 15px; border: 1px solid #f8bbd0; }
+        .chr-identity-merged-panel .file-upload-item .file-label { font-size: 13px; font-weight: 700; color: #880e4f; margin-bottom: 8px; display: block; }
+        .chr-identity-merged-panel .file-upload-item .file-hint { font-size: 11px; color: #6c757d; margin-bottom: 8px; display: block; }
+        .chr-identity-merged-panel .file-upload-item .chr-file-input { margin-top: 5px; }
+
         .chr-upload-box { background: #fff; border: 2px dashed #bdc3c7; border-radius: 10px; padding: 20px; text-align: center; margin-bottom: 15px; }
         .chr-upload-box.required-extra { border-color: #e67e22; background: #fff8e1; border-style: solid; }
         .chr-upload-box .upload-icon { font-size: 36px; margin-bottom: 8px; display: block; }
@@ -108,11 +123,6 @@
 
         .chr-extra-doc-panel { background: linear-gradient(135deg, #fff8e1, #ffe8a1); border: 2px solid #e67e22; border-radius: 10px; padding: 15px 20px; margin-top: 15px; }
         .chr-extra-doc-panel .panel-title { font-size: 14px; font-weight: 700; color: #a04000; margin-bottom: 10px; }
-
-        /* ✅ پنل مدارک هویتی (شناسنامه و کارت ملی) */
-        .chr-identity-panel { background: linear-gradient(135deg, #fce4ec, #f8bbd0); border: 2px solid #e91e63; border-radius: 10px; padding: 15px 20px; margin-bottom: 15px; }
-        .chr-identity-panel .panel-title { font-size: 14px; font-weight: 700; color: #880e4f; margin-bottom: 10px; }
-        .chr-identity-panel .chr-upload-box { border-color: #e91e63; }
 
         .chr-student-card-panel { background: linear-gradient(135deg, #f3e5f5, #e1bee7); border: 2px solid #9c27b0; border-radius: 10px; padding: 15px 20px; margin-top: 15px; }
         .chr-student-card-panel .chr-upload-box { border-color: #9c27b0; }
@@ -187,7 +197,6 @@
 
         .chr-hidden { display: none !important; }
 
-        /* ===== Modal ===== */
         .chr-modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); z-index: 2147483647; margin: 0; padding: 0; direction: rtl; text-align: center; overflow: auto; }
         .chr-modal-overlay.show { display: block; }
         .chr-modal-overlay::before { content: ''; display: inline-block; height: 100%; vertical-align: middle; margin-right: -0.25em; }
@@ -231,6 +240,7 @@
             .chr-history-item { flex-direction: column; align-items: stretch; }
             .chr-edit-banner { flex-direction: column; }
             .chr-child-hint { flex-direction: column; }
+            .chr-identity-merged-panel .file-upload-row { flex-direction: column; }
         }
     </style>
 </asp:Content>
@@ -240,8 +250,47 @@
     <asp:UpdatePanel ID="upMain" runat="server" UpdateMode="Conditional" ChildrenAsTriggers="true">
         <ContentTemplate>
 
-            <div class="chr-container">
+            <div class="chr-container" id="topContainer">
                 <div class="chr-title">🎓 ثبت درخواست فرزندان ممتاز - سال 1404-1405</div>
+
+                <%-- ✅ راهنمای قدم به قدم --%>
+                <asp:Panel ID="pnlGuide" runat="server" CssClass="chr-guide-box">
+                    <div class="chr-guide-title">
+                        📘 راهنمای قدم به قدم ثبت درخواست
+                    </div>
+                    <div class="chr-guide-steps">
+                        <div class="chr-guide-step">
+                            <div class="step-number">1</div>
+                            <div class="step-text">
+                                <strong>انتخاب فرزند:</strong> در بخش «انتخاب فرزند»، کارت فرزند موردنظر را کلیک کنید تا انتخاب شود. اگر فرزند شما در لیست نیست، از دکمه «➕ افزودن فرزند جدید» استفاده کنید.
+                            </div>
+                        </div>
+                        <div class="chr-guide-step">
+                            <div class="step-number">2</div>
+                            <div class="step-text">
+                                <strong>تکمیل اطلاعات تحصیلی:</strong> نوع تحصیل (دانش‌آموز/دانشجو) و مقطع تحصیلی را انتخاب کنید و اطلاعات خواسته‌شده (مدرسه/دانشگاه، معدل و ...) را وارد نمایید.
+                            </div>
+                        </div>
+                        <div class="chr-guide-step">
+                            <div class="step-number">3</div>
+                            <div class="step-text">
+                                <strong>بارگذاری مدارک هویتی:</strong> در بخش مدارک، ابتدا <strong>شناسنامه</strong> و <strong>کارت ملی</strong> فرزند را انتخاب کنید و با یک کلیک روی دکمه «⬆️ بارگذاری مدارک هویتی»، هر دو فایل را با هم آپلود کنید.
+                            </div>
+                        </div>
+                        <div class="chr-guide-step">
+                            <div class="step-number">4</div>
+                            <div class="step-text">
+                                <strong>بارگذاری سایر مدارک:</strong> بر اساس نوع تحصیل، کارنامه یا کارت دانشجویی و در صورت نیاز مدارک اضافی (سمپاد/المپیاد) را آپلود کنید.
+                            </div>
+                        </div>
+                        <div class="chr-guide-step">
+                            <div class="step-number">5</div>
+                            <div class="step-text">
+                                <strong>ارسال نهایی:</strong> پس از تکمیل همه موارد، دکمه «📤 ارسال نهایی» را بزنید.
+                            </div>
+                        </div>
+                    </div>
+                </asp:Panel>
 
                 <%-- بنر نیاز به اصلاح --%>
                 <asp:Panel ID="pnlEditBanner" runat="server" Visible="false" CssClass="chr-edit-banner">
@@ -309,7 +358,9 @@
                     <asp:Label ID="lblDeadlineStatus" runat="server" CssClass="status" />
                 </asp:Panel>
 
-                <%-- ✅ بخش فرزندان --%>
+                <%-- ============================================================
+                     ✅ بخش فرزندان
+                     ============================================================ --%>
                 <div class="chr-section child">
                     <div class="chr-section-title">
                         👶 انتخاب فرزند (فقط فرزندان تحت تکفل شما)
@@ -321,7 +372,6 @@
                         </asp:LinkButton>
                     </div>
 
-                    <%-- پیام راهنما --%>
                     <div class="chr-child-hint">
                         <span class="hint-icon">💡</span>
                         <div class="hint-text">
@@ -383,7 +433,9 @@
                                     <div class="chr-form-group">
                                         <label>تاریخ تولد (مثال: 1390/05/15): <span class="required">*</span></label>
                                         <asp:TextBox ID="txtNewChildBirthDate" runat="server" CssClass="chr-input" 
-                                            placeholder="1390/05/15" MaxLength="10" />
+                                            placeholder="1370/01/01" MaxLength="10" 
+                                            dir="ltr" style="text-align:left; letter-spacing:1px;"
+                                            oninput="maskDate(this);" />
                                     </div>
                                 </div>
                             </div>
@@ -450,7 +502,9 @@
                                     <div class="chr-form-group">
                                         <label>تاریخ تولد (مثال: 1390/05/15): <span class="required">*</span></label>
                                         <asp:TextBox ID="txtEditChildBirthDate" runat="server" CssClass="chr-input" 
-                                            placeholder="1390/05/15" MaxLength="10" />
+                                            placeholder="1370/01/01" MaxLength="10" 
+                                            dir="ltr" style="text-align:left; letter-spacing:1px;"
+                                            oninput="maskDate(this);" />
                                     </div>
                                 </div>
                             </div>
@@ -497,7 +551,7 @@
                 </div>
 
                 <%-- ============================================================
-                     ✅ بخش تحصیلی — با گزینه‌های جدید
+                     ✅ بخش تحصیلی
                      ============================================================ --%>
                 <asp:Panel ID="pnlEducation" runat="server" CssClass="chr-section education chr-hidden">
                     <div class="chr-section-title">
@@ -538,7 +592,7 @@
                         </div>
                     </div>
 
-                    <%-- ✅ ردیف ۲: اطلاعات مدرسه (فقط برای دانش‌آموز) --%>
+                    <%-- ✅ اطلاعات مدرسه (دانش‌آموز) --%>
                     <asp:Panel ID="pnlSchool" runat="server" CssClass="chr-hidden">
                         <div style="background: #fff; border: 2px dashed #3498db; border-radius: 10px; padding: 15px; margin-top: 10px;">
                             <div style="font-size: 14px; font-weight: 700; color: #0c5460; margin-bottom: 12px;">
@@ -575,8 +629,18 @@
                                 </div>
                             </div>
 
+                            <%-- ✅ گزینه استثنایی --%>
+                            <div class="chr-condition-hint" style="background: linear-gradient(135deg, #fce4ec, #f8bbd0); border-right-color: #e91e63; margin-top: 12px;">
+                                <span class="condition-icon">🌟</span>
+                                <div class="condition-content" style="flex:1;">
+                                    <asp:CheckBox ID="chkIsExceptional" runat="server" 
+                                        Text=" 🌟 درخواست استثنایی (این گزینه فقط برای موارد خاص و با تایید روابط عمومی است)" 
+                                        Font-Bold="true" ForeColor="#880e4f" />
+                                </div>
+                            </div>
+
                             <%-- ✅ گزینه قبولی در سمپاد --%>
-                            <div class="chr-condition-hint" style="background: linear-gradient(135deg, #e8f4fd, #d1ecf1); border-right-color: #3498db; margin-top: 10px;">
+                            <div class="chr-condition-hint" style="background: linear-gradient(135deg, #e8f4fd, #d1ecf1); border-right-color: #3498db; margin-top: 12px;">
                                 <span class="condition-icon">🏆</span>
                                 <div class="condition-content" style="flex:1;">
                                     <asp:CheckBox ID="chkSampad" runat="server" 
@@ -603,10 +667,48 @@
                                     </asp:Panel>
                                 </div>
                             </div>
+
+                            <%-- ✅ گزینه قبولی در المپیاد --%>
+                            <div class="chr-condition-hint" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-right-color: #4caf50; margin-top: 12px;">
+                                <span class="condition-icon">🏅</span>
+                                <div class="condition-content" style="flex:1;">
+                                    <asp:CheckBox ID="chkIsOlympiad" runat="server" 
+                                        Text=" ✅ قبولی در المپیاد علمی (کشوری یا جهانی)" 
+                                        AutoPostBack="true" OnCheckedChanged="chkIsOlympiad_CheckedChanged"
+                                        Font-Bold="true" ForeColor="#1b5e20" />
+                                    
+                                    <asp:Panel ID="pnlOlympiadDetails" runat="server" CssClass="chr-hidden" style="margin-top:12px;">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="chr-form-group" style="margin-bottom:0;">
+                                                    <label>تصویر کارنامه/مدرک قبولی المپیاد: <span class="required">*</span></label>
+                                                    
+                                                    <%-- ✅ پنل فایل فعلی المپیاد (در حالت ویرایش) — مثل بقیه مدارک --%>
+                                                    <asp:Panel ID="pnlOldOlympiadDoc" runat="server" Visible="false" CssClass="chr-old-file-box">
+                                                        <span class="lbl">📁 فایل فعلی در سرور:</span>
+                                                        <span class="fname"><asp:Label ID="lblOldOlympiadDocName" runat="server" /></span>
+                                                        <div class="file-actions">
+                                                            <a id="lnkViewOldOlympiad" runat="server" target="_blank" class="chr-btn-view-file">👁️ مشاهده</a>
+                                                            <a id="lnkDownloadOldOlympiad" runat="server" class="chr-btn-download-file">⬇️ دانلود</a>
+                                                        </div>
+                                                    </asp:Panel>
+                                                    
+                                                    <asp:FileUpload ID="fuOlympiadDoc" runat="server" CssClass="chr-file-input" />
+                                                    <span style="font-size:11px;color:#6c757d;display:block;margin-top:5px;">فرمت: JPG، PNG یا PDF - حداکثر 2 مگابایت</span>
+                                                    <asp:Label ID="lblOlympiadDocStatus" runat="server" CssClass="upload-status" />
+                                                    <asp:Button ID="btnUploadOlympiadDoc" runat="server" Text="⬆️ بارگذاری مدرک المپیاد" 
+                                                        OnClick="btnUploadOlympiadDoc_Click" CssClass="chr-upload-btn" 
+                                                        style="background:#4caf50; margin-top:8px;" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </asp:Panel>
+                                </div>
+                            </div>
                         </div>
                     </asp:Panel>
 
-                    <%-- ✅ ردیف ۳: اطلاعات دانشگاه (فقط برای دانشجو) --%>
+                    <%-- ✅ اطلاعات دانشگاه (دانشجو) --%>
                     <asp:Panel ID="pnlUniversity" runat="server" CssClass="chr-hidden">
                         <div style="background: #fff; border: 2px dashed #9c27b0; border-radius: 10px; padding: 15px; margin-top: 10px;">
                             <div style="font-size: 14px; font-weight: 700; color: #6a1b9a; margin-bottom: 12px;">
@@ -651,7 +753,7 @@
                                 </div>
                             </div>
 
-                            <%-- ✅ نوع ورود به دانشگاه: با آزمون / بدون آزمون --%>
+                            <%-- ✅ نوع ورود به دانشگاه --%>
                             <div style="background: #f3e5f5; border-right: 4px solid #9c27b0; border-radius: 8px; padding: 12px 15px; margin-top: 12px;">
                                 <div class="row">
                                     <div class="col-md-4">
@@ -690,6 +792,27 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <%-- ✅ فیلدهای معدل A و B برای دانشجویان خارجی --%>
+                            <div id="divForeignGrades" style="display: none; background: #fff3cd; padding: 15px; border-radius: 10px; border: 1px dashed #f39c12; margin-top: 15px;">
+                                <div style="font-size: 13px; font-weight: 700; color: #856404; margin-bottom: 10px;">
+                                    🌍 اطلاعات معدل (ویژه دانشجویان خارجی)
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="chr-form-group">
+                                            <label for="txtGradeTitleA">عنوان A: <span class="required">*</span></label>
+                                            <asp:TextBox ID="txtGradeTitleA" runat="server" CssClass="chr-input" placeholder="مثلاً: معدل کل" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="chr-form-group">
+                                            <label for="txtGradeTitleB">عنوان B: <span class="required">*</span></label>
+                                            <asp:TextBox ID="txtGradeTitleB" runat="server" CssClass="chr-input" placeholder="مثلاً: معدل تخصصی" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </asp:Panel>
 
@@ -715,75 +838,79 @@
                 </asp:Panel>
 
                 <%-- ============================================================
-                     ✅ بخش مدارک — با مدارک هویتی جدید
+                     ✅ بخش مدارک — با پنل مدارک هویتی ادغام‌شده
                      ============================================================ --%>
                 <asp:Panel ID="pnlDocuments" runat="server" CssClass="chr-section documents chr-hidden">
                     <div class="chr-section-title">📎 بارگذاری مدارک مورد نیاز</div>
 
-                    <%-- ✅ پنل مدارک هویتی (شناسنامه و کارت ملی) --%>
-                    <div class="chr-identity-panel">
-                        <div class="panel-title">🆔 مدارک هویتی الزامی</div>
-
-                        <%-- تصویر صفحه اول شناسنامه --%>
-                        <div class="chr-upload-box required-extra" style="border-color: #e91e63;">
-                            <span class="upload-icon">📘</span>
-                            <div class="upload-title">تصویر صفحه اول شناسنامه فرزند <span style="color:#e74c3c;">*</span></div>
-                            <div class="upload-hint">فرمت: JPG، PNG یا PDF - حداکثر 2 مگابایت</div>
-                            
-                            <asp:Panel ID="pnlOldBirthCert" runat="server" Visible="false" CssClass="chr-old-file-box">
-                                <span class="lbl">📁 فایل فعلی در سرور:</span>
-                                <span class="fname"><asp:Label ID="lblOldBirthCertName" runat="server" /></span>
-                                <div class="file-actions">
-                                    <a id="lnkViewOldBirthCert" runat="server" target="_blank" class="chr-btn-view-file">👁️ مشاهده</a>
-                                    <a id="lnkDownloadOldBirthCert" runat="server" class="chr-btn-download-file">⬇️ دانلود</a>
-                                </div>
-                            </asp:Panel>
-                            
-                            <asp:FileUpload ID="fuBirthCertificate" runat="server" 
-                                CssClass="chr-file-input" 
-                                onchange="onFileSelected(this, 'birthCertSelectedInfo', 'birthCertSelectedName');" />
-                            
-                            <div id="birthCertSelectedInfo" class="chr-selected-file-info" style="display:none;">
-                                <span>📎 فایل انتخاب شده: </span>
-                                <span class="fname" id="birthCertSelectedName"></span>
-                            </div>
-                            
-                            <asp:Button ID="btnUploadBirthCert" runat="server" Text="⬆️ بارگذاری شناسنامه" 
-                                OnClick="btnUploadBirthCert_Click" CssClass="chr-upload-btn pink" />
-                            <asp:Label ID="lblBirthCertStatus" runat="server" CssClass="upload-status" />
+                    <%-- ✅ پنل مدارک هویتی با یک دکمه آپلود --%>
+                    <div class="chr-identity-merged-panel">
+                        <div class="panel-title">
+                            🆔 مدارک هویتی الزامی
+                            <span style="font-size:11px;color:#6c757d;font-weight:400;">(هر دو مورد الزامی است)</span>
                         </div>
 
-                        <%-- تصویر کارت ملی فرزند --%>
-                        <div class="chr-upload-box required-extra" style="border-color: #e91e63; margin-top:15px;">
-                            <span class="upload-icon">💳</span>
-                            <div class="upload-title">تصویر کارت ملی فرزند <span style="color:#e74c3c;">*</span></div>
-                            <div class="upload-hint">فرمت: JPG، PNG یا PDF - حداکثر 2 مگابایت</div>
-                            
-                            <asp:Panel ID="pnlOldNationalCard" runat="server" Visible="false" CssClass="chr-old-file-box">
-                                <span class="lbl">📁 فایل فعلی در سرور:</span>
-                                <span class="fname"><asp:Label ID="lblOldNationalCardName" runat="server" /></span>
-                                <div class="file-actions">
-                                    <a id="lnkViewOldNationalCard" runat="server" target="_blank" class="chr-btn-view-file">👁️ مشاهده</a>
-                                    <a id="lnkDownloadOldNationalCard" runat="server" class="chr-btn-download-file">⬇️ دانلود</a>
-                                </div>
-                            </asp:Panel>
-                            
-                            <asp:FileUpload ID="fuNationalCard" runat="server" 
-                                CssClass="chr-file-input" 
-                                onchange="onFileSelected(this, 'nationalCardSelectedInfo', 'nationalCardSelectedName');" />
-                            
-                            <div id="nationalCardSelectedInfo" class="chr-selected-file-info" style="display:none;">
-                                <span>📎 فایل انتخاب شده: </span>
-                                <span class="fname" id="nationalCardSelectedName"></span>
+                        <%-- فایل‌های فعلی (در حالت ویرایش) --%>
+                        <asp:Panel ID="pnlOldIdentityFiles" runat="server" Visible="false" 
+                            style="background:#e8f8f0;padding:15px;border-radius:8px;margin-bottom:15px;border:2px solid #27ae60;">
+                            <div style="font-size:12px;color:#155724;font-weight:700;margin-bottom:10px;">
+                                📁 فایل‌های فعلی در سرور:
                             </div>
-                            
-                            <asp:Button ID="btnUploadNationalCard" runat="server" Text="⬆️ بارگذاری کارت ملی" 
-                                OnClick="btnUploadNationalCard_Click" CssClass="chr-upload-btn pink" />
-                            <asp:Label ID="lblNationalCardStatus" runat="server" CssClass="upload-status" />
+                            <asp:Panel ID="pnlOldBirthCertView" runat="server" Visible="false" style="margin-bottom:10px;">
+                                <span style="font-size:12px;color:#6c757d;">📘 شناسنامه: </span>
+                                <span style="font-size:12px;color:#27ae60;font-weight:700;"><asp:Label ID="lblOldBirthCertName2" runat="server" /></span>
+                                <a id="lnkViewOldBirthCert2" runat="server" target="_blank" class="chr-btn-view-file" style="margin-right:10px;">👁️ مشاهده</a>
+                                <a id="lnkDownloadOldBirthCert2" runat="server" class="chr-btn-download-file">⬇️ دانلود</a>
+                            </asp:Panel>
+                            <asp:Panel ID="pnlOldNationalCardView" runat="server" Visible="false">
+                                <span style="font-size:12px;color:#6c757d;">💳 کارت ملی: </span>
+                                <span style="font-size:12px;color:#27ae60;font-weight:700;"><asp:Label ID="lblOldNationalCardName2" runat="server" /></span>
+                                <a id="lnkViewOldNationalCard2" runat="server" target="_blank" class="chr-btn-view-file" style="margin-right:10px;">👁️ مشاهده</a>
+                                <a id="lnkDownloadOldNationalCard2" runat="server" class="chr-btn-download-file">⬇️ دانلود</a>
+                            </asp:Panel>
+                        </asp:Panel>
+
+                        <%-- دو فایل آپلود + یک دکمه --%>
+                        <div class="file-upload-row">
+                            <div class="file-upload-item">
+                                <span class="file-label">📘 تصویر صفحه اول شناسنامه فرزند <span style="color:#e74c3c;">*</span></span>
+                                <span class="file-hint">فرمت: JPG، PNG یا PDF - حداکثر 2 مگابایت</span>
+                                <asp:FileUpload ID="fuBirthCertificate" runat="server" 
+                                    CssClass="chr-file-input" 
+                                    onchange="onFileSelected(this, 'birthCertSelectedInfo', 'birthCertSelectedName');" />
+                                <div id="birthCertSelectedInfo" class="chr-selected-file-info" style="display:none;">
+                                    <span>📎 فایل انتخاب شده: </span>
+                                    <span class="fname" id="birthCertSelectedName"></span>
+                                </div>
+                            </div>
+
+                            <div class="file-upload-item">
+                                <span class="file-label">💳 تصویر کارت ملی فرزند <span style="color:#e74c3c;">*</span></span>
+                                <span class="file-hint">فرمت: JPG، PNG یا PDF - حداکثر 2 مگابایت</span>
+                                <asp:FileUpload ID="fuNationalCard" runat="server" 
+                                    CssClass="chr-file-input" 
+                                    onchange="onFileSelected(this, 'nationalCardSelectedInfo', 'nationalCardSelectedName');" />
+                                <div id="nationalCardSelectedInfo" class="chr-selected-file-info" style="display:none;">
+                                    <span>📎 فایل انتخاب شده: </span>
+                                    <span class="fname" id="nationalCardSelectedName"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <%-- یک دکمه برای هر دو فایل --%>
+                        <div style="text-align:center; margin-top:15px;">
+                            <asp:Button ID="btnUploadBothIdentity" runat="server" 
+                                Text="⬆️ بارگذاری مدارک هویتی (شناسنامه + کارت ملی)" 
+                                OnClick="btnUploadBothIdentity_Click" 
+                                CssClass="chr-upload-btn pink" 
+                                style="padding:12px 30px; font-size:14px; font-weight:700;" 
+                                OnClientClick="showLoading();" />
+                            <asp:Label ID="lblBothIdentityStatus" runat="server" CssClass="upload-status" 
+                                style="display:block; margin-top:10px;" />
                         </div>
                     </div>
 
-                    <%-- ✅ کارنامه (فقط برای دانش‌آموز) --%>
+                    <%-- ✅ کارنامه --%>
                     <asp:Panel ID="pnlTranscriptUpload" runat="server" CssClass="chr-hidden">
                         <div class="chr-upload-box">
                             <span class="upload-icon">📄</span>
@@ -809,12 +936,13 @@
                             </div>
                             
                             <asp:Button ID="btnUploadTranscript" runat="server" Text="⬆️ بارگذاری کارنامه" 
-                                OnClick="btnUploadTranscript_Click" CssClass="chr-upload-btn" />
+                                OnClick="btnUploadTranscript_Click" CssClass="chr-upload-btn" 
+                                OnClientClick="showLoading();" />
                             <asp:Label ID="lblTranscriptStatus" runat="server" CssClass="upload-status" />
                         </div>
                     </asp:Panel>
 
-                    <%-- ✅ کارت دانشجویی (فقط برای دانشجو) --%>
+                    <%-- ✅ کارت دانشجویی --%>
                     <asp:Panel ID="pnlStudentCard" runat="server" CssClass="chr-student-card-panel chr-hidden">
                         <div class="panel-title" style="font-size:14px;font-weight:700;color:#6a1b9a;margin-bottom:10px;">
                             🎓 کارت دانشجویی
@@ -843,7 +971,8 @@
                             </div>
                             
                             <asp:Button ID="btnUploadStudentCard" runat="server" Text="⬆️ بارگذاری کارت دانشجویی" 
-                                OnClick="btnUploadStudentCard_Click" CssClass="chr-upload-btn purple" />
+                                OnClick="btnUploadStudentCard_Click" CssClass="chr-upload-btn purple" 
+                                OnClientClick="showLoading();" />
                             <asp:Label ID="lblStudentCardStatus" runat="server" CssClass="upload-status" />
                         </div>
                     </asp:Panel>
@@ -878,7 +1007,8 @@
                             </div>
                             
                             <asp:Button ID="btnUploadExtraDoc" runat="server" Text="⬆️ بارگذاری مدرک" 
-                                OnClick="btnUploadExtraDoc_Click" CssClass="chr-upload-btn orange" />
+                                OnClick="btnUploadExtraDoc_Click" CssClass="chr-upload-btn orange" 
+                                OnClientClick="showLoading();" />
                             <asp:Label ID="lblExtraDocStatus" runat="server" CssClass="upload-status" />
                         </div>
                     </asp:Panel>
@@ -886,11 +1016,13 @@
 
                 <div class="chr-btn-group">
                     <asp:Button ID="btnSubmit" runat="server" Text="📤 ارسال نهایی" 
-                        CssClass="chr-btn chr-btn-submit" OnClick="btnSubmit_Click" />
+                        CssClass="chr-btn chr-btn-submit" OnClick="btnSubmit_Click" 
+                        OnClientClick="showLoading();" />
                     <asp:Button ID="btnCancel" runat="server" Text="❌ انصراف" 
                         CssClass="chr-btn chr-btn-cancel" OnClick="btnCancel_Click" CausesValidation="false" />
                 </div>
 
+                <%-- HiddenFields --%>
                 <asp:HiddenField ID="hfSelectedChildID" runat="server" Value="0" />
                 <asp:HiddenField ID="hfEditingRequestID" runat="server" Value="0" />
                 <asp:HiddenField ID="hfRequiresExtraDoc" runat="server" Value="0" />
@@ -901,6 +1033,7 @@
                 <asp:HiddenField ID="hfNationalCardUploaded" runat="server" Value="0" />
                 <asp:HiddenField ID="hfStudentCardUploaded" runat="server" Value="0" />
                 <asp:HiddenField ID="hfSampadSelected" runat="server" Value="0" />
+                <asp:HiddenField ID="hfOlympiadDocUploaded" runat="server" Value="0" />
             </div>
 
         </ContentTemplate>
@@ -909,11 +1042,12 @@
             <asp:AsyncPostBackTrigger ControlID="ddlEducationLevel" EventName="SelectedIndexChanged" />
             <asp:AsyncPostBackTrigger ControlID="ddlAdmissionType" EventName="SelectedIndexChanged" />
             <asp:AsyncPostBackTrigger ControlID="chkSampad" EventName="CheckedChanged" />
+            <asp:AsyncPostBackTrigger ControlID="chkIsOlympiad" EventName="CheckedChanged" />
+            <asp:PostBackTrigger ControlID="btnUploadBothIdentity" />
             <asp:PostBackTrigger ControlID="btnUploadTranscript" />
             <asp:PostBackTrigger ControlID="btnUploadExtraDoc" />
-            <asp:PostBackTrigger ControlID="btnUploadBirthCert" />
-            <asp:PostBackTrigger ControlID="btnUploadNationalCard" />
             <asp:PostBackTrigger ControlID="btnUploadStudentCard" />
+            <asp:PostBackTrigger ControlID="btnUploadOlympiadDoc" />
             <asp:AsyncPostBackTrigger ControlID="btnSubmit" EventName="Click" />
             <asp:AsyncPostBackTrigger ControlID="btnCancelEdit" EventName="Click" />
             <asp:AsyncPostBackTrigger ControlID="lnkShowAddChild" EventName="Click" />
@@ -926,7 +1060,7 @@
         </Triggers>
     </asp:UpdatePanel>
 
-    <%-- ✅ History با UpdatePanel جداگانه --%>
+    <%-- History با UpdatePanel جداگانه --%>
     <asp:UpdatePanel ID="upHistory" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
             <div class="chr-container" style="margin-top:-20px;">
@@ -1055,7 +1189,6 @@
             if (l) l.classList.remove('show');
         }
 
-        // ✅ تابع عمومی برای نمایش اطلاعات فایل انتخاب شده
         function onFileSelected(input, infoId, nameId) {
             var info = document.getElementById(infoId);
             var nameEl = document.getElementById(nameId);
@@ -1070,8 +1203,37 @@
             }
         }
 
-        (function () {
-            function relocate() {
+        function maskDate(input) {
+            var value = input.value.replace(/[^\d]/g, '');
+            if (value.length > 8) value = value.substring(0, 8);
+            var result = '';
+            if (value.length > 0) result = value.substring(0, 4);
+            if (value.length >= 5) result += '/' + value.substring(4, 6);
+            if (value.length >= 7) result += '/' + value.substring(6, 8);
+            input.value = result;
+        }
+
+        function scrollToElement(elementId) {
+            setTimeout(function () {
+                var el = document.getElementById(elementId);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 300);
+        }
+
+        var scrollPosition = 0;
+
+        if (typeof Sys !== 'undefined' && Sys.WebForms && Sys.WebForms.PageRequestManager) {
+            var prm = Sys.WebForms.PageRequestManager.getInstance();
+
+            prm.add_beginRequest(function (sender, args) {
+                scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+            });
+
+            prm.add_endRequest(function (sender, args) {
+                window.scrollTo(0, scrollPosition);
+
                 try {
                     var modal = document.getElementById('chrModal');
                     var toast = document.getElementById('chrToastContainer');
@@ -1080,17 +1242,10 @@
                     if (toast && toast.parentNode !== document.body) document.body.appendChild(toast);
                     if (loading && loading.parentNode !== document.body) document.body.appendChild(loading);
                 } catch (e) { console.error(e); }
-            }
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', relocate);
-            } else { relocate(); }
-            if (typeof Sys !== 'undefined' && Sys.WebForms && Sys.WebForms.PageRequestManager) {
-                Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
-                    relocate();
-                    hideLoading();
-                });
-            }
-        })();
+
+                hideLoading();
+            });
+        }
     </script>
 
 </asp:Content>

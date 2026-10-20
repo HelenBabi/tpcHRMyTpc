@@ -3,6 +3,7 @@ Imports System.Data.SqlClient
 Imports System.Collections.Generic
 Imports System.Globalization
 Imports System.IO
+Imports System.Text.RegularExpressions
 
 Partial Class ChildRequest
     Inherits System.Web.UI.Page
@@ -30,9 +31,6 @@ Partial Class ChildRequest
         End Set
     End Property
 
-    ' ============================================================
-    ' ✅ توابع کمکی برای نمایش/مخفی کردن پنل با CSS Class
-    ' ============================================================
     Private Sub ShowPanel(ByVal pnl As Panel, ByVal baseClass As String)
         If pnl Is Nothing Then Return
         pnl.CssClass = baseClass
@@ -43,9 +41,6 @@ Partial Class ChildRequest
         pnl.CssClass = baseClass & " chr-hidden"
     End Sub
 
-    ' ============================================================
-    ' Page Lifecycle
-    ' ============================================================
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
         If Session("codePersoneli") Is Nothing Then
             Response.Redirect("~/Login_2.aspx")
@@ -61,6 +56,7 @@ Partial Class ChildRequest
             LoadDeadline()
             LoadChildren()
             LoadHistory()
+            pnlGuide.Visible = True
         End If
     End Sub
 
@@ -148,13 +144,14 @@ Partial Class ChildRequest
         Session.Remove("TempTranscript_" & _personCode & "_Name")
         Session.Remove("TempExtraDoc_" & _personCode & "_Path")
         Session.Remove("TempExtraDoc_" & _personCode & "_Name")
-        ' ✅ مدارک جدید
         Session.Remove("TempBirthCert_" & _personCode & "_Path")
         Session.Remove("TempBirthCert_" & _personCode & "_Name")
         Session.Remove("TempNationalCard_" & _personCode & "_Path")
         Session.Remove("TempNationalCard_" & _personCode & "_Name")
         Session.Remove("TempStudentCard_" & _personCode & "_Path")
         Session.Remove("TempStudentCard_" & _personCode & "_Name")
+        Session.Remove("TempOlympiad_" & _personCode & "_Path")
+        Session.Remove("TempOlympiad_" & _personCode & "_Name")
     End Sub
 
     Private Sub LoadDeadline()
@@ -333,6 +330,7 @@ Partial Class ChildRequest
         HidePanel(pnlRankInput, "")
         HidePanel(pnlWithoutExamReason, "")
         HidePanel(pnlSampadDetails, "")
+        HidePanel(pnlOlympiadDetails, "")
         ShowPanel(pnlAverageRow, "")
 
         ddlChildType.SelectedValue = ""
@@ -352,6 +350,10 @@ Partial Class ChildRequest
         chkSampad.Checked = False
         txtSampadSchoolName.Text = ""
         txtSampadStudentNumber.Text = ""
+        chkIsOlympiad.Checked = False
+        chkIsExceptional.Checked = False
+        txtGradeTitleA.Text = ""
+        txtGradeTitleB.Text = ""
 
         hfRequiresExtraDoc.Value = "0"
         hfExtraDocType.Value = ""
@@ -361,23 +363,22 @@ Partial Class ChildRequest
         hfNationalCardUploaded.Value = "0"
         hfStudentCardUploaded.Value = "0"
         hfSampadSelected.Value = "0"
+        hfOlympiadDocUploaded.Value = "0"
 
         lblTranscriptStatus.Text = ""
         lblExtraDocStatus.Text = ""
-        lblBirthCertStatus.Text = ""
-        lblNationalCardStatus.Text = ""
         lblStudentCardStatus.Text = ""
+        lblOlympiadDocStatus.Text = ""
 
         pnlOldTranscript.Visible = False
         pnlOldExtraDoc.Visible = False
-        pnlOldBirthCert.Visible = False
-        pnlOldNationalCard.Visible = False
         pnlOldStudentCard.Visible = False
+        pnlOldOlympiadDoc.Visible = False
+
+        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "hideForeignGrades_" & Guid.NewGuid().ToString("N"),
+            "var el = document.getElementById('divForeignGrades'); if(el) el.style.display = 'none';", True)
     End Sub
 
-    ' ============================================================
-    ' Child: Add New
-    ' ============================================================
     Protected Sub lnkShowAddChild_Click(ByVal sender As Object, ByVal e As EventArgs)
         HidePanel(pnlEditChild, "chr-add-child-panel")
         ShowPanel(pnlAddChild, "chr-add-child-panel")
@@ -440,8 +441,9 @@ Partial Class ChildRequest
                 Return
             End If
 
-            If String.IsNullOrEmpty(birthDate) Then
-                ShowModalAlert("warning", "تاریخ تولد الزامی", "لطفاً تاریخ تولد فرزند را وارد کنید (مثال: 1390/05/15).")
+            Dim dateError As String = ""
+            If Not IsValidPersianDate(birthDate, dateError) Then
+                ShowModalAlert("warning", "تاریخ تولد نامعتبر", dateError)
                 Return
             End If
 
@@ -497,9 +499,6 @@ Partial Class ChildRequest
         End Try
     End Sub
 
-    ' ============================================================
-    ' Child: Edit
-    ' ============================================================
     Private Sub LoadChildForEdit(ByVal childID As Integer)
         Try
             Dim dt As DataTable = GetDataTable(
@@ -599,8 +598,9 @@ Partial Class ChildRequest
                 Return
             End If
 
-            If String.IsNullOrEmpty(birthDate) Then
-                ShowModalAlert("warning", "تاریخ تولد الزامی", "لطفاً تاریخ تولد فرزند را وارد کنید (مثال: 1390/05/15).")
+            Dim dateError As String = ""
+            If Not IsValidPersianDate(birthDate, dateError) Then
+                ShowModalAlert("warning", "تاریخ تولد نامعتبر", dateError)
                 Return
             End If
 
@@ -653,42 +653,14 @@ Partial Class ChildRequest
         End Try
     End Sub
 
-    ' ============================================================
-    ' Events: DropDownList — نوع تحصیل
-    ' ============================================================
     Protected Sub ddlChildType_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs)
         Try
-            HidePanel(pnlConditionHint, "chr-condition-hint")
-            HidePanel(pnlPrimaryBox, "chr-primary-box")
-            HidePanel(pnlExtraDocument, "chr-extra-doc-panel")
-            HidePanel(pnlTranscriptUpload, "")
-            HidePanel(pnlUniversity, "")
-            HidePanel(pnlSchool, "")
-            HidePanel(pnlStudentCard, "chr-student-card-panel")
-            HidePanel(pnlRankInput, "")
-            HidePanel(pnlWithoutExamReason, "")
-
-            ddlEducationLevel.Items.Clear()
+            ApplyChildTypeUI()
 
             If String.IsNullOrEmpty(ddlChildType.SelectedValue) Then
+                ddlEducationLevel.Items.Clear()
                 ddlEducationLevel.Items.Add(New ListItem("-- ابتدا نوع تحصیل را انتخاب کنید --", ""))
                 Return
-            End If
-
-            Dim isStudent As Boolean = (ddlChildType.SelectedValue = "دانشجو")
-
-            If isStudent Then
-                ' ✅ دانشجو: دانشگاه + کارت دانشجویی
-                ShowPanel(pnlUniversity, "")
-                ShowPanel(pnlStudentCard, "chr-student-card-panel")
-                HidePanel(pnlSchool, "")
-                HidePanel(pnlTranscriptUpload, "")
-            Else
-                ' ✅ دانش‌آموز: مدرسه + کارنامه
-                ShowPanel(pnlSchool, "")
-                ShowPanel(pnlTranscriptUpload, "")
-                HidePanel(pnlUniversity, "")
-                HidePanel(pnlStudentCard, "chr-student-card-panel")
             End If
 
             LoadEducationLevels(ddlChildType.SelectedValue)
@@ -696,6 +668,41 @@ Partial Class ChildRequest
         Catch ex As Exception
             ShowToast("error", "خطا: " & ex.Message)
         End Try
+    End Sub
+
+    ' ✅ منطق مشترک نمایش/مخفی‌سازی پنل‌ها بر اساس نوع تحصیل
+    Private Sub ApplyChildTypeUI()
+        HidePanel(pnlConditionHint, "chr-condition-hint")
+        HidePanel(pnlPrimaryBox, "chr-primary-box")
+        HidePanel(pnlExtraDocument, "chr-extra-doc-panel")
+        HidePanel(pnlTranscriptUpload, "")
+        HidePanel(pnlUniversity, "")
+        HidePanel(pnlSchool, "")
+        HidePanel(pnlStudentCard, "chr-student-card-panel")
+        HidePanel(pnlRankInput, "")
+        HidePanel(pnlWithoutExamReason, "")
+
+        If String.IsNullOrEmpty(ddlChildType.SelectedValue) Then Return
+
+        Dim isStudent As Boolean = (ddlChildType.SelectedValue = "دانشجو")
+
+        If isStudent Then
+            ShowPanel(pnlUniversity, "")
+            ShowPanel(pnlStudentCard, "chr-student-card-panel")
+            HidePanel(pnlSchool, "")
+            HidePanel(pnlTranscriptUpload, "")
+
+            ScriptManager.RegisterStartupScript(Me, Me.GetType(), "showForeignGrades_" & Guid.NewGuid().ToString("N"),
+                "var el = document.getElementById('divForeignGrades'); if(el) el.style.display = 'block';", True)
+        Else
+            ShowPanel(pnlSchool, "")
+            ShowPanel(pnlTranscriptUpload, "")
+            HidePanel(pnlUniversity, "")
+            HidePanel(pnlStudentCard, "chr-student-card-panel")
+
+            ScriptManager.RegisterStartupScript(Me, Me.GetType(), "hideForeignGrades_" & Guid.NewGuid().ToString("N"),
+                "var el = document.getElementById('divForeignGrades'); if(el) el.style.display = 'none';", True)
+        End If
     End Sub
 
     Private Sub LoadEducationLevels(ByVal childType As String)
@@ -735,47 +742,53 @@ Partial Class ChildRequest
 
             If String.IsNullOrEmpty(ddlEducationLevel.SelectedValue) Then Return
 
-            Dim levelID As Integer = Convert.ToInt32(ddlEducationLevel.SelectedValue)
-            Dim dt As DataTable = GetDataTable(
-                "SELECT Condition, MinAverage, RowNumber FROM exmChildConditions WHERE ID = @ID",
-                New SqlParameter("@ID", levelID))
-
-            If dt.Rows.Count = 0 Then Return
-
-            Dim rowNumber As Integer = Convert.ToInt32(dt.Rows(0)("RowNumber"))
-            Dim condition As String = dt.Rows(0)("Condition").ToString()
-            Dim isPrimary As Boolean = (rowNumber = 1 OrElse rowNumber = 2)
-
-            If isPrimary Then
-                ShowPanel(pnlPrimaryBox, "chr-primary-box")
-                HidePanel(pnlAverageRow, "")
-                HidePanel(pnlConditionHint, "chr-condition-hint")
-                txtAverage.Text = ""
-                ShowPanel(pnlTranscriptUpload, "")
-                Return
-            End If
-
-            ShowPanel(pnlAverageRow, "")
-            lblCondition.Text = condition
-            ShowPanel(pnlConditionHint, "chr-condition-hint")
-
-            Dim isStudent As Boolean = (ddlChildType.SelectedValue = "دانشجو")
-            If Not isStudent Then
-                ShowPanel(pnlTranscriptUpload, "")
-            Else
-                HidePanel(pnlTranscriptUpload, "")
-            End If
-
-            CheckExtraDocumentRequirement(condition)
+            ApplyEducationLevelUI(Convert.ToInt32(ddlEducationLevel.SelectedValue))
 
         Catch ex As Exception
             ShowToast("error", "خطا: " & ex.Message)
         End Try
     End Sub
 
-    ' ============================================================
-    ' ✅ نوع ورود به دانشگاه: با آزمون / بدون آزمون
-    ' ============================================================
+    ' ✅ منطق مشترک نمایش پنل‌های شرطی مقطع
+    Private Sub ApplyEducationLevelUI(ByVal levelID As Integer)
+        HidePanel(pnlConditionHint, "chr-condition-hint")
+        HidePanel(pnlPrimaryBox, "chr-primary-box")
+
+        If levelID <= 0 Then Return
+
+        Dim dt As DataTable = GetDataTable(
+            "SELECT Condition, MinAverage, RowNumber FROM exmChildConditions WHERE ID = @ID",
+            New SqlParameter("@ID", levelID))
+
+        If dt.Rows.Count = 0 Then Return
+
+        Dim rowNumber As Integer = Convert.ToInt32(dt.Rows(0)("RowNumber"))
+        Dim condition As String = If(IsDBNull(dt.Rows(0)("Condition")), "", dt.Rows(0)("Condition").ToString())
+        Dim isPrimary As Boolean = (rowNumber = 1 OrElse rowNumber = 2)
+
+        If isPrimary Then
+            ShowPanel(pnlPrimaryBox, "chr-primary-box")
+            HidePanel(pnlAverageRow, "")
+            HidePanel(pnlConditionHint, "chr-condition-hint")
+            txtAverage.Text = ""
+            ShowPanel(pnlTranscriptUpload, "")
+            Return
+        End If
+
+        ShowPanel(pnlAverageRow, "")
+        lblCondition.Text = condition
+        ShowPanel(pnlConditionHint, "chr-condition-hint")
+
+        Dim isStudent As Boolean = (ddlChildType.SelectedValue = "دانشجو")
+        If Not isStudent Then
+            ShowPanel(pnlTranscriptUpload, "")
+        Else
+            HidePanel(pnlTranscriptUpload, "")
+        End If
+
+        CheckExtraDocumentRequirement(condition)
+    End Sub
+
     Protected Sub ddlAdmissionType_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs)
         Try
             HidePanel(pnlRankInput, "")
@@ -793,19 +806,14 @@ Partial Class ChildRequest
         End Try
     End Sub
 
-    ' ============================================================
-    ' ✅ چک‌باکس سمپاد
-    ' ============================================================
     Protected Sub chkSampad_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs)
         Try
             If chkSampad.Checked Then
                 ShowPanel(pnlSampadDetails, "")
                 hfSampadSelected.Value = "1"
-                ' اگر سمپاد انتخاب شد، نوع مدرسه به سمپاد تغییر کند
                 If ddlSchoolType.Items.FindByValue("سمپاد") IsNot Nothing Then
                     ddlSchoolType.SelectedValue = "سمپاد"
                 End If
-                ' مدرک استعدادهای درخشان الزامی می‌شود
                 hfRequiresExtraDoc.Value = "1"
                 hfExtraDocType.Value = "استعدادهای درخشان"
                 lblExtraDocTitle.Text = "📑 مدرک قبولی در سمپاد"
@@ -817,7 +825,6 @@ Partial Class ChildRequest
                 hfSampadSelected.Value = "0"
                 txtSampadSchoolName.Text = ""
                 txtSampadStudentNumber.Text = ""
-                ' اگر شرط دیگری برای مدرک اضافی وجود ندارد، پنهان شود
                 If String.IsNullOrEmpty(hfExtraDocType.Value) OrElse hfExtraDocType.Value = "استعدادهای درخشان" Then
                     hfRequiresExtraDoc.Value = "0"
                     hfExtraDocType.Value = ""
@@ -827,6 +834,22 @@ Partial Class ChildRequest
         Catch ex As Exception
             ShowToast("error", "خطا: " & ex.Message)
         End Try
+    End Sub
+
+    Protected Sub chkIsOlympiad_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs)
+        Try
+            If chkIsOlympiad.Checked Then
+                ShowPanel(pnlOlympiadDetails, "")
+            Else
+                HidePanel(pnlOlympiadDetails, "")
+            End If
+        Catch ex As Exception
+            ShowToast("error", "خطا: " & ex.Message)
+        End Try
+    End Sub
+
+    Protected Sub btnUploadOlympiadDoc_Click(ByVal sender As Object, ByVal e As EventArgs)
+        HandleFileUpload(fuOlympiadDoc, "TempOlympiad_" & _personCode, lblOlympiadDocStatus, "مدرک المپیاد", hfOlympiadDocUploaded)
     End Sub
 
     Private Sub CheckExtraDocumentRequirement(ByVal condition As String)
@@ -875,7 +898,6 @@ Partial Class ChildRequest
             End If
         End If
 
-        ' اگر سمپاد انتخاب شده، مدرک استعدادهای درخشان الزامی است
         If hfSampadSelected.Value = "1" Then
             requires = True
             title = "📑 مدرک قبولی در سمپاد"
@@ -899,24 +921,12 @@ Partial Class ChildRequest
         End If
     End Sub
 
-    ' ============================================================
-    ' Upload Handlers — عمومی
-    ' ============================================================
     Protected Sub btnUploadTranscript_Click(ByVal sender As Object, ByVal e As EventArgs)
         HandleFileUpload(fuTranscript, "TempTranscript_" & _personCode, lblTranscriptStatus, "کارنامه", hfTranscriptUploaded)
     End Sub
 
     Protected Sub btnUploadExtraDoc_Click(ByVal sender As Object, ByVal e As EventArgs)
         HandleFileUpload(fuExtraDocument, "TempExtraDoc_" & _personCode, lblExtraDocStatus, "مدرک", hfExtraDocUploaded)
-    End Sub
-
-    ' ✅ Handler های جدید
-    Protected Sub btnUploadBirthCert_Click(ByVal sender As Object, ByVal e As EventArgs)
-        HandleFileUpload(fuBirthCertificate, "TempBirthCert_" & _personCode, lblBirthCertStatus, "شناسنامه", hfBirthCertUploaded)
-    End Sub
-
-    Protected Sub btnUploadNationalCard_Click(ByVal sender As Object, ByVal e As EventArgs)
-        HandleFileUpload(fuNationalCard, "TempNationalCard_" & _personCode, lblNationalCardStatus, "کارت ملی", hfNationalCardUploaded)
     End Sub
 
     Protected Sub btnUploadStudentCard_Click(ByVal sender As Object, ByVal e As EventArgs)
@@ -1021,9 +1031,6 @@ Partial Class ChildRequest
         End Try
     End Function
 
-    ' ============================================================
-    ' History
-    ' ============================================================
     Protected Sub rptHistory_ItemDataBound(ByVal sender As Object, ByVal e As RepeaterItemEventArgs)
         Try
             If e.Item.ItemType <> ListItemType.Item AndAlso e.Item.ItemType <> ListItemType.AlternatingItem Then Return
@@ -1067,6 +1074,9 @@ Partial Class ChildRequest
         End Try
     End Sub
 
+    ' ============================================================
+    ' ✅ اصلاح‌شده: LoadRequestForEdit — حل مشکل کلیک دوباره و نمایش فایل فعلی المپیاد
+    ' ============================================================
     Private Sub LoadRequestForEdit(ByVal requestID As Integer)
         Try
             Dim dt As DataTable = GetDataTable(
@@ -1087,6 +1097,7 @@ Partial Class ChildRequest
             lblEditMode.Visible = True
             pnlEditBanner.Visible = True
             lblEditChildName.Text = row("ChildFullName").ToString()
+            pnlGuide.Visible = False
 
             Dim reasonFromHistory As String = ""
             Dim commentFromHistory As String = ""
@@ -1151,28 +1162,40 @@ Partial Class ChildRequest
             ShowPanel(pnlDocuments, "chr-section documents")
             ShowPanel(pnlAverageRow, "")
 
-            If Not IsDBNull(row("ChildType")) Then ddlChildType.SelectedValue = row("ChildType").ToString()
+            ' ✅ ست کردن نوع تحصیل
+            If Not IsDBNull(row("ChildType")) Then
+                Dim ct As String = row("ChildType").ToString().Trim()
+                Dim liType As ListItem = ddlChildType.Items.FindByValue(ct)
+                If liType IsNot Nothing Then
+                    ddlChildType.ClearSelection()
+                    liType.Selected = True
+                End If
+            End If
 
+            ' ✅ اعمال کامل UI نوع تحصیل (به جای اینکه منتظر SelectedIndexChanged بمانیم)
+            ApplyChildTypeUI()
+
+            ' ✅ بارگذاری مقاطع بر اساس نوع تحصیل
             If Not String.IsNullOrEmpty(ddlChildType.SelectedValue) Then
-                Dim isStudent As Boolean = (ddlChildType.SelectedValue = "دانشجو")
-                If isStudent Then
-                    ShowPanel(pnlUniversity, "")
-                    ShowPanel(pnlStudentCard, "chr-student-card-panel")
-                    HidePanel(pnlSchool, "")
-                    HidePanel(pnlTranscriptUpload, "")
-                Else
-                    ShowPanel(pnlSchool, "")
-                    ShowPanel(pnlTranscriptUpload, "")
-                    HidePanel(pnlUniversity, "")
-                    HidePanel(pnlStudentCard, "chr-student-card-panel")
+                LoadEducationLevels(ddlChildType.SelectedValue)
+
+                ' ✅ ست کردن مقطع
+                If Not IsDBNull(row("EducationLevelID")) Then
+                    Dim levelID As String = row("EducationLevelID").ToString().Trim()
+                    Dim liLevel As ListItem = ddlEducationLevel.Items.FindByValue(levelID)
+                    If liLevel IsNot Nothing Then
+                        ddlEducationLevel.ClearSelection()
+                        liLevel.Selected = True
+                    End If
                 End If
 
-                LoadEducationLevels(ddlChildType.SelectedValue)
+                ' ✅ اعمال کامل UI مقطع
+                Dim lvlID As Integer = 0
                 If Not IsDBNull(row("EducationLevelID")) Then
-                    Dim levelID As String = row("EducationLevelID").ToString()
-                    If ddlEducationLevel.Items.FindByValue(levelID) IsNot Nothing Then
-                        ddlEducationLevel.SelectedValue = levelID
-                    End If
+                    Integer.TryParse(row("EducationLevelID").ToString(), lvlID)
+                End If
+                If lvlID > 0 Then
+                    ApplyEducationLevelUI(lvlID)
                 End If
             End If
 
@@ -1180,7 +1203,6 @@ Partial Class ChildRequest
                 txtAverage.Text = Convert.ToDecimal(row("Average")).ToString("0.00")
             End If
 
-            ' ✅ فیلدهای جدید
             If dt.Columns.Contains("SchoolName") AndAlso Not IsDBNull(row("SchoolName")) Then txtSchoolName.Text = row("SchoolName").ToString()
             If dt.Columns.Contains("SchoolType") AndAlso Not IsDBNull(row("SchoolType")) Then ddlSchoolType.SelectedValue = row("SchoolType").ToString()
             If dt.Columns.Contains("SchoolPhone") AndAlso Not IsDBNull(row("SchoolPhone")) Then txtSchoolPhone.Text = row("SchoolPhone").ToString()
@@ -1218,9 +1240,23 @@ Partial Class ChildRequest
             If dt.Columns.Contains("SampadSchoolName") AndAlso Not IsDBNull(row("SampadSchoolName")) Then txtSampadSchoolName.Text = row("SampadSchoolName").ToString()
             If dt.Columns.Contains("SampadStudentNumber") AndAlso Not IsDBNull(row("SampadStudentNumber")) Then txtSampadStudentNumber.Text = row("SampadStudentNumber").ToString()
 
-            ' ✅ فایل‌های قدیمی
-            Dim transcriptFile As String = If(IsDBNull(row("TranscriptFileName")), "", row("TranscriptFileName").ToString())
-            Dim extraDocFile As String = If(IsDBNull(row("ExtraDocumentFileName")), "", row("ExtraDocumentFileName").ToString())
+            If dt.Columns.Contains("IsOlympiad") AndAlso Not IsDBNull(row("IsOlympiad")) Then
+                chkIsOlympiad.Checked = Convert.ToBoolean(row("IsOlympiad"))
+                If chkIsOlympiad.Checked Then
+                    ShowPanel(pnlOlympiadDetails, "")
+                End If
+            End If
+
+            If dt.Columns.Contains("IsExceptional") AndAlso Not IsDBNull(row("IsExceptional")) Then
+                chkIsExceptional.Checked = Convert.ToBoolean(row("IsExceptional"))
+            End If
+
+            If dt.Columns.Contains("ForeignGradeTitleA") AndAlso Not IsDBNull(row("ForeignGradeTitleA")) Then txtGradeTitleA.Text = row("ForeignGradeTitleA").ToString()
+            If dt.Columns.Contains("ForeignGradeTitleB") AndAlso Not IsDBNull(row("ForeignGradeTitleB")) Then txtGradeTitleB.Text = row("ForeignGradeTitleB").ToString()
+
+            ' ✅ فایل‌های قدیمی — کارنامه
+            Dim transcriptFile As String = If(IsDBNull(row("TranscriptFileName")), "", row("TranscriptFileName").ToString().Trim())
+            Dim extraDocFile As String = If(IsDBNull(row("ExtraDocumentFileName")), "", row("ExtraDocumentFileName").ToString().Trim())
 
             If Not String.IsNullOrEmpty(transcriptFile) Then
                 pnlOldTranscript.Visible = True
@@ -1242,35 +1278,32 @@ Partial Class ChildRequest
                 lnkDownloadOldExtra.HRef = ResolveUrl("~/DownloadMyChildDoc.ashx") & "?id=" & requestID & "&type=extra&mode=download"
             End If
 
-            ' ✅ فایل‌های هویتی
             If dt.Columns.Contains("BirthCertificateFileName") AndAlso Not IsDBNull(row("BirthCertificateFileName")) Then
-                Dim fn As String = row("BirthCertificateFileName").ToString()
+                Dim fn As String = row("BirthCertificateFileName").ToString().Trim()
                 If Not String.IsNullOrEmpty(fn) Then
-                    pnlOldBirthCert.Visible = True
-                    lblOldBirthCertName.Text = fn
-                    lblBirthCertStatus.Text = "✅ فایل فعلی موجود است."
-                    lblBirthCertStatus.CssClass = "upload-status"
+                    pnlOldIdentityFiles.Visible = True
+                    pnlOldBirthCertView.Visible = True
+                    lblOldBirthCertName2.Text = fn
                     hfBirthCertUploaded.Value = "1"
-                    lnkViewOldBirthCert.HRef = ResolveUrl("~/DownloadMyChildDoc.ashx") & "?id=" & requestID & "&type=birthcert&mode=view"
-                    lnkDownloadOldBirthCert.HRef = ResolveUrl("~/DownloadMyChildDoc.ashx") & "?id=" & requestID & "&type=birthcert&mode=download"
+                    lnkViewOldBirthCert2.HRef = ResolveUrl("~/DownloadMyChildDoc.ashx") & "?id=" & requestID & "&type=birthcert&mode=view"
+                    lnkDownloadOldBirthCert2.HRef = ResolveUrl("~/DownloadMyChildDoc.ashx") & "?id=" & requestID & "&type=birthcert&mode=download"
                 End If
             End If
 
             If dt.Columns.Contains("NationalCardFileName") AndAlso Not IsDBNull(row("NationalCardFileName")) Then
-                Dim fn As String = row("NationalCardFileName").ToString()
+                Dim fn As String = row("NationalCardFileName").ToString().Trim()
                 If Not String.IsNullOrEmpty(fn) Then
-                    pnlOldNationalCard.Visible = True
-                    lblOldNationalCardName.Text = fn
-                    lblNationalCardStatus.Text = "✅ فایل فعلی موجود است."
-                    lblNationalCardStatus.CssClass = "upload-status"
+                    pnlOldIdentityFiles.Visible = True
+                    pnlOldNationalCardView.Visible = True
+                    lblOldNationalCardName2.Text = fn
                     hfNationalCardUploaded.Value = "1"
-                    lnkViewOldNationalCard.HRef = ResolveUrl("~/DownloadMyChildDoc.ashx") & "?id=" & requestID & "&type=nationalcard&mode=view"
-                    lnkDownloadOldNationalCard.HRef = ResolveUrl("~/DownloadMyChildDoc.ashx") & "?id=" & requestID & "&type=nationalcard&mode=download"
+                    lnkViewOldNationalCard2.HRef = ResolveUrl("~/DownloadMyChildDoc.ashx") & "?id=" & requestID & "&type=nationalcard&mode=view"
+                    lnkDownloadOldNationalCard2.HRef = ResolveUrl("~/DownloadMyChildDoc.ashx") & "?id=" & requestID & "&type=nationalcard&mode=download"
                 End If
             End If
 
             If dt.Columns.Contains("StudentCardFileName") AndAlso Not IsDBNull(row("StudentCardFileName")) Then
-                Dim fn As String = row("StudentCardFileName").ToString()
+                Dim fn As String = row("StudentCardFileName").ToString().Trim()
                 If Not String.IsNullOrEmpty(fn) Then
                     pnlOldStudentCard.Visible = True
                     lblOldStudentCardName.Text = fn
@@ -1280,6 +1313,24 @@ Partial Class ChildRequest
                     lnkViewOldStudentCard.HRef = ResolveUrl("~/DownloadMyChildDoc.ashx") & "?id=" & requestID & "&type=studentcard&mode=view"
                     lnkDownloadOldStudentCard.HRef = ResolveUrl("~/DownloadMyChildDoc.ashx") & "?id=" & requestID & "&type=studentcard&mode=download"
                 End If
+            End If
+
+            ' ✅✅✅ فایل فعلی المپیاد: نمایش پنل مشاهده/دانلود (مثل بقیه مدارک)
+            If dt.Columns.Contains("OlympiadDocFileName") AndAlso Not IsDBNull(row("OlympiadDocFileName")) Then
+                Dim olympiadFile As String = row("OlympiadDocFileName").ToString().Trim()
+                If Not String.IsNullOrEmpty(olympiadFile) Then
+                    hfOlympiadDocUploaded.Value = "1"
+                    pnlOldOlympiadDoc.Visible = True
+                    lblOldOlympiadDocName.Text = olympiadFile
+                    lblOlympiadDocStatus.Text = "✅ فایل فعلی موجود است. برای تغییر، فایل جدید بارگذاری کنید."
+                    lblOlympiadDocStatus.CssClass = "upload-status"
+                    lnkViewOldOlympiad.HRef = ResolveUrl("~/DownloadMyChildDoc.ashx") & "?id=" & requestID & "&type=olympiad&mode=view"
+                    lnkDownloadOldOlympiad.HRef = ResolveUrl("~/DownloadMyChildDoc.ashx") & "?id=" & requestID & "&type=olympiad&mode=download"
+                Else
+                    pnlOldOlympiadDoc.Visible = False
+                End If
+            Else
+                pnlOldOlympiadDoc.Visible = False
             End If
 
             Dim extraDocType As String = If(IsDBNull(row("ExtraDocumentType")), "", row("ExtraDocumentType").ToString())
@@ -1292,41 +1343,21 @@ Partial Class ChildRequest
                 lblExtraDocDescription.Text = "لطفاً در صورت نیاز فایل جدید بارگذاری کنید."
             End If
 
+            ' ✅ اعمال مجدد UI مقطع برای حالت ابتدایی
             Dim levelIDForCheck As Integer = 0
             If Not IsDBNull(row("EducationLevelID")) Then
                 Integer.TryParse(row("EducationLevelID").ToString(), levelIDForCheck)
             End If
 
             If levelIDForCheck > 0 Then
-                Dim dtLevel As DataTable = GetDataTable(
-                    "SELECT RowNumber FROM exmChildConditions WHERE ID = @ID",
-                    New SqlParameter("@ID", levelIDForCheck))
-
-                If dtLevel.Rows.Count > 0 Then
-                    Dim rowNum As Integer = Convert.ToInt32(dtLevel.Rows(0)("RowNumber"))
-                    Dim isPrimary As Boolean = (rowNum = 1 OrElse rowNum = 2)
-
-                    If isPrimary Then
-                        ShowPanel(pnlPrimaryBox, "chr-primary-box")
-                        HidePanel(pnlAverageRow, "")
-                        txtAverage.Text = ""
-                        ShowPanel(pnlTranscriptUpload, "")
-                    Else
-                        HidePanel(pnlPrimaryBox, "chr-primary-box")
-                        ShowPanel(pnlAverageRow, "")
-
-                        If ddlChildType.SelectedValue = "دانشجو" Then
-                            ShowPanel(pnlUniversity, "")
-                            ShowPanel(pnlStudentCard, "chr-student-card-panel")
-                            HidePanel(pnlTranscriptUpload, "")
-                        Else
-                            ShowPanel(pnlTranscriptUpload, "")
-                        End If
-                    End If
-                End If
+                ApplyEducationLevelUI(levelIDForCheck)
             End If
 
             LoadChildren()
+
+            ' ✅ به‌روزرسانی UpdatePanelها برای اینکه تغییرات بلافاصله اعمال شوند
+            If upMain IsNot Nothing Then upMain.Update()
+            If upHistory IsNot Nothing Then upHistory.Update()
 
             Dim script As String = "setTimeout(function(){ var el = document.querySelector('.chr-edit-banner'); if(el) el.scrollIntoView({behavior:'smooth', block:'start'}); }, 500);"
             ScriptManager.RegisterStartupScript(Me, Me.GetType(), "scrollToEdit_" & Guid.NewGuid().ToString("N"), script, True)
@@ -1353,9 +1384,6 @@ Partial Class ChildRequest
         End Try
     End Sub
 
-    ' ============================================================
-    ' ✅ اعتبارسنجی فرم — با مدارک اجباری جدید
-    ' ============================================================
     Private Function ValidateForm() As Boolean
         Dim isEditMode As Boolean = (hfEditingRequestID.Value <> "0" AndAlso hfEditingRequestID.Value <> "")
 
@@ -1374,7 +1402,6 @@ Partial Class ChildRequest
             Return False
         End If
 
-        ' ✅ بررسی مدارک هویتی اجباری
         Dim hasBirthCert As Boolean = (Session("TempBirthCert_" & _personCode & "_Path") IsNot Nothing) OrElse (hfBirthCertUploaded.Value = "1")
         If Not hasBirthCert Then
             ShowModalAlert("warning", "شناسنامه الزامی",
@@ -1391,7 +1418,6 @@ Partial Class ChildRequest
 
         Dim isStudent As Boolean = (ddlChildType.SelectedValue = "دانشجو")
 
-        ' ✅ بررسی کارت دانشجویی برای دانشجو
         If isStudent Then
             Dim hasStudentCard As Boolean = (Session("TempStudentCard_" & _personCode & "_Path") IsNot Nothing) OrElse (hfStudentCardUploaded.Value = "1")
             If Not hasStudentCard Then
@@ -1400,7 +1426,6 @@ Partial Class ChildRequest
                 Return False
             End If
 
-            ' ✅ اطلاعات دانشگاه اجباری
             If String.IsNullOrEmpty(txtUniversityName.Text.Trim()) Then
                 ShowModalAlert("warning", "نام دانشگاه الزامی", "لطفاً نام دانشگاه/مؤسسه را وارد کنید.")
                 Return False
@@ -1441,7 +1466,6 @@ Partial Class ChildRequest
                 End If
             End If
         Else
-            ' ✅ اطلاعات مدرسه اجباری برای دانش‌آموز
             If String.IsNullOrEmpty(txtSchoolName.Text.Trim()) Then
                 ShowModalAlert("warning", "نام مدرسه الزامی", "لطفاً نام مدرسه را وارد کنید.")
                 Return False
@@ -1457,11 +1481,20 @@ Partial Class ChildRequest
                 Return False
             End If
 
-            ' ✅ بررسی کارنامه برای دانش‌آموز
             Dim hasTranscript As Boolean = (Session("TempTranscript_" & _personCode & "_Path") IsNot Nothing) OrElse (hfTranscriptUploaded.Value = "1")
             If Not hasTranscript Then
                 ShowModalAlert("warning", "کارنامه الزامی",
                     "لطفاً تصویر کارنامه دانش‌آموز را در بخش مدارک بارگذاری کنید.")
+                Return False
+            End If
+        End If
+
+        ' ✅ بررسی المپیاد: هم Session (آپلود جدید) و هم hfOlympiadDocUploaded (فایل موجود در DB) چک می‌شود
+        If chkIsOlympiad.Checked Then
+            Dim hasOlympiadDoc As Boolean = (Session("TempOlympiad_" & _personCode & "_Path") IsNot Nothing) OrElse (hfOlympiadDocUploaded.Value = "1")
+            If Not hasOlympiadDoc Then
+                ShowModalAlert("warning", "مدرک المپیاد الزامی",
+                    "لطفاً تصویر کارنامه/مدرک قبولی المپیاد را بارگذاری کنید.")
                 Return False
             End If
         End If
@@ -1542,9 +1575,6 @@ Partial Class ChildRequest
         End Try
     End Function
 
-    ' ============================================================
-    ' ✅ ذخیره درخواست — با فیلدهای جدید
-    ' ============================================================
     Private Sub SaveRequest()
         Try
             Dim isStudent As Boolean = (ddlChildType.SelectedValue = "دانشجو")
@@ -1577,13 +1607,13 @@ Partial Class ChildRequest
             Dim birthCertFile As String = ""
             Dim nationalCardFile As String = ""
             Dim studentCardFile As String = ""
+            Dim olympiadDocFile As String = ""
 
-            ' ✅ بازیابی فایل‌های قدیمی در حالت ویرایش
             If isEditMode Then
                 Dim editID As Integer = Convert.ToInt32(hfEditingRequestID.Value)
                 Dim dtOld As DataTable = GetDataTable(
                     "SELECT TranscriptFileName, ExtraDocumentFileName, BirthCertificateFileName, " &
-                    "       NationalCardFileName, StudentCardFileName " &
+                    "       NationalCardFileName, StudentCardFileName, OlympiadDocFileName " &
                     "FROM exmChildRequests WHERE ID = @ID",
                     New SqlParameter("@ID", editID))
                 If dtOld.Rows.Count > 0 Then
@@ -1598,10 +1628,12 @@ Partial Class ChildRequest
                     If dtOld.Columns.Contains("StudentCardFileName") AndAlso dtOld.Rows(0)("StudentCardFileName") IsNot DBNull.Value Then
                         studentCardFile = dtOld.Rows(0)("StudentCardFileName").ToString()
                     End If
+                    If dtOld.Columns.Contains("OlympiadDocFileName") AndAlso dtOld.Rows(0)("OlympiadDocFileName") IsNot DBNull.Value Then
+                        olympiadDocFile = dtOld.Rows(0)("OlympiadDocFileName").ToString()
+                    End If
                 End If
             End If
 
-            ' ✅ انتقال فایل‌های جدید از Temp
             If Session("TempBirthCert_" & _personCode & "_Path") IsNot Nothing Then
                 Dim newFile As String = MoveFileFromTemp("TempBirthCert_" & _personCode, childName, "شناسنامه")
                 If Not String.IsNullOrEmpty(newFile) Then birthCertFile = newFile
@@ -1620,6 +1652,11 @@ Partial Class ChildRequest
             If Not isStudent AndAlso Session("TempTranscript_" & _personCode & "_Path") IsNot Nothing Then
                 Dim newFile As String = MoveFileFromTemp("TempTranscript_" & _personCode, childName, "کارنامه")
                 If Not String.IsNullOrEmpty(newFile) Then transcriptFile = newFile
+            End If
+
+            If chkIsOlympiad.Checked AndAlso Session("TempOlympiad_" & _personCode & "_Path") IsNot Nothing Then
+                Dim newFile As String = MoveFileFromTemp("TempOlympiad_" & _personCode, childName, "مدرک-المپیاد")
+                If Not String.IsNullOrEmpty(newFile) Then olympiadDocFile = newFile
             End If
 
             Dim docTypeForName As String = hfExtraDocType.Value
@@ -1664,6 +1701,9 @@ Partial Class ChildRequest
                     "  StudentNumber = @StudentNumber, AdmissionType = @AdmissionType, WithoutExamReason = @WithoutExamReason, " &
                     "  RankInExam = @RankInExam, " &
                     "  IsSampad = @IsSampad, SampadSchoolName = @SampadSchoolName, SampadStudentNumber = @SampadStudentNumber, " &
+                    "  IsExceptional = @IsExceptional, IsOlympiad = @IsOlympiad, " &
+                    "  OlympiadDocFileName = @OlympiadFile, OlympiadDocFilePath = @OlympiadPath, " &
+                    "  ForeignGradeTitleA = @GradeTitleA, ForeignGradeTitleB = @GradeTitleB, " &
                     "  TranscriptFileName = @TranscriptFile, TranscriptFilePath = @TranscriptPath, " &
                     "  ExtraDocumentFileName = @ExtraDocFile, ExtraDocumentFilePath = @ExtraDocPath, " &
                     "  ExtraDocumentType = @ExtraDocType, " &
@@ -1699,6 +1739,12 @@ Partial Class ChildRequest
                     New SqlParameter("@IsSampad", chkSampad.Checked),
                     New SqlParameter("@SampadSchoolName", ToDbNull(txtSampadSchoolName.Text.Trim())),
                     New SqlParameter("@SampadStudentNumber", ToDbNull(txtSampadStudentNumber.Text.Trim())),
+                    New SqlParameter("@IsExceptional", chkIsExceptional.Checked),
+                    New SqlParameter("@IsOlympiad", chkIsOlympiad.Checked),
+                    New SqlParameter("@OlympiadFile", ToDbNull(olympiadDocFile)),
+                    New SqlParameter("@OlympiadPath", ToDbNull(olympiadDocFile)),
+                    New SqlParameter("@GradeTitleA", ToDbNull(txtGradeTitleA.Text.Trim())),
+                    New SqlParameter("@GradeTitleB", ToDbNull(txtGradeTitleB.Text.Trim())),
                     New SqlParameter("@TranscriptFile", ToDbNull(transcriptFile)),
                     New SqlParameter("@TranscriptPath", ToDbNull(transcriptFile)),
                     New SqlParameter("@ExtraDocFile", ToDbNull(extraDocFile)),
@@ -1731,6 +1777,9 @@ Partial Class ChildRequest
                     "UniversityName, UniversityType, UniversityPhone, StudentNumber, " &
                     "AdmissionType, WithoutExamReason, RankInExam, " &
                     "IsSampad, SampadSchoolName, SampadStudentNumber, " &
+                    "IsExceptional, IsOlympiad, " &
+                    "OlympiadDocFileName, OlympiadDocFilePath, " &
+                    "ForeignGradeTitleA, ForeignGradeTitleB, " &
                     "AcademicYear, " &
                     "TranscriptFileName, TranscriptFilePath, " &
                     "ExtraDocumentFileName, ExtraDocumentFilePath, ExtraDocumentType, " &
@@ -1746,6 +1795,9 @@ Partial Class ChildRequest
                     "@UniversityName, @UniversityType, @UniversityPhone, @StudentNumber, " &
                     "@AdmissionType, @WithoutExamReason, @RankInExam, " &
                     "@IsSampad, @SampadSchoolName, @SampadStudentNumber, " &
+                    "@IsExceptional, @IsOlympiad, " &
+                    "@OlympiadFile, @OlympiadPath, " &
+                    "@GradeTitleA, @GradeTitleB, " &
                     "@AcademicYear, " &
                     "@TranscriptFile, @TranscriptPath, " &
                     "@ExtraDocFile, @ExtraDocPath, @ExtraDocType, " &
@@ -1782,6 +1834,12 @@ Partial Class ChildRequest
                     New SqlParameter("@IsSampad", chkSampad.Checked),
                     New SqlParameter("@SampadSchoolName", ToDbNull(txtSampadSchoolName.Text.Trim())),
                     New SqlParameter("@SampadStudentNumber", ToDbNull(txtSampadStudentNumber.Text.Trim())),
+                    New SqlParameter("@IsExceptional", chkIsExceptional.Checked),
+                    New SqlParameter("@IsOlympiad", chkIsOlympiad.Checked),
+                    New SqlParameter("@OlympiadFile", ToDbNull(olympiadDocFile)),
+                    New SqlParameter("@OlympiadPath", ToDbNull(olympiadDocFile)),
+                    New SqlParameter("@GradeTitleA", ToDbNull(txtGradeTitleA.Text.Trim())),
+                    New SqlParameter("@GradeTitleB", ToDbNull(txtGradeTitleB.Text.Trim())),
                     New SqlParameter("@AcademicYear", ACADEMIC_YEAR),
                     New SqlParameter("@TranscriptFile", ToDbNull(transcriptFile)),
                     New SqlParameter("@TranscriptPath", ToDbNull(transcriptFile)),
@@ -1825,9 +1883,8 @@ Partial Class ChildRequest
     Private Sub ResetAfterSubmit()
         lblTranscriptStatus.Text = ""
         lblExtraDocStatus.Text = ""
-        lblBirthCertStatus.Text = ""
-        lblNationalCardStatus.Text = ""
         lblStudentCardStatus.Text = ""
+        lblOlympiadDocStatus.Text = ""
         HidePanel(pnlEducation, "chr-section education")
         HidePanel(pnlDocuments, "chr-section documents")
         pnlEditBanner.Visible = False
@@ -1837,10 +1894,10 @@ Partial Class ChildRequest
         lblEditMode.Visible = False
         pnlOldTranscript.Visible = False
         pnlOldExtraDoc.Visible = False
-        pnlOldBirthCert.Visible = False
-        pnlOldNationalCard.Visible = False
         pnlOldStudentCard.Visible = False
-
+        pnlOldOlympiadDoc.Visible = False
+        pnlGuide.Visible = True
+        pnlOldIdentityFiles.Visible = False
         hfSelectedChildID.Value = "0"
         hfEditingRequestID.Value = "0"
         hfEditingChildID.Value = "0"
@@ -1852,6 +1909,7 @@ Partial Class ChildRequest
         hfNationalCardUploaded.Value = "0"
         hfStudentCardUploaded.Value = "0"
         hfSampadSelected.Value = "0"
+        hfOlympiadDocUploaded.Value = "0"
 
         btnSubmit.Text = "📤 ارسال نهایی"
         btnSubmit.CssClass = "chr-btn chr-btn-submit"
@@ -2170,8 +2228,149 @@ Partial Class ChildRequest
         Return result
     End Function
 
+    Private Function IsValidPersianDate(ByVal dateStr As String, ByRef errorMsg As String) As Boolean
+        errorMsg = ""
+        If String.IsNullOrEmpty(dateStr) Then
+            errorMsg = "تاریخ تولد الزامی است."
+            Return False
+        End If
+
+        Dim pattern As String = "^\d{4}/\d{2}/\d{2}$"
+        If Not Regex.IsMatch(dateStr, pattern) Then
+            errorMsg = "فرمت تاریخ تولد باید YYYY/MM/DD باشد (مثال: 1390/05/15)."
+            Return False
+        End If
+
+        Dim parts As String() = dateStr.Split("/"c)
+        Dim y As Integer, m As Integer, d As Integer
+
+        If Not Integer.TryParse(parts(0), y) OrElse Not Integer.TryParse(parts(1), m) OrElse Not Integer.TryParse(parts(2), d) Then
+            errorMsg = "تاریخ تولد نامعتبر است."
+            Return False
+        End If
+
+        If y < 1300 OrElse y > 1420 Then
+            errorMsg = "سال تولد باید بین ۱۳۰۰ تا ۱۴۲۰ باشد."
+            Return False
+        End If
+        If m < 1 OrElse m > 12 Then
+            errorMsg = "ماه تولد باید بین ۰۱ تا ۱۲ باشد."
+            Return False
+        End If
+        If d < 1 OrElse d > 31 Then
+            errorMsg = "روز تولد باید بین ۰۱ تا ۳۱ باشد."
+            Return False
+        End If
+
+        Dim isLeapYear As Boolean = IsPersianLeapYear(y)
+        Dim maxDaysInMonth As Integer
+
+        If m <= 6 Then
+            maxDaysInMonth = 31
+        ElseIf m <= 11 Then
+            maxDaysInMonth = 30
+        Else
+            maxDaysInMonth = If(isLeapYear, 30, 29)
+        End If
+
+        If d > maxDaysInMonth Then
+            errorMsg = "روز وارد شده برای این ماه معتبر نیست (حداکثر " & maxDaysInMonth & " روز)."
+            Return False
+        End If
+
+        Return True
+    End Function
+
+    Private Function IsPersianLeapYear(ByVal year As Integer) As Boolean
+        Dim y As Integer = year Mod 33
+        Return (y = 1 OrElse y = 5 OrElse y = 9 OrElse y = 13 OrElse y = 17 OrElse y = 22 OrElse y = 26 OrElse y = 30)
+    End Function
+
     Protected Sub btnCancel_Click(ByVal sender As Object, ByVal e As EventArgs)
         Response.Redirect("~/index.aspx")
     End Sub
 
+    Protected Sub btnUploadBothIdentity_Click(ByVal sender As Object, ByVal e As EventArgs)
+        Try
+            Dim successCount As Integer = 0
+            Dim errors As New List(Of String)()
+
+            If fuBirthCertificate.HasFile Then
+                Dim result As String = UploadSingleFile(fuBirthCertificate, "TempBirthCert_" & _personCode, hfBirthCertUploaded)
+                If String.IsNullOrEmpty(result) Then
+                    successCount += 1
+                Else
+                    errors.Add("📘 شناسنامه: " & result)
+                End If
+            Else
+                errors.Add("📘 شناسنامه: فایلی انتخاب نشده است")
+            End If
+
+            If fuNationalCard.HasFile Then
+                Dim result As String = UploadSingleFile(fuNationalCard, "TempNationalCard_" & _personCode, hfNationalCardUploaded)
+                If String.IsNullOrEmpty(result) Then
+                    successCount += 1
+                Else
+                    errors.Add("💳 کارت ملی: " & result)
+                End If
+            Else
+                errors.Add("💳 کارت ملی: فایلی انتخاب نشده است")
+            End If
+
+            If successCount = 2 Then
+                lblBothIdentityStatus.Text = "✅ هر دو فایل با موفقیت بارگذاری شدند"
+                lblBothIdentityStatus.CssClass = "upload-status"
+                ShowToast("success", "مدارک هویتی (شناسنامه + کارت ملی) با موفقیت بارگذاری شدند")
+
+                ScriptManager.RegisterStartupScript(Me, Me.GetType(), "scrollToIdentity_" & Guid.NewGuid().ToString("N"),
+                    "scrollToElement('pnlDocuments');", True)
+            ElseIf successCount = 1 Then
+                lblBothIdentityStatus.Text = "⚠️ یکی از فایل‌ها بارگذاری شد. " & String.Join(" | ", errors.ToArray())
+                lblBothIdentityStatus.CssClass = "upload-status error"
+                ShowToast("warning", "یکی از فایل‌ها بارگذاری نشد")
+            Else
+                lblBothIdentityStatus.Text = "❌ " & String.Join(" | ", errors.ToArray())
+                lblBothIdentityStatus.CssClass = "upload-status error"
+                ShowToast("error", "هیچ فایلی بارگذاری نشد")
+            End If
+
+            upMain.Update()
+
+        Catch ex As Exception
+            lblBothIdentityStatus.Text = "❌ خطا: " & ex.Message
+            lblBothIdentityStatus.CssClass = "upload-status error"
+            ShowToast("error", "خطا در بارگذاری: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Function UploadSingleFile(ByVal fileUpload As FileUpload, ByVal sessionKey As String,
+                                       ByVal uploadedFlag As HiddenField) As String
+        Try
+            If fileUpload.PostedFile.ContentLength > MAX_FILE_SIZE Then
+                Return "حجم فایل بیشتر از 2 مگابایت است"
+            End If
+
+            Dim ext As String = Path.GetExtension(fileUpload.FileName).ToLower()
+            If Not ALLOWED_EXTENSIONS.Contains(ext) Then
+                Return "فرمت مجاز نیست (فقط JPG، PNG، PDF)"
+            End If
+
+            Dim tempFolderPath As String = Server.MapPath(TEMP_FOLDER)
+            If Not Directory.Exists(tempFolderPath) Then Directory.CreateDirectory(tempFolderPath)
+
+            Dim tempFileName As String = "tmp_" & Guid.NewGuid().ToString("N") & ext
+            Dim tempFilePath As String = Path.Combine(tempFolderPath, tempFileName)
+
+            fileUpload.SaveAs(tempFilePath)
+
+            Session(sessionKey & "_Path") = tempFilePath
+            Session(sessionKey & "_Name") = fileUpload.FileName
+
+            If uploadedFlag IsNot Nothing Then uploadedFlag.Value = "1"
+
+            Return ""
+        Catch ex As Exception
+            Return "خطا: " & ex.Message
+        End Try
+    End Function
 End Class

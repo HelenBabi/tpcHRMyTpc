@@ -1,185 +1,476 @@
-﻿
-<%@ Master Language="VB" CodeFile="dabir.master.vb" Inherits="light_MasterPage" %>
-<%--<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>--%>
+﻿<%@ Master Language="VB" CodeFile="dabir.master.vb" Inherits="light_MasterPage" %>
 <!DOCTYPE html>
-<html lang="en" dir="rtl">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-	<meta name="description" content="">
-	<meta name="author" content="">
+<html lang="fa" dir="rtl">
+<head id="Head1" runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>پتروشیمی من</title>
 
-   <%-- <script src="../Scripts/jquery-1.4.1.js"></script>--%>
-   
-     <asp:ContentPlaceHolder id="head" runat="server">
-
-    </asp:ContentPlaceHolder>
-
-	<title>پتروشیمی من</title>
-   >
-   
     <link rel="icon" type="image/png" href="images/Logo-site.png" />
     <link href="dabir.css" rel="stylesheet" />
-	<!-- Main Styles -->
-	<link rel="stylesheet" href="assets/styles/style.min.css">
-	
-	<!-- Material Design Icon -->
-	<link rel="stylesheet" href="assets/fonts/material-design/css/materialdesignicons.css">
 
-	<!-- mCustomScrollbar -->
-	<link rel="stylesheet" href="assets/plugin/mCustomScrollbar/jquery.mCustomScrollbar.min.css">
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="assets/styles/style.min.css">
+    <link rel="stylesheet" href="assets/fonts/material-design/css/materialdesignicons.css">
+    <link rel="stylesheet" href="assets/plugin/mCustomScrollbar/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="assets/plugin/waves/waves.min.css">
+    <link rel="stylesheet" href="assets/plugin/sweet-alert/sweetalert.css">
+    <link rel="stylesheet" href="assets/styles/style-rtl.min.css">
 
-	<!-- Waves Effect -->
-	<link rel="stylesheet" href="assets/plugin/waves/waves.min.css">
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
 
-	<!-- Sweet Alert -->
-	<link rel="stylesheet" href="assets/plugin/sweet-alert/sweetalert.css">
-	
-	<!-- RTL -->
-	<link rel="stylesheet" href="assets/styles/style-rtl.min.css">
-   <link rel="icon" type="image/png" href="images/Logo-site.png" />
-   <%-- <script>
-        $(document).ready(function () {
-            $("#ImgProfile").
-            alert('');
-        });
-    </script>--%>
-    
-   
+    <!-- ✅ استایل مدرن مستر پیج -->
+    <style type="text/css">
+        :root {
+            --mp-primary: #0f766e;
+            --mp-primary-dark: #115e59;
+            --mp-primary-light: #14b8a6;
+            --mp-accent: #f59e0b;
+            --mp-bg: #f1f5f9;
+            --mp-card-bg: #ffffff;
+            --mp-text: #1e293b;
+            --mp-text-muted: #64748b;
+            --mp-border: #e2e8f0;
+            --mp-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+            --mp-shadow-lg: 0 10px 40px rgba(15, 23, 42, 0.12);
+            --mp-radius: 14px;
+            --mp-radius-sm: 10px;
+            --mp-header-h: 64px;
+            --mp-sidebar-w: 260px;
+            --mp-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: var(--mp-bg);
+            color: var(--mp-text);
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            font-size: 14px;
+            min-height: 100vh;
+        }
+
+        /* ✅ Layout اصلی */
+        .mp-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ✅ Sidebar */
+        .mp-sidebar {
+            width: var(--mp-sidebar-w);
+            background: linear-gradient(180deg, #0f172a 0%, #134e4a 100%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1030;
+            transition: var(--mp-transition);
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        /* ✅ حالت بسته شدن منو در دسکتاپ */
+        .mp-layout.sidebar-collapsed .mp-sidebar {
+            transform: translateX(100%);
+        }
+
+        .mp-sidebar-logo {
+            padding: 18px 20px;
+            font-size: 17px;
+            font-weight: 800;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .mp-sidebar-logo i { font-size: 24px; color: var(--mp-primary-light); }
+        .mp-sidebar-logo:hover { color: #fff; text-decoration: none; }
+
+        .mp-sidebar-user {
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .mp-sidebar-user .avatar-wrap { position: relative; flex-shrink: 0; }
+        .mp-sidebar-user .avatar-wrap img {
+            width: 48px; height: 48px; border-radius: 50%;
+            object-fit: cover; border: 2px solid var(--mp-primary-light); display: block;
+        }
+        .mp-sidebar-user .avatar-wrap .status {
+            position: absolute; bottom: 0; left: 0;
+            width: 12px; height: 12px; background: #22c55e;
+            border-radius: 50%; border: 2px solid #0f172a;
+        }
+        .mp-sidebar-user .user-info { flex: 1; min-width: 0; }
+        .mp-sidebar-user .user-name {
+            font-size: 14px; font-weight: 700; color: #fff; margin: 0 0 4px 0;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .mp-sidebar-user .user-role { font-size: 11px; color: rgba(255,255,255,0.6); margin: 0; }
+
+        .mp-sidebar-nav { flex: 1; overflow-y: auto; padding: 10px 0; }
+        .mp-sidebar-nav::-webkit-scrollbar { width: 6px; }
+        .mp-sidebar-nav::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 3px; }
+
+        /* منوها */
+        .mp-sidebar-nav ul.menu { list-style: none; margin: 0; padding: 0; }
+        .mp-sidebar-nav ul.menu > li { list-style: none; }
+        .mp-sidebar-nav ul.menu > li > a.parent-item {
+            display: flex; align-items: center; gap: 10px; padding: 11px 20px;
+            color: rgba(255, 255, 255, 0.82); text-decoration: none; font-size: 13px; font-weight: 600;
+            border-right: 3px solid transparent; transition: var(--mp-transition);
+        }
+        .mp-sidebar-nav ul.menu > li > a.parent-item:hover {
+            background: rgba(255, 255, 255, 0.06); color: #fff; border-right-color: var(--mp-primary-light);
+        }
+        .mp-sidebar-nav ul.menu > li > a.parent-item .menu-icon { font-size: 18px; color: var(--mp-primary-light); }
+        .mp-sidebar-nav ul.menu > li > a.parent-item .menu-arrow { margin-right: auto; transition: transform 0.25s; font-size: 12px; opacity: 0.6; }
+        .mp-sidebar-nav ul.menu > li.open > a.parent-item {
+            background: rgba(20, 184, 166, 0.15); color: #fff; border-right-color: var(--mp-primary-light);
+        }
+        .mp-sidebar-nav ul.menu > li.open > a.parent-item .menu-arrow { transform: rotate(180deg); }
+
+        .mp-sidebar-nav ul.sub-menu {
+            list-style: none; margin: 0; padding: 0; max-height: 0; overflow: hidden;
+            transition: max-height 0.3s ease; background: rgba(0, 0, 0, 0.18);
+        }
+        .mp-sidebar-nav ul.menu > li.open > ul.sub-menu { max-height: 800px; }
+        .mp-sidebar-nav ul.sub-menu > li > a {
+            display: block; padding: 9px 20px 9px 44px; color: rgba(255, 255, 255, 0.72);
+            text-decoration: none; font-size: 12.5px; font-weight: 500;
+            border-right: 3px solid transparent; transition: var(--mp-transition); position: relative;
+        }
+        .mp-sidebar-nav ul.sub-menu > li > a::before {
+            content: ''; position: absolute; right: 26px; top: 50%; transform: translateY(-50%);
+            width: 5px; height: 5px; background: rgba(255, 255, 255, 0.35); border-radius: 50%; transition: var(--mp-transition);
+        }
+        .mp-sidebar-nav ul.sub-menu > li > a:hover {
+            background: rgba(20, 184, 166, 0.18); color: #fff; border-right-color: var(--mp-primary-light); padding-right: 48px;
+        }
+        .mp-sidebar-nav ul.sub-menu > li > a:hover::before { background: var(--mp-primary-light); width: 8px; height: 8px; }
+
+        /* ✅ Main area */
+        .mp-main {
+            flex: 1; margin-right: var(--mp-sidebar-w); display: flex; flex-direction: column;
+            min-height: 100vh; transition: var(--mp-transition); min-width: 0;
+        }
+        
+        /* ✅ وقتی منو بسته شد، حاشیه محتوا صفر می‌شود تا تمام‌صفحه شود */
+        .mp-layout.sidebar-collapsed .mp-main {
+            margin-right: 0;
+        }
+
+        /* ✅ Header */
+        .mp-header {
+            height: var(--mp-header-h); background: var(--mp-card-bg); border-bottom: 1px solid var(--mp-border);
+            display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
+            position: sticky; top: 0; z-index: 1020; box-shadow: 0 1px 8px rgba(0,0,0,0.04); gap: 16px;
+        }
+        .mp-header-right { display: flex; align-items: center; gap: 12px; min-width: 0; }
+        .mp-header-title {
+            font-size: 15px; font-weight: 700; color: var(--mp-text); margin: 0;
+            display: flex; align-items: center; gap: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .mp-header-title i { color: var(--mp-primary); font-size: 20px; }
+        .mp-header-actions { display: flex; align-items: center; gap: 6px; }
+
+        .mp-menu-toggle {
+            background: transparent; border: none; width: 40px; height: 40px; border-radius: 10px;
+            display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+            color: var(--mp-text); font-size: 20px; transition: var(--mp-transition);
+        }
+        .mp-menu-toggle:hover { background: var(--mp-bg); color: var(--mp-primary); }
+
+        .mp-icon-btn {
+            display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px;
+            border-radius: 10px; color: var(--mp-text-muted); text-decoration: none; font-size: 19px;
+            position: relative; transition: var(--mp-transition); border: none; background: transparent; cursor: pointer;
+        }
+        .mp-icon-btn:hover { background: var(--mp-bg); color: var(--mp-primary); text-decoration: none; }
+        .mp-icon-btn.has-badge::after {
+            content: ''; position: absolute; top: 8px; left: 8px; width: 8px; height: 8px;
+            background: #ef4444; border-radius: 50%; border: 2px solid #fff;
+        }
+
+        /* user dropdown */
+        .mp-user-menu { position: relative; }
+        .mp-user-menu-toggle {
+            display: flex; align-items: center; gap: 10px; padding: 6px 12px 6px 8px;
+            border-radius: 999px; background: var(--mp-bg); border: 1px solid var(--mp-border);
+            cursor: pointer; transition: var(--mp-transition); font-family: inherit;
+        }
+        .mp-user-menu-toggle:hover { background: #e2e8f0; border-color: #cbd5e1; }
+        .mp-user-menu-toggle img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid var(--mp-primary-light); }
+        .mp-user-menu-toggle .mp-user-name {
+            font-size: 13px; font-weight: 700; color: var(--mp-text);
+            max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .mp-user-dropdown {
+            position: absolute; top: calc(100% + 8px); left: 0; min-width: 220px;
+            background: var(--mp-card-bg); border: 1px solid var(--mp-border);
+            border-radius: var(--mp-radius-sm); box-shadow: var(--mp-shadow-lg);
+            padding: 8px; display: none; z-index: 1050; direction: rtl;
+        }
+        .mp-user-menu.open .mp-user-dropdown { display: block; animation: mpFadeIn 0.2s ease; }
+        @keyframes mpFadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .mp-user-dropdown a, .mp-user-dropdown .mp-dropdown-item {
+            display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px;
+            color: var(--mp-text); text-decoration: none !important; font-size: 13px; font-weight: 600;
+            transition: var(--mp-transition); cursor: pointer;
+        }
+        .mp-user-dropdown a:hover, .mp-user-dropdown .mp-dropdown-item:hover { background: #f0fdfa; color: var(--mp-primary-dark); }
+        .mp-user-dropdown a i, .mp-user-dropdown .mp-dropdown-item i { font-size: 16px; color: var(--mp-primary); width: 20px; text-align: center; }
+        .mp-user-dropdown .mp-dropdown-divider { height: 1px; background: var(--mp-border); margin: 6px 4px; }
+
+        /* ✅ Content area */
+        .mp-content {
+            flex: 1; padding: 0; /* ✅ صفر شد تا فرم‌ها تمام‌صفحه باز شوند */
+            min-width: 0; background: var(--mp-bg);
+        }
+
+        /* ✅ Footer */
+        .mp-footer {
+            background: var(--mp-card-bg); border-top: 1px solid var(--mp-border); padding: 14px 24px;
+            text-align: center; color: var(--mp-text-muted); font-size: 12px; font-weight: 500;
+        }
+
+        /* ✅ Overlay (موبایل) */
+        .mp-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.5); z-index: 1025;
+        }
+
+        /* ✅ Responsive */
+        @media (max-width: 991px) {
+            .mp-sidebar { transform: translateX(100%); }
+            .mp-sidebar.mobile-open { transform: translateX(0); }
+            .mp-main { margin-right: 0; } /* در موبایل همیشه تمام‌صفحه */
+            .mp-overlay.show { display: block; }
+            .mp-content { padding: 0; }
+            .mp-header { padding: 0 16px; }
+            .mp-user-menu-toggle .mp-user-name { display: none; }
+        }
+        @media (max-width: 575px) {
+            .mp-header-title { font-size: 13px; }
+            .mp-content { padding: 0; }
+        }
+    </style>
 </head>
 
 <body>
-     <form id="form1" runat="server">
-          <link rel="icon" type="image/png" href="images/Logo-site.png" />
-             <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true">
-</asp:ScriptManager>
-        <%-- <cc1:HoverMenuExtender ID="HoverMenuExtender1" runat="server" TargetControlID="label_lname" PopupControlID="panel_p" OffsetX="0" OffsetY="0" >
+    <form id="form1" runat="server">
 
-    </cc1:HoverMenuExtender>--%>
- <%--   <cc1:PopupControlExtender ID="PopupControlExtender1" runat="server"  TargetControlID="label_lname" PopupControlID="panel_p" OffsetX="-80" OffsetY="20" >
-    </cc1:PopupControlExtender>--%>
+        <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true"></asp:ScriptManager>
 
-<div class="main-menu">
+        <div id="mpLayout" class="mp-layout">
 
-	<header class="header">
-		<a href="#" class="logo"><i class="ico mdi mdi-cube-outline"></i>پتروشیمی تبریز</a>
-		<button type="button" class="button-close fa fa-times js__menu_close"></button>
-		<div class="user">
-			<a href="#" class="avatar"><img id="imgProfiles" src="assets/images/avatar-sm-5.jpg" alt="" runat="server" ><span class="status online"></span></a>
-           <%-- <asp:Image ID="Image1" runat="server" Width="70px" Height="70px" class="avatar" />--%>
+            <%-- ✅ SIDEBAR --%>
+            <aside id="mpSidebar" class="mp-sidebar">
+                <a href="index.aspx" class="mp-sidebar-logo">
+                    <i class="mdi mdi-cube-outline"></i>
+                    <span>پتروشیمی تبریز</span>
+                </a>
 
-            <%--<a href="#" class="avatar">
-                <asp:Image ID="Image1" runat="server" Width="70px" Height="70px" class="avatar" />
-                <img alt="" id="imgProfiles"  />
-                <span class="status online"></span>
+                <div class="mp-sidebar-user">
+                    <div class="avatar-wrap">
+                        <img id="imgProfiles" src="assets/images/avatar-sm-5.jpg" alt="profile" runat="server" />
+                        <span class="status"></span>
+                    </div>
+                    <div class="user-info">
+                        <h5 class="user-name">
+                            <asp:Literal ID="ltr_family" runat="server"></asp:Literal>
+                        </h5>
+                        <h5 class="user-role">
+                            <asp:Literal ID="ltrLevel" runat="server"></asp:Literal>
+                        </h5>
+                    </div>
+                </div>
 
-            </a>--%>
-             <link rel="icon" type="image/png" href="images/Logo-site.png" />
-			<h5 class="name"><a href="#">
-                                <asp:Literal ID="ltr_family" runat="server"></asp:Literal>
-			                 </a></h5>
-			<h5 class="position">
-                  <asp:Literal ID="ltrLevel" runat="server" ></asp:Literal>
-			</h5>
-          <%--  <h5 class="position">
-                  <asp:Literal ID="ltrMadrak" runat="server" ></asp:Literal>
-			</h5>--%>
-			<!-- /.name -->
-			<div class="control-wrap js__drop_down">
-    <i class="fa fa-caret-down js__drop_down_button"></i>
-    <div class="control-list">
-        <div class="control-item"><a href="frmPass.aspx"><i class="fa fa-user"></i> تغییر رمز</a></div>
-        <div class="control-item"><a href="frmChngPic.aspx"><i class="fa fa-gear"></i> تغییر تصویر</a></div>
-        <div class="control-item"><a href="personelProfileFrm.aspx"><i class="fa fa-user"></i> پروفایل</a></div>
-        <div class="control-item">
-            <asp:LinkButton ID="btnLogout" runat="server" OnClick="btnLogout_Click">
-                <i class="fa fa-sign-out"></i> خروج از سیستم
-            </asp:LinkButton>
+                <nav class="mp-sidebar-nav">
+                    <asp:Label ID="Label1" runat="server" Text=""></asp:Label>
+                </nav>
+            </aside>
+
+            <%-- Overlay برای موبایل --%>
+            <div id="mpOverlay" class="mp-overlay"></div>
+
+            <%-- ✅ MAIN --%>
+            <div class="mp-main">
+
+                <%-- Header --%>
+                <header class="mp-header">
+                    <div class="mp-header-right">
+                        <button type="button" class="mp-menu-toggle" onclick="mpToggleSidebar();" title="منو">
+                            <i class="mdi mdi-menu"></i>
+                        </button>
+                        <h1 class="mp-header-title">
+                            <i class="mdi mdi-view-dashboard-outline"></i>
+                            <span>سامانه پتروشیمی من</span>
+                        </h1>
+                    </div>
+
+                    <div class="mp-header-actions">
+                        <%-- زنگ اعلان --%>
+                        <asp:ImageButton ID="Imagenoti" runat="server" Height="28px"
+                            ImageUrl="~/images/alarm/alarm.gif" Visible="False" Width="28px"
+                            ToolTip="کار جدید دریافت کرده اید"
+                            style="border-radius: 8px;" />
+
+                        <%-- ایمیل --%>
+                        <a href="#" class="mp-icon-btn has-badge" title="پیام‌ها">
+                            <i class="mdi mdi-email-outline"></i>
+                        </a>
+
+                        <%-- منوی کاربر --%>
+                        <div id="mpUserMenu" class="mp-user-menu">
+                            <button type="button" class="mp-user-menu-toggle" onclick="mpToggleUserMenu(event);">
+                                <img id="imgProfileTop" src="assets/images/avatar-sm-5.jpg" alt="profile" runat="server" />
+                                <span class="mp-user-name">
+                                    <asp:Literal ID="ltr_family_top" runat="server"></asp:Literal>
+                                </span>
+                                <i class="mdi mdi-chevron-down" style="font-size: 16px; color: var(--mp-text-muted);"></i>
+                            </button>
+                            <div class="mp-user-dropdown">
+                                <a href="personelProfileFrm.aspx">
+                                    <i class="mdi mdi-account-circle"></i> پروفایل
+                                </a>
+                                <a href="frmPass.aspx">
+                                    <i class="mdi mdi-lock-reset"></i> تغییر رمز
+                                </a>
+                                <a href="frmChngPic.aspx">
+                                    <i class="mdi mdi-image-edit"></i> تغییر تصویر
+                                </a>
+                                <div class="mp-dropdown-divider"></div>
+                                <asp:LinkButton ID="btnLogoutTop" runat="server" CssClass="mp-dropdown-item"
+                                    OnClick="btnLogout_Click" CausesValidation="false">
+                                    <i class="mdi mdi-logout"></i> خروج از سیستم
+                                </asp:LinkButton>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <%-- Content --%>
+                <main class="mp-content">
+                    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+                </main>
+
+                <%-- Footer --%>
+                <footer class="mp-footer">
+                    © <%= DateTime.Now.Year %> پتروشیمی تبریز — تمامی حقوق محفوظ است
+                </footer>
+            </div>
         </div>
-    </div>
-</div>
-			<!-- /.control-wrap -->
-		</div>
-		<!-- /.user -->
-	</header>
-	<!-- /.header -->
-	<div class="content">
 
-		<div class="navigation">
-			 <link rel="icon" type="image/png" href="images/Logo-site.png" />
-            <asp:Label ID="Label1" runat="server" Text=""></asp:Label>
-    
-		</div>
-		<!-- /.navigation -->
-	</div>
-	<!-- /.content -->
-</div>
-<!-- /.main-menu -->
-  
-<div class="fixed-navbar">
-	<div class="pull-left">
-		<button type="button" class="menu-mobile-button glyphicon glyphicon-menu-hamburger js__menu_mobile"></button>
-		<h1 class="page-title">
-                              <asp:Label ID="ltrDate" runat="server" Text="Label" ></asp:Label>
-		
-        </h1>
-		<!-- /.page-title -->
-       
-	</div>
-	<!-- /.pull-left -->
-	<div class="pull-right">
-    <asp:ImageButton ID="Imagenoti" runat="server" Height="30px" 
-        ImageUrl="~/images/alarm/alarm.gif" Visible="False" Width="30px" 
-        ToolTip="کار جدید دریافت کرده اید" />
-    <!-- /.ico-item -->
-    <a href="#" class="ico-item mdi mdi-email notice-alarm js__toggle_open" data-target="#message-popup"></a>
-    <asp:LinkButton ID="btnLogoutTop" runat="server" CssClass="ico-item mdi mdi-logout" OnClick="btnLogout_Click"></asp:LinkButton>
-</div>
-	<!-- /.pull-right -->
-</div>
-<!-- /.fixed-navbar -->
+        <!-- Scripts -->
+        <script src="assets/scripts/jquery.min.js"></script>
+        <script src="assets/scripts/modernizr.min.js"></script>
+        <script src="assets/plugin/bootstrap/js/bootstrap.min.js"></script>
+        <script src="assets/plugin/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+        <script src="assets/plugin/nprogress/nprogress.js"></script>
+        <script src="assets/plugin/sweet-alert/sweetalert.min.js"></script>
+        <script src="assets/plugin/waves/waves.min.js"></script>
+        <script src="assets/scripts/main.min.js"></script>
 
-<div id="notification-popup" class="notice-popup js__toggle" data-space="75">
-	
-    <h2 class="popup-title">Your Notifications</h2>
-	<!-- /.popup-title -->
-	<div class="content">
-		
-		<!-- /.notice-list -->
-		<a href="#" class="notice-read-more">See more messages <i class="fa fa-angle-down"></i></a>
-	</div>
-	<!-- /.content -->
-</div>
+        <script type="text/javascript">
+            // ✅ Sidebar Toggle (دسکتاپ و موبایل)
+            function mpToggleSidebar() {
+                var layout = document.getElementById('mpLayout');
+                var sidebar = document.getElementById('mpSidebar');
+                var overlay = document.getElementById('mpOverlay');
+                if (!sidebar) return;
 
-<div id="wrapper">
-	<div class="main-content">
-		
-        <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server"> 
-                 </asp:ContentPlaceHolder>  
+                var isMobile = window.innerWidth <= 991;
 
-		<footer class="footer">
-			<ul class="list-inline">
-				<li>.</li>
-				<li><a href="#"></a></li>
-				<li><a href="#"></a></li>
-				<li><a href="#"></a></li>
-			</ul>
-		</footer>
-	</div>
-	<!-- /.main-content -->
-</div><!--/#wrapper -->
+                if (isMobile) {
+                    sidebar.classList.toggle('mobile-open');
+                    if (overlay) overlay.classList.toggle('show');
+                } else {
+                    // در دسکتاپ: کلاس را به layout میدهیم تا محتوا تمام‌صفحه شود
+                    layout.classList.toggle('sidebar-collapsed');
+                }
+            }
 
-	<script src="assets/scripts/jquery.min.js"></script>
-	<script src="assets/scripts/modernizr.min.js"></script>
-	<script src="assets/plugin/bootstrap/js/bootstrap.min.js"></script>
-	<script src="assets/plugin/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
-	<script src="assets/plugin/nprogress/nprogress.js"></script>
-	<script src="assets/plugin/sweet-alert/sweetalert.min.js"></script>
-	<script src="assets/plugin/waves/waves.min.js"></script>
+            // ✅ User Dropdown
+            function mpToggleUserMenu(e) {
+                if (e) { e.stopPropagation(); }
+                var menu = document.getElementById('mpUserMenu');
+                if (menu) menu.classList.toggle('open');
+            }
+            document.addEventListener('click', function (e) {
+                var menu = document.getElementById('mpUserMenu');
+                if (menu && !menu.contains(e.target)) { menu.classList.remove('open'); }
+            });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    var menu = document.getElementById('mpUserMenu');
+                    if (menu) menu.classList.remove('open');
+                }
+            });
 
-	<script src="assets/scripts/main.min.js"></script>
+            // ✅ Accordion
+            (function () {
+                function initMenuAccordion() {
+                    var nav = document.querySelector('.mp-sidebar-nav');
+                    if (!nav) return;
+                    var parents = nav.querySelectorAll('ul.menu > li > a.parent-item');
+                    if (!parents.length) return;
+                    for (var i = 0; i < parents.length; i++) {
+                        var link = parents[i];
+                        var newLink = link.cloneNode(true);
+                        link.parentNode.replaceChild(newLink, link);
+                        newLink.addEventListener('click', function (e) {
+                            e.preventDefault();
+                            var li = this.parentNode;
+                            var wasOpen = li.classList.contains('open');
+                            var allOpen = nav.querySelectorAll('ul.menu > li.open');
+                            for (var j = 0; j < allOpen.length; j++) { allOpen[j].classList.remove('open'); }
+                            if (!wasOpen) li.classList.add('open');
+                        });
+                    }
+                }
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', initMenuAccordion);
+                } else { initMenuAccordion(); }
+                if (typeof Sys !== 'undefined' && Sys.WebForms && Sys.WebForms.PageRequestManager) {
+                    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(initMenuAccordion);
+                }
+            })();
 
-      </form>
+            window.addEventListener('resize', function () {
+                var sidebar = document.getElementById('mpSidebar');
+                var overlay = document.getElementById('mpOverlay');
+                if (!sidebar) return;
+                if (window.innerWidth > 991) {
+                    sidebar.classList.remove('mobile-open');
+                    if (overlay) overlay.classList.remove('show');
+                }
+            });
+
+            (function () {
+                var overlay = document.getElementById('mpOverlay');
+                if (overlay) {
+                    overlay.addEventListener('click', function () {
+                        var sidebar = document.getElementById('mpSidebar');
+                        if (sidebar) sidebar.classList.remove('mobile-open');
+                        overlay.classList.remove('show');
+                    });
+                }
+            })();
+        </script>
+    </form>
 </body>
 </html>

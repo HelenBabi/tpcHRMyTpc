@@ -45,6 +45,7 @@
         .rv-table .col-name { font-weight: 600; color: #2c3e50; }
         .rv-table .col-actions { width: 130px; text-align: center; }
         .rv-table .col-amount { text-align: center; font-weight: 700; color: #27ae60; }
+        .rv-table .col-contract { font-size: 12px; color: #6c757d; }
 
         .rv-status-badge { padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; white-space: nowrap; display: inline-block; }
         .rv-status-1 { background: #fff3cd; color: #856404; }
@@ -80,6 +81,9 @@
         .rv-detail-section.school { border-right-color: #3498db; background: #e8f4fd; }
         .rv-detail-section.university { border-right-color: #9c27b0; background: #f3e5f5; }
         .rv-detail-section.sampad { border-right-color: #f39c12; background: #fef9e7; }
+        .rv-detail-section.olympiad { border-right-color: #4caf50; background: #e8f5e9; }
+        .rv-detail-section.exceptional { border-right-color: #e91e63; background: #fce4ec; }
+        .rv-detail-section.contract { border-right-color: #3498db; background: #e8f4fd; }
         .rv-detail-section h4 { font-size: 14px; font-weight: 700; color: #2c3e50; margin: 0 0 12px 0; padding-bottom: 8px; border-bottom: 1px dashed #dee2e6; }
         .rv-detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
         .rv-detail-item { background: #fff; padding: 10px 14px; border-radius: 8px; border: 1px solid #e9ecef; }
@@ -366,47 +370,49 @@
             <asp:Panel ID="pnlTableOpen" runat="server" Visible="false">
                 <div class="rv-table-wrap">
                     <asp:Repeater ID="rptOpen" runat="server" OnItemCommand="rptOpen_ItemCommand">
-                        <HeaderTemplate>
-                            <table class="rv-table">
-                                <thead>
-                                    <tr>
-                                        <th class="col-id">#</th>
-                                        <th>نام کارمند</th>
-                                        <th>نام فرزند</th>
-                                        <th>کد ملی فرزند</th>
-                                        <th>نوع</th>
-                                        <th>مقطع</th>
-                                        <th>معدل</th>
-                                        <th>مدرک اضافی</th>
-                                        <th class="col-amount">مبلغ (ریال)</th>
-                                        <th>وضعیت</th>
-                                        <th>تاریخ ثبت</th>
-                                        <th class="col-actions">عملیات</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                        </HeaderTemplate>
-                        <ItemTemplate>
-                            <tr>
-                                <td class="col-id"><%# Eval("ID") %></td>
-                                <td><%# Eval("FullName") %><br /><small style="color:#6c757d;"><%# Eval("PersonCode") %></small></td>
-                                <td class="col-name"><%# Eval("ChildFullName") %></td>
-                                <td><%# Eval("ChildNationalCode") %></td>
-                                <td><%# Eval("ChildType") %></td>
-                                <td><%# Eval("EducationLevel") %></td>
-                                <td style="text-align:center;"><%# Eval("AverageDisplay") %></td>
-                                <td style="text-align:center;"><%# Eval("ExtraDocDisplay") %></td>
-                                <td class="col-amount"><%# Eval("AmountDisplay") %></td>
-                                <td><span class='rv-status-badge rv-status-<%# Eval("StatusCode") %>'><%# Eval("StatusText") %></span></td>
-                                <td><%# Eval("CreateDatePersian") %></td>
-                                <td class="col-actions">
-                                    <asp:LinkButton ID="lnkView" runat="server" CssClass="rv-btn rv-btn-view" 
-                                        CommandName="ViewRequest" CommandArgument='<%# Eval("ID") %>' CausesValidation="false">👁️ مشاهده</asp:LinkButton>
-                                </td>
-                            </tr>
-                        </ItemTemplate>
-                        <FooterTemplate></tbody></table></FooterTemplate>
-                    </asp:Repeater>
+    <HeaderTemplate>
+        <table class="rv-table">
+            <thead>
+                <tr>
+                    <th class="col-id">#</th>
+                    <th>نام کارمند</th>
+                    <th>نوع قرارداد</th>
+                    <th>نام فرزند</th>
+                    <th>کد ملی فرزند</th>
+                    <th>نوع</th>
+                    <th>مقطع</th>
+                    <th>معدل</th>
+                    <th>مدرک اضافی</th>
+                    <th class="col-amount">مبلغ (ریال)</th>
+                    <th>وضعیت</th>
+                    <th>تاریخ ثبت</th>
+                    <th class="col-actions">عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+    </HeaderTemplate>
+    <ItemTemplate>
+        <tr>
+            <td class="col-id"><%# DataBinder.Eval(Container.DataItem, "ID") %></td>
+            <td><%# DataBinder.Eval(Container.DataItem, "FullName") %><br /><small style="color:#6c757d;"><%# DataBinder.Eval(Container.DataItem, "PersonCode") %></small></td>
+            <td class="col-contract"><%# DataBinder.Eval(Container.DataItem, "ContractTypeName") %></td>
+            <td class="col-name"><%# DataBinder.Eval(Container.DataItem, "ChildFullName") %></td>
+            <td><%# DataBinder.Eval(Container.DataItem, "ChildNationalCode") %></td>
+            <td><%# DataBinder.Eval(Container.DataItem, "ChildType") %></td>
+            <td><%# DataBinder.Eval(Container.DataItem, "EducationLevel") %></td>
+            <td style="text-align:center;"><%# DataBinder.Eval(Container.DataItem, "AverageDisplay") %></td>
+            <td style="text-align:center;"><%# DataBinder.Eval(Container.DataItem, "ExtraDocDisplay") %></td>
+            <td class="col-amount"><%# DataBinder.Eval(Container.DataItem, "AmountDisplay") %></td>
+            <td><span class='rv-status-badge rv-status-<%# DataBinder.Eval(Container.DataItem, "StatusCode") %>'><%# DataBinder.Eval(Container.DataItem, "StatusText") %></span></td>
+            <td><%# DataBinder.Eval(Container.DataItem, "CreateDatePersian") %></td>
+            <td class="col-actions">
+                <asp:LinkButton ID="lnkView" runat="server" CssClass="rv-btn rv-btn-view" 
+                    CommandName="ViewRequest" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") %>' CausesValidation="false">👁️ مشاهده</asp:LinkButton>
+            </td>
+        </tr>
+    </ItemTemplate>
+    <FooterTemplate></tbody></table></FooterTemplate>
+</asp:Repeater>
                 </div>
             </asp:Panel>
             <asp:Panel ID="pnlEmptyOpen" runat="server" Visible="false">
@@ -448,43 +454,45 @@
             <asp:Panel ID="pnlTableClosed" runat="server" Visible="false">
                 <div class="rv-table-wrap">
                     <asp:Repeater ID="rptClosed" runat="server" OnItemCommand="rptClosed_ItemCommand">
-                        <HeaderTemplate>
-                            <table class="rv-table">
-                                <thead>
-                                    <tr>
-                                        <th class="col-id">#</th>
-                                        <th>نام کارمند</th>
-                                        <th>نام فرزند</th>
-                                        <th>کد ملی فرزند</th>
-                                        <th>نوع</th>
-                                        <th>مقطع</th>
-                                        <th class="col-amount">مبلغ (ریال)</th>
-                                        <th>وضعیت</th>
-                                        <th>تاریخ ثبت</th>
-                                        <th class="col-actions">عملیات</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                        </HeaderTemplate>
-                        <ItemTemplate>
-                            <tr>
-                                <td class="col-id"><%# Eval("ID") %></td>
-                                <td><%# Eval("FullName") %><br /><small style="color:#6c757d;"><%# Eval("PersonCode") %></small></td>
-                                <td class="col-name"><%# Eval("ChildFullName") %></td>
-                                <td><%# Eval("ChildNationalCode") %></td>
-                                <td><%# Eval("ChildType") %></td>
-                                <td><%# Eval("EducationLevel") %></td>
-                                <td class="col-amount"><%# Eval("AmountDisplay") %></td>
-                                <td><span class='rv-status-badge rv-status-<%# Eval("StatusCode") %>'><%# Eval("StatusText") %></span></td>
-                                <td><%# Eval("CreateDatePersian") %></td>
-                                <td class="col-actions">
-                                    <asp:LinkButton ID="lnkView" runat="server" CssClass="rv-btn rv-btn-view" 
-                                        CommandName="ViewRequest" CommandArgument='<%# Eval("ID") %>' CausesValidation="false">👁️ مشاهده</asp:LinkButton>
-                                </td>
-                            </tr>
-                        </ItemTemplate>
-                        <FooterTemplate></tbody></table></FooterTemplate>
-                    </asp:Repeater>
+    <HeaderTemplate>
+        <table class="rv-table">
+            <thead>
+                <tr>
+                    <th class="col-id">#</th>
+                    <th>نام کارمند</th>
+                    <th>نوع قرارداد</th>
+                    <th>نام فرزند</th>
+                    <th>کد ملی فرزند</th>
+                    <th>نوع</th>
+                    <th>مقطع</th>
+                    <th class="col-amount">مبلغ (ریال)</th>
+                    <th>وضعیت</th>
+                    <th>تاریخ ثبت</th>
+                    <th class="col-actions">عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+    </HeaderTemplate>
+    <ItemTemplate>
+        <tr>
+            <td class="col-id"><%# DataBinder.Eval(Container.DataItem, "ID") %></td>
+            <td><%# DataBinder.Eval(Container.DataItem, "FullName") %><br /><small style="color:#6c757d;"><%# DataBinder.Eval(Container.DataItem, "PersonCode") %></small></td>
+            <td class="col-contract"><%# DataBinder.Eval(Container.DataItem, "ContractTypeName") %></td>
+            <td class="col-name"><%# DataBinder.Eval(Container.DataItem, "ChildFullName") %></td>
+            <td><%# DataBinder.Eval(Container.DataItem, "ChildNationalCode") %></td>
+            <td><%# DataBinder.Eval(Container.DataItem, "ChildType") %></td>
+            <td><%# DataBinder.Eval(Container.DataItem, "EducationLevel") %></td>
+            <td class="col-amount"><%# DataBinder.Eval(Container.DataItem, "AmountDisplay") %></td>
+            <td><span class='rv-status-badge rv-status-<%# DataBinder.Eval(Container.DataItem, "StatusCode") %>'><%# DataBinder.Eval(Container.DataItem, "StatusText") %></span></td>
+            <td><%# DataBinder.Eval(Container.DataItem, "CreateDatePersian") %></td>
+            <td class="col-actions">
+                <asp:LinkButton ID="lnkView" runat="server" CssClass="rv-btn rv-btn-view" 
+                    CommandName="ViewRequest" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") %>' CausesValidation="false">👁️ مشاهده</asp:LinkButton>
+            </td>
+        </tr>
+    </ItemTemplate>
+    <FooterTemplate></tbody></table></FooterTemplate>
+</asp:Repeater>
                 </div>
             </asp:Panel>
             <asp:Panel ID="pnlEmptyClosed" runat="server" Visible="false">
@@ -505,7 +513,7 @@
             <div class="rv-modal-body">
                 <asp:Panel ID="pnlDetail" runat="server" Visible="false">
 
-                    <%-- ✅ هشدار عدم تطابق شرایط (بند ۱) --%>
+                    <%-- ✅ هشدار عدم تطابق شرایط --%>
                     <asp:Panel ID="pnlConditionAlert" runat="server" Visible="false" CssClass="rv-condition-alert">
                         <span class="alert-icon">⚠️</span>
                         <div class="alert-content">
@@ -524,6 +532,7 @@
                             <div class="rv-detail-item"><span class="lbl">کد پرسنلی</span><span class="val"><asp:Label ID="lblD_PersonCode" runat="server" /></span></div>
                             <div class="rv-detail-item"><span class="lbl">واحد</span><span class="val"><asp:Label ID="lblD_UnitName" runat="server" /></span></div>
                             <div class="rv-detail-item"><span class="lbl">موبایل</span><span class="val"><asp:Label ID="lblD_Mobile" runat="server" /></span></div>
+                            <div class="rv-detail-item"><span class="lbl">نوع قرارداد</span><span class="val"><asp:Label ID="lblD_ContractType" runat="server" /></span></div>
                         </div>
                     </div>
 
@@ -569,6 +578,33 @@
                         </div>
                     </asp:Panel>
 
+                    <%-- ✅ اطلاعات المپیاد (جدید) --%>
+                    <asp:Panel ID="pnlDetailOlympiad" runat="server" Visible="false" CssClass="rv-detail-section olympiad">
+                        <h4>🏅 قبولی در المپیاد علمی</h4>
+                        <div class="rv-detail-grid">
+                            <div class="rv-detail-item"><span class="lbl">وضعیت</span><span class="val"><asp:Label ID="lblD_OlympiadStatus" runat="server" Text="✅ بله - قبولی در المپیاد علمی" /></span></div>
+                        </div>
+                        <asp:Panel ID="pnlDocOlympiad" runat="server" Visible="false" style="margin-top:15px;">
+                            <div class="rv-doc-card">
+                                <span class="doc-icon">📜</span>
+                                <div class="doc-title">تصویر کارنامه/مدرک قبولی المپیاد</div>
+                                <div class="doc-name"><asp:Label ID="lblDocOlympiadName" runat="server" /></div>
+                                <div class="rv-doc-actions">
+                                    <a id="lnkViewOlympiad" runat="server" target="_blank" class="rv-doc-btn rv-doc-btn-view">👁️ مشاهده</a>
+                                    <a id="lnkDownloadOlympiad" runat="server" class="rv-doc-btn rv-doc-btn-download">⬇️ دانلود</a>
+                                </div>
+                            </div>
+                        </asp:Panel>
+                    </asp:Panel>
+
+                    <%-- ✅ اطلاعات استثنایی (جدید) --%>
+                    <asp:Panel ID="pnlDetailExceptional" runat="server" Visible="false" CssClass="rv-detail-section exceptional">
+                        <h4>🌟 درخواست استثنایی</h4>
+                        <div style="font-size:13px;color:#880e4f;line-height:1.8;">
+                            ✅ این درخواست به‌عنوان <strong>«درخواست استثنایی»</strong> ثبت شده است و نیاز به بررسی ویژه توسط روابط عمومی دارد.
+                        </div>
+                    </asp:Panel>
+
                     <%-- ✅ اطلاعات دانشگاه (دانشجو) --%>
                     <asp:Panel ID="pnlDetailUniversity" runat="server" Visible="false" CssClass="rv-detail-section university">
                         <h4>🎓 اطلاعات دانشگاه / مؤسسه</h4>
@@ -584,18 +620,14 @@
                     </asp:Panel>
 
                     <%-- ============================================================
-                         ✅ مبلغ مقطع — طراحی برجسته و شکیل (بند ۷)
+                         ✅ مبلغ مقطع — طراحی برجسته و شکیل
                          ============================================================ --%>
                     <asp:Panel ID="pnlDetailAmount" runat="server" Visible="false" CssClass="rv-detail-section amount">
                         <h4>💰 مبلغ قابل پرداخت برای این مقطع</h4>
                         <div class="rv-amount-display">
-
-                            <%-- نشان مقطع --%>
                             <div class="amount-level-badge">
                                 🎓 مقطع: <asp:Label ID="lblAmountLevel" runat="server" />
                             </div>
-
-                            <%-- جعبه مبلغ --%>
                             <div class="amount-value-box">
                                 <asp:Label ID="lblAmountValue" runat="server" CssClass="amount-value" />
                                 <span class="amount-unit">ریال</span>
@@ -603,8 +635,6 @@
                                     <asp:Label ID="lblAmountWords" runat="server" />
                                 </span>
                             </div>
-
-                            <%-- یادآوری --%>
                             <span class="amount-hint">💡 این مبلغ فقط برای همکاران روابط عمومی قابل مشاهده است.</span>
                         </div>
                     </asp:Panel>
@@ -616,7 +646,7 @@
                         </div>
                     </asp:Panel>
 
-                    <%-- ✅ مدارک هویتی (بند ۶) --%>
+                    <%-- ✅ مدارک هویتی --%>
                     <div class="rv-detail-section identity">
                         <h4>🆔 مدارک هویتی</h4>
                         <div class="rv-doc-grid">
@@ -738,31 +768,31 @@
                         style="border-right-color:#9b59b6;background:#f4ecf7;">
                         <h4>📋 تاریخچه بررسی‌ها</h4>
                         <asp:Repeater ID="rptReviewHistory" runat="server">
-                            <ItemTemplate>
-                                <div class="rv-history-item">
-                                    <div class="rv-hist-header">
-                                        <span class='rv-status-badge rv-status-<%# Eval("StatusCode") %>'>
-                                            <%# GetStatusText(Convert.ToInt32(Eval("StatusCode"))) %>
-                                        </span>
-                                        <span class="rv-hist-date">
-                                            <%# GetHistoryDate(Eval("ReviewDate"), Eval("CreateDate")) %>
-                                        </span>
-                                    </div>
-                                    <div class="rv-hist-row">
-                                        <strong>👤 کارشناس:</strong> 
-                                        <%# GetHistoryReviewer(Eval("ReviewerName"), Eval("ReviewerCode")) %>
-                                    </div>
-                                    <div class="rv-hist-row">
-                                        <strong>📋 دلیل:</strong> 
-                                        <%# GetHistoryReason(Eval("StatusDescription")) %>
-                                    </div>
-                                    <div class="rv-hist-comment">
-                                        <strong>📝 یادداشت:</strong> 
-                                        <%# GetHistoryComment(Eval("ReviewerComment")) %>
-                                    </div>
-                                </div>
-                            </ItemTemplate>
-                        </asp:Repeater>
+    <ItemTemplate>
+        <div class="rv-history-item">
+            <div class="rv-hist-header">
+                <span class='rv-status-badge rv-status-<%# DataBinder.Eval(Container.DataItem, "StatusCode") %>'>
+                    <%# GetStatusText(Convert.ToInt32(DataBinder.Eval(Container.DataItem, "StatusCode"))) %>
+                </span>
+                <span class="rv-hist-date">
+                    <%# GetHistoryDate(DataBinder.Eval(Container.DataItem, "ReviewDate"), DataBinder.Eval(Container.DataItem, "CreateDate")) %>
+                </span>
+            </div>
+            <div class="rv-hist-row">
+                <strong>👤 کارشناس:</strong> 
+                <%# GetHistoryReviewer(DataBinder.Eval(Container.DataItem, "ReviewerName"), DataBinder.Eval(Container.DataItem, "ReviewerCode")) %>
+            </div>
+            <div class="rv-hist-row">
+                <strong>📋 دلیل:</strong> 
+                <%# GetHistoryReason(DataBinder.Eval(Container.DataItem, "StatusDescription")) %>
+            </div>
+            <div class="rv-hist-comment">
+                <strong>📝 یادداشت:</strong> 
+                <%# GetHistoryComment(DataBinder.Eval(Container.DataItem, "ReviewerComment")) %>
+            </div>
+        </div>
+    </ItemTemplate>
+</asp:Repeater>
                     </asp:Panel>
 
                     <%-- فرم بررسی --%>
@@ -781,6 +811,7 @@
                                 <button type="button" class="rv-chip" onclick="selectReason(this, 'رتبه آزمون نامعتبر');">رتبه نامعتبر</button>
                                 <button type="button" class="rv-chip" onclick="selectReason(this, 'شناسنامه یا کارت ملی پیوست نشده');">مدارک هویتی ناقص</button>
                                 <button type="button" class="rv-chip" onclick="selectReason(this, 'کارت دانشجویی پیوست نشده');">کارت دانشجویی ناقص</button>
+                                <button type="button" class="rv-chip" onclick="selectReason(this, 'مدرک المپیاد پیوست نشده');">مدرک المپیاد ناقص</button>
                                 <button type="button" class="rv-chip" onclick="selectReason(this, 'سایر (توضیح دهید)');">سایر</button>
                             </div>
                             <asp:TextBox ID="txtReviewReason" runat="server" CssClass="rv-textarea" 
@@ -892,18 +923,15 @@
         }
 
         // ============================================================
-        // ✅ آماده‌سازی برای خروجی Excel (رفع تداخل با Modal)
+        // ✅ آماده‌سازی برای خروجی Excel
         // ============================================================
         function prepareExport() {
             try {
-                // بستن Modal
                 closeDetailModal();
 
-                // پاک کردن HiddenField
                 var hfShow = document.getElementById('<%= hfShowModal.ClientID %>');
                 if (hfShow) hfShow.value = '0';
 
-                // ثبت فلگ موقت
                 try { sessionStorage.setItem('exportInProgress', '1'); } catch (e) { }
 
                 return true;
@@ -1032,12 +1060,11 @@
         });
 
         // ============================================================
-        // باز کردن Modal بعد از PostBack (با بررسی فلگ export)
+        // باز کردن Modal بعد از PostBack
         // ============================================================
         (function () {
             function tryOpenModal() {
                 try {
-                    // ✅ اگر فلگ export فعال است، Modal را باز نکن
                     var exportFlag = null;
                     try { exportFlag = sessionStorage.getItem('exportInProgress'); } catch (e) { }
 

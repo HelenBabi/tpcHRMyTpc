@@ -3,233 +3,312 @@
 <!DOCTYPE html>
 
 <html lang="fa" dir="rtl">
-<head>
+<head id="Head1" runat="server">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <meta name="description" content="سامانه پتروشیمی من">
     <meta name="author" content="Petrochimi Tabriz">
     <link rel="icon" type="image/png" href="images/Logo-site.png" />
-    <title>پتروشیمی من</title>
-    
+    <title>ورود به سامانه | پتروشیمی من</title>
+
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/fontawesome.min.css">
     <link rel="stylesheet" href="css/sweetalert2.min.css" />
 
     <style type="text/css">
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: 'Tahoma', 'IranSans', 'Segoe UI', sans-serif;
-            min-height: 100vh;
-            padding: 20px;
+        :root {
+            --lp-primary: #0f766e;
+            --lp-primary-dark: #115e59;
+            --lp-primary-light: #14b8a6;
+            --lp-accent: #2dd4bf;
+            --lp-bg: #f1f5f9;
+            --lp-text: #1e293b;
+            --lp-text-muted: #64748b;
+            --lp-border: #e2e8f0;
+            --lp-radius: 18px;
+            --lp-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+            --lp-shadow-lg: 0 20px 60px rgba(15, 23, 42, 0.15);
         }
-        
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            min-height: 100vh;
+            background: #f1f5f9;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* پس‌زمینه تزئینی */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -40%;
+            right: -20%;
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle, rgba(20, 184, 166, 0.18) 0%, transparent 60%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -30%;
+            left: -15%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(15, 118, 110, 0.12) 0%, transparent 60%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
         #main-wrapper {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 30px 20px;
+            position: relative;
+            z-index: 1;
         }
-        
+
         .main-container {
             display: flex;
-            gap: 25px;
-            max-width: 1200px;
+            gap: 28px;
+            max-width: 1180px;
             width: 100%;
             flex-wrap: wrap;
             align-items: stretch;
         }
-        
+
         /* ============================================ */
         /* ستون راست - فرم لاگین */
         /* ============================================ */
         .login-column {
             flex: 0 0 420px;
             max-width: 420px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            background: #fff;
+            border-radius: var(--lp-radius);
+            box-shadow: var(--lp-shadow-lg);
             overflow: hidden;
             transition: transform 0.3s ease;
-        }
-        
-        .login-column:hover { transform: translateY(-5px); }
-        
-        .login-inside {
-            padding: 35px 30px;
-            animation: fadeInUp 0.6s ease;
-        }
-        
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #667eea;
-            text-align: center;
-            margin-bottom: 10px;
-            border-bottom: 2px solid #667eea;
-            display: inline-block;
-            width: auto;
-            padding-bottom: 5px;
-        }
-        
-        .frm-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #333;
-            text-align: center;
-            margin: 20px 0 25px;
+            border: 1px solid var(--lp-border);
             position: relative;
         }
-        
-        .frm-title::after {
+        .login-column::before {
             content: '';
-            display: block;
-            width: 50px;
-            height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            margin: 10px auto 0;
-            border-radius: 3px;
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #0f766e, #14b8a6, #2dd4bf);
         }
-        
-        .frm-input { margin-bottom: 20px; position: relative; }
-        
+
+        .login-column:hover { transform: translateY(-5px); }
+
+        .login-inside {
+            padding: 38px 30px 32px;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .brand-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #f0fdfa;
+            color: var(--lp-primary-dark);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            border: 1px solid #99f6e4;
+            margin-bottom: 18px;
+        }
+
+        .frm-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: #0f172a;
+            text-align: center;
+            margin: 4px 0 6px;
+            position: relative;
+        }
+        .frm-subtitle {
+            font-size: 13px;
+            color: var(--lp-text-muted);
+            text-align: center;
+            margin: 0 0 26px;
+            line-height: 1.7;
+            font-weight: 500;
+        }
+
+        .frm-input { margin-bottom: 18px; position: relative; }
+
         .frm-inp {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
+            padding: 13px 44px 13px 15px;
+            border: 2px solid var(--lp-border);
             border-radius: 12px;
             font-size: 14px;
-            transition: all 0.3s ease;
-            background: #f8f9fa;
+            transition: all 0.25s ease;
+            background: #f8fafc;
             font-family: inherit;
             text-align: right;
+            color: var(--lp-text);
         }
-        
+        .frm-inp::placeholder { color: #94a3b8; }
         .frm-inp:focus {
-            border-color: #667eea;
+            border-color: var(--lp-primary-light);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
-            background: white;
+            box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.15);
+            background: #fff;
         }
-        
-        .frm-inp:hover { border-color: #764ba2; }
-        
+        .frm-inp:hover { border-color: #94a3b8; }
+
+        .input-icon .icon-emoji {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 17px;
+            z-index: 1;
+            opacity: 0.75;
+        }
+
         .frm-submit {
             width: 100%;
             padding: 14px 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white !important;
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            color: #fff !important;
             border: none;
             border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
+            font-size: 15px;
+            font-weight: 800;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
+            transition: all 0.25s ease;
+            margin-top: 6px;
             display: block;
             text-align: center;
+            box-shadow: 0 8px 20px rgba(15, 118, 110, 0.25);
         }
-        
         .frm-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102,126,234,0.3);
-            background: linear-gradient(135deg, #5a67d8 0%, #6b46a0 100%);
-            color: white !important;
+            box-shadow: 0 12px 30px rgba(15, 118, 110, 0.35);
+            background: linear-gradient(135deg, #115e59 0%, #0f766e 100%);
+            color: #fff !important;
         }
-        
         .frm-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
         .sso-btn {
             width: 100%;
-            padding: 14px 20px;
-            background: #4285f4;
-            color: white !important;
-            border: none;
+            padding: 13px 20px;
+            background: #f1f5f9;
+            color: var(--lp-primary-dark) !important;
+            border: 2px solid #cbd5e1;
             border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-            display: block;
-            text-align: center;
-            text-decoration: none;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none !important;
         }
-        
         .sso-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(66, 133, 244, 0.3);
-            background: #3367d6;
-            color: white !important;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.1);
+            background: #fff;
+            border-color: var(--lp-primary-light);
+            color: var(--lp-primary) !important;
         }
-        
+
         .divider {
             display: flex;
             align-items: center;
             text-align: center;
-            margin: 20px 0;
+            margin: 22px 0;
         }
-        
         .divider::before, .divider::after {
             content: '';
             flex: 1;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid var(--lp-border);
         }
-        
-        .divider::before { margin-left: 15px; }
-        .divider::after { margin-right: 15px; }
-        
-        .divider span { color: #999; font-size: 13px; white-space: nowrap; }
-        
+        .divider::before { margin-left: 12px; }
+        .divider::after { margin-right: 12px; }
+        .divider span { color: #94a3b8; font-size: 12px; white-space: nowrap; font-weight: 600; }
+
+        .forgot-link { text-align: center; margin-top: 18px; }
+        .forgot-link a {
+            color: var(--lp-primary);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .forgot-link a:hover {
+            color: var(--lp-primary-dark);
+            text-decoration: none;
+            gap: 8px;
+        }
+
         .frm-footer {
             text-align: center;
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid #e0e0e0;
+            margin-top: 24px;
+            padding-top: 18px;
+            border-top: 1px dashed var(--lp-border);
         }
-        
-        .frm-footer h5 { color: #e74c3c; font-size: 13px; margin: 0; }
-        
-        .validation-error {
-            color: #e74c3c;
+        .frm-footer h5 {
+            color: #64748b;
             font-size: 12px;
+            margin: 0;
+            font-weight: 500;
+            line-height: 1.7;
+        }
+        .frm-footer h5 strong { color: var(--lp-primary); }
+
+        .validation-error {
+            color: #ef4444;
+            font-size: 11.5px;
             display: block;
             margin-top: 5px;
             text-align: right;
+            font-weight: 600;
         }
-        
-        .forgot-link { text-align: center; margin-top: 20px; }
-        
-        .forgot-link a {
-            color: #667eea;
-            text-decoration: none;
+
+        /* ============================================ */
+        /* پیام‌ها */
+        /* ============================================ */
+        .lp-alert {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
             font-size: 13px;
-            transition: color 0.3s ease;
+            line-height: 1.8;
+            border: 1px solid;
+            font-weight: 600;
         }
-        
-        .forgot-link a:hover { color: #764ba2; text-decoration: underline; }
-        
-        .input-icon { position: relative; }
-        
-        .input-icon .icon-emoji {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 18px;
-            z-index: 1;
-        }
-        
-        .input-icon .frm-inp { padding-right: 45px; padding-left: 15px; }
-        
+        .lp-alert.success { background: #dcfce7; color: #166534; border-color: #86efac; }
+        .lp-alert.info    { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
+        .lp-alert.warning { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+        .lp-alert.error   { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+        .lp-alert .icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
         /* ============================================ */
         /* ستون چپ - اطلاعیه‌ها و تازه‌ها */
         /* ============================================ */
@@ -238,212 +317,210 @@
             min-width: 400px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 22px;
         }
-        
+
         /* ============================================ */
-        /* کارت پیغام مدیر (بالای تازه‌ها) */
+        /* کارت پیغام مدیر */
         /* ============================================ */
         .admin-message-card {
-            background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%);
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border-radius: var(--lp-radius);
+            box-shadow: var(--lp-shadow-lg);
             overflow: hidden;
-            border: 2px solid #ffc107;
+            border: 1px solid #fde68a;
+            position: relative;
             animation: pulseGlow 2s infinite;
         }
-        
         @keyframes pulseGlow {
-            0% { box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 0 0 rgba(255, 193, 7, 0.4); }
-            70% { box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 0 15px rgba(255, 193, 7, 0); }
-            100% { box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 0 0 rgba(255, 193, 7, 0); }
+            0%   { box-shadow: var(--lp-shadow-lg), 0 0 0 0 rgba(245, 158, 11, 0.35); }
+            70%  { box-shadow: var(--lp-shadow-lg), 0 0 0 14px rgba(245, 158, 11, 0); }
+            100% { box-shadow: var(--lp-shadow-lg), 0 0 0 0 rgba(245, 158, 11, 0); }
         }
-        
+
         .admin-message-header {
-            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-            color: white;
-            padding: 15px 25px;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: #fff;
+            padding: 15px 22px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        
         .admin-message-header .icon {
-            font-size: 24px;
+            font-size: 22px;
             animation: bellRing 2s infinite;
         }
-        
         @keyframes bellRing {
             0%, 100% { transform: rotate(0); }
             10%, 30% { transform: rotate(-15deg); }
             20%, 40% { transform: rotate(15deg); }
             50% { transform: rotate(0); }
         }
-        
         .admin-message-header h3 {
             margin: 0;
-            font-size: 17px;
-            font-weight: 600;
+            font-size: 16px;
+            font-weight: 800;
         }
-        
+
         .admin-message-body {
-            padding: 20px 25px;
-            max-height: 300px;
+            padding: 18px 22px;
+            max-height: 280px;
             overflow-y: auto;
+            background: #fff;
         }
-        
-        .admin-message-body::-webkit-scrollbar { width: 8px; }
-        .admin-message-body::-webkit-scrollbar-track { background: rgba(255,255,255,0.3); border-radius: 4px; }
-        .admin-message-body::-webkit-scrollbar-thumb { background: #f39c12; border-radius: 4px; }
-        
+        .admin-message-body::-webkit-scrollbar { width: 6px; }
+        .admin-message-body::-webkit-scrollbar-track { background: #f8fafc; border-radius: 3px; }
+        .admin-message-body::-webkit-scrollbar-thumb { background: #f59e0b; border-radius: 3px; }
+
         .admin-message-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: #856404;
+            font-size: 14px;
+            font-weight: 800;
+            color: #92400e;
             margin-bottom: 12px;
             padding-bottom: 10px;
-            border-bottom: 2px dashed #ffc107;
+            border-bottom: 2px dashed #fcd34d;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        
         .admin-message-text {
-            font-size: 14px;
-            color: #856404;
+            font-size: 13.5px;
+            color: #78350f;
             line-height: 2;
             text-align: justify;
             text-justify: inter-word;
         }
-        
-        .admin-message-text p {
-            margin-bottom: 10px;
-        }
-        
-        .admin-message-text strong {
-            color: #e74c3c;
-        }
-        
+        .admin-message-text p { margin-bottom: 10px; }
+        .admin-message-text strong { color: #dc2626; }
         .admin-message-text ol,
         .admin-message-text ul {
-            padding-right: 25px;
+            padding-right: 24px;
             margin: 10px 0;
         }
-        
-        .admin-message-text li {
-            margin-bottom: 8px;
-        }
-        
+        .admin-message-text li { margin-bottom: 8px; }
+
         /* ============================================ */
         /* کارت تازه‌ها */
         /* ============================================ */
         .news-card {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            background: #fff;
+            border-radius: var(--lp-radius);
+            box-shadow: var(--lp-shadow-lg);
             overflow: hidden;
             flex: 1;
             display: flex;
             flex-direction: column;
+            border: 1px solid var(--lp-border);
         }
-        
+
         .news-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 18px 25px;
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            color: #fff;
+            padding: 18px 22px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        
-        .news-header .icon { font-size: 24px; }
-        
+        .news-header .icon { font-size: 22px; }
         .news-header h3 {
             margin: 0;
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 17px;
+            font-weight: 800;
         }
-        
+
         .news-body {
-            padding: 20px 25px;
+            padding: 20px 22px;
             overflow-y: auto;
             max-height: 500px;
             flex: 1;
         }
-        
-        .news-body::-webkit-scrollbar { width: 8px; }
-        .news-body::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
-        .news-body::-webkit-scrollbar-thumb { background: #667eea; border-radius: 4px; }
-        
+        .news-body::-webkit-scrollbar { width: 6px; }
+        .news-body::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+        .news-body::-webkit-scrollbar-thumb { background: #14b8a6; border-radius: 3px; }
+
         .news-item {
             display: flex;
-            gap: 15px;
-            padding: 15px;
+            gap: 14px;
+            padding: 14px;
             border-radius: 12px;
             margin-bottom: 12px;
-            background: #f8f9fa;
-            border-right: 4px solid #667eea;
-            transition: all 0.3s ease;
+            background: #f8fafc;
+            border-right: 4px solid #14b8a6;
+            transition: all 0.25s ease;
         }
-        
         .news-item:hover {
-            background: #e8f4fd;
+            background: #f0fdfa;
             transform: translateX(-5px);
-            box-shadow: 0 5px 15px rgba(102,126,234,0.15);
+            box-shadow: 0 8px 20px rgba(20, 184, 166, 0.12);
         }
-        
         .news-item:last-child { margin-bottom: 0; }
-        
+
         .news-item .news-icon {
-            font-size: 30px;
+            font-size: 26px;
             flex-shrink: 0;
-            width: 45px;
-            height: 45px;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: white;
+            background: #fff;
             border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
         }
-        
-        .news-item .news-content { flex: 1; }
-        
+        .news-item .news-content { flex: 1; min-width: 0; }
         .news-item .news-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 6px;
+            font-size: 13.5px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 5px;
+            line-height: 1.6;
         }
-        
         .news-item .news-text {
-            font-size: 13px;
-            color: #6c757d;
-            line-height: 1.7;
+            font-size: 12.5px;
+            color: #64748b;
+            line-height: 1.8;
             text-align: justify;
         }
-        
         .news-item .news-date {
             font-size: 11px;
-            color: #adb5bd;
+            color: #94a3b8;
             margin-top: 6px;
             display: block;
+            font-weight: 600;
         }
-        
+
         .no-news {
             text-align: center;
             padding: 40px 20px;
-            color: #adb5bd;
+            color: #94a3b8;
         }
-        
         .no-news .icon {
-            font-size: 50px;
+            font-size: 48px;
             display: block;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
+            opacity: 0.6;
         }
-        
-        .no-news p { font-size: 14px; margin: 0; }
-        
+        .no-news p { font-size: 13px; margin: 0; font-weight: 600; }
+
+        /* ============================================ */
+        /* لودینگ */
+        /* ============================================ */
+        .loading { position: relative; pointer-events: none; }
+        .loading::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            top: 50%;
+            left: 20px;
+            margin-top: -9px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.6s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
         /* ============================================ */
         /* ریسپانسیو */
         /* ============================================ */
@@ -452,41 +529,22 @@
             .login-column { flex: 0 0 100%; max-width: 100%; }
             .news-column { min-width: 100%; }
         }
-        
         @media (max-width: 576px) {
-            .login-inside { padding: 25px 20px; }
+            #main-wrapper { padding: 15px; }
+            .login-inside { padding: 30px 22px 26px; }
             .frm-title { font-size: 20px; }
-            .title { font-size: 16px; }
-            .news-header { padding: 15px 20px; }
-            .news-header h3 { font-size: 16px; }
-            .news-body { padding: 15px 18px; }
-            .admin-message-header { padding: 12px 18px; }
-            .admin-message-header h3 { font-size: 15px; }
-            .admin-message-body { padding: 15px 18px; }
+            .news-header { padding: 15px 18px; }
+            .news-header h3 { font-size: 15px; }
+            .news-body { padding: 15px 16px; }
+            .admin-message-header { padding: 13px 18px; }
+            .admin-message-header h3 { font-size: 14px; }
+            .admin-message-body { padding: 14px 16px; }
         }
-        
+
         input[type="submit"], input[type="button"], button {
             -webkit-appearance: none;
             appearance: none;
         }
-        
-        .loading { position: relative; pointer-events: none; }
-        
-        .loading::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            top: 50%;
-            left: 20px;
-            margin-top: -10px;
-            border: 2px solid white;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 0.6s linear infinite;
-        }
-        
-        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 
 </head>
@@ -494,67 +552,59 @@
 <body>
 
 <div id="main-wrapper">
-    <!-- پیام موفقیت تغییر رمز -->
-<asp:Panel ID="pnlSuccessMessage" runat="server" Visible="false"
-    style="background:#d4edda; color:#155724; padding:12px 18px; border-radius:10px; 
-           margin-bottom:20px; border:2px solid #27ae60; text-align:center;">
-    <span style="font-size:20px;">✅</span>
-    <asp:Label ID="lblSuccessMessage" runat="server"
-        style="font-weight:bold; font-size:14px;" />
-</asp:Panel>
     <div class="main-container">
-        
+
         <!-- ============================================ -->
         <!-- ستون راست - فرم لاگین -->
         <!-- ============================================ -->
         <div class="login-column">
             <form id="form1" runat="server" class="login-form" defaultbutton="Button1" defaultfocus="TextBox1">
                 <div class="login-inside">
-                    
+
+                    <!-- پیام موفقیت تغییر رمز -->
+                    <asp:Panel ID="pnlSuccessMessage" runat="server" Visible="false" CssClass="lp-alert success">
+                        <span class="icon">✅</span>
+                        <asp:Label ID="lblSuccessMessage" runat="server" />
+                    </asp:Panel>
+
                     <div id="divReturnInfo" runat="server" style="display:none;">
-                        <div style="background:#d1ecf1; padding:12px 15px; border-radius:10px; margin-bottom:20px; text-align:center; border:2px solid #bee5eb;">
-                            <span style="font-size:15px; color:#0c5460; font-weight:bold;">
-                                📱 برای ثبت حضور در دوره آموزشی، لطفاً وارد شوید
-                            </span>
+                        <div class="lp-alert info">
+                            <span class="icon">📱</span>
+                            <span>برای ثبت حضور در دوره آموزشی، لطفاً وارد شوید</span>
                         </div>
                     </div>
-                    
-                    <div class="text-center">
-                        <div class="title d-inline-block">
-                            <span class="icon-emoji">🏭</span> شرکت پتروشیمی تبریز
-                        </div>
+
+                    <div class="brand-chip">
+                        🏭 شرکت پتروشیمی تبریز
                     </div>
-                    
-                    <div class="frm-title">
-                        <span class="icon-emoji">👤</span> سامانه پتروشیمی من
-                    </div>
-                    
+
+                    <div class="frm-title">ورود به سامانه</div>
+                    <p class="frm-subtitle">برای ادامه، کد پرسنلی و رمز عبور خود را وارد کنید</p>
+
                     <div class="frm-input input-icon">
                         <span class="icon-emoji">🆔</span>
-                        <asp:TextBox ID="TextBox1" runat="server" CssClass="frm-inp" TabIndex="1" 
+                        <asp:TextBox ID="TextBox1" runat="server" CssClass="frm-inp" TabIndex="1"
                             placeholder="کد پرسنلی" TextMode="Number"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
-                            ForeColor="Red" ErrorMessage="کد پرسنلی باید وارد شود" 
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server"
+                            ForeColor="Red" ErrorMessage="کد پرسنلی باید وارد شود"
                             ControlToValidate="TextBox1" ValidationGroup="1"
                             CssClass="validation-error" Display="Dynamic"></asp:RequiredFieldValidator>
                     </div>
-                    
+
                     <div class="frm-input input-icon">
                         <span class="icon-emoji">🔒</span>
-                        <asp:TextBox ID="TextBox2" runat="server" CssClass="frm-inp" 
-                            TextMode="Password" TabIndex="2" 
+                        <asp:TextBox ID="TextBox2" runat="server" CssClass="frm-inp"
+                            TextMode="Password" TabIndex="2"
                             placeholder="رمز ورود (رمز پیش‌فرض: کد ملی)"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
-                            ForeColor="Red" ErrorMessage="رمز عبور باید وارد شود" 
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server"
+                            ForeColor="Red" ErrorMessage="رمز عبور باید وارد شود"
                             ControlToValidate="TextBox2" ValidationGroup="1"
                             CssClass="validation-error" Display="Dynamic"></asp:RequiredFieldValidator>
                     </div>
-                    
-                    <div class="clearfix"></div>
-                    
+
                     <div class="d-grid gap-2 mt-3">
-                        <asp:Button ID="Button1" runat="server" Text="ورود به سامانه" 
-                            CssClass="frm-submit" OnClick="Button1_Click" ValidationGroup="1"/>
+                        <asp:Button ID="Button1" runat="server" Text="ورود به سامانه"
+                            CssClass="frm-submit" OnClick="Button1_Click" ValidationGroup="1" />
                     </div>
 
                     <div class="divider">
@@ -562,36 +612,36 @@
                     </div>
 
                     <div class="d-grid gap-2">
-                        <a href="https://sso.tpco.ir/Sso/Portal?applicationName=MyTpc" class="sso-btn"> ورود با SSO</a>
+                        <a href="https://sso.tpco.ir/Sso/Portal?applicationName=MyTpc" class="sso-btn">
+                            <i class="fa fa-sign-in-alt"></i>
+                            ورود با SSO
+                        </a>
                     </div>
-                    
+
                     <div class="forgot-link">
                         <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="~/ForgotPass.aspx">
                             <span class="icon-emoji">🔑</span> رمز عبور خود را فراموش کرده‌اید؟
                         </asp:HyperLink>
                     </div>
-                    
+
                     <div class="frm-footer">
                         <h5>
-                            <span class="icon-emoji">📞</span> 
-                            نیاز به راهنمایی دارید؟ با شماره 33286380 تماس بگیرید
+                            📞 نیاز به راهنمایی دارید؟ با شماره <strong>33286380</strong> تماس بگیرید
                         </h5>
                     </div>
-                    
+
                     <asp:HiddenField ID="hdnReturnUrl" runat="server" />
-                    
+
                 </div>
             </form>
         </div>
-        
+
         <!-- ============================================ -->
         <!-- ستون چپ - پیغام مدیر + تازه‌ها -->
         <!-- ============================================ -->
         <div class="news-column">
-            
-            <!-- ============================================ -->
-            <!-- کارت پیغام مدیر (بالای تازه‌ها) -->
-            <!-- ============================================ -->
+
+            <!-- کارت پیغام مدیر -->
             <asp:Panel ID="pnlAdminMessage" runat="server" Visible="false" CssClass="admin-message-card">
                 <div class="admin-message-header">
                     <span class="icon">🔔</span>
@@ -607,10 +657,8 @@
                     </div>
                 </div>
             </asp:Panel>
-            
-            <!-- ============================================ -->
+
             <!-- کارت تازه‌ها -->
-            <!-- ============================================ -->
             <div class="news-card">
                 <div class="news-header">
                     <span class="icon">📢</span>
@@ -631,7 +679,7 @@
                             </div>
                         </ItemTemplate>
                     </asp:Repeater>
-                    
+
                     <asp:Panel ID="pnlNoNews" runat="server" Visible="false">
                         <div class="no-news">
                             <span class="icon">📭</span>
@@ -641,9 +689,8 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
-    
 </div>
 
 <!-- ============================================ -->
@@ -704,10 +751,13 @@
         }
     };
 </script>
-    <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function () {
-            // ====== بررسی پیام موفقیت ======
-            var successMsg = '<%= If(Session("LoginSuccessMessage") IsNot Nothing, Session("LoginSuccessMessage").ToString().Replace("'", "\'"), "") %>';
+
+<!-- ============================================ -->
+<!-- اسکریپت پیام موفقیت -->
+<!-- ============================================ -->
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        var successMsg = '<%= If(Session("LoginSuccessMessage") IsNot Nothing, Session("LoginSuccessMessage").ToString().Replace("'", "\'"), "") %>';
 
         if (successMsg && successMsg.trim() !== '') {
             if (typeof Swal !== 'undefined') {
@@ -716,7 +766,7 @@
                     text: successMsg,
                     icon: 'success',
                     confirmButtonText: 'متوجه شدم',
-                    confirmButtonColor: '#27ae60',
+                    confirmButtonColor: '#0f766e',
                     customClass: {
                         popup: 'swal-rtl'
                     }

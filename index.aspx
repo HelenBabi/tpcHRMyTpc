@@ -1,324 +1,595 @@
-﻿<%@ Page Title="" Language="VB" MasterPageFile="~/dabir.master" AutoEventWireup="false" CodeFile="index.aspx.vb" Inherits="index" %>
-<%@ Register assembly="DevExpress.Web.v10.1, Version=10.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web.ASPxTabControl" tagprefix="dx" %>
+﻿<%@ Page Title="داشبورد اصلی" Language="VB" MasterPageFile="~/dabir.master" 
+    AutoEventWireup="false" CodeFile="index.aspx.vb" Inherits="index" %>
 
-<%@ Register assembly="DevExpress.Web.v10.1, Version=10.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web.ASPxClasses" tagprefix="dx" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
+    <style type="text/css">
+        /* ============================================================
+           ✅ استایل صفحه داشبورد — هماهنگ با مستر پیج
+           ============================================================ */
+        .dash-wrap { 
+            direction: rtl;
+            padding: 24px; /* ✅ پدینگ برای جلوگیری از چسبیدن کارت‌ها به لبه */
+        }
 
-<%@ Register assembly="DevExpress.Web.ASPxEditors.v10.1, Version=10.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web.ASPxEditors" tagprefix="dx" %>
-<%@ Register assembly="DevExpress.Web.ASPxGridView.v10.1, Version=10.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web.ASPxGridView" tagprefix="dx1" %>
-<%@ Register assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" tagprefix="cc1" %>
-<%@ Register assembly="DevExpress.Web.ASPxEditors.v10.1" namespace="DevExpress.Web.ASPxEditors" tagprefix="dx" %>
-<%@ Register assembly="DevExpress.Web.v10.1" namespace="DevExpress.Web.ASPxTabControl" tagprefix="dx" %>
-<%@ Register assembly="DevExpress.Web.v10.1" namespace="DevExpress.Web.ASPxClasses" tagprefix="dx" %>
-<%@ Register assembly="DevExpress.Web.ASPxGridView.v10.1" namespace="DevExpress.Web.ASPxGridView" tagprefix="dx" %>
+        /* Welcome */
+        .dash-welcome {
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 60%, #2dd4bf 100%);
+            border-radius: 18px;
+            padding: 30px 35px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 24px;
+            box-shadow: 0 12px 30px rgba(15, 118, 110, 0.25);
+        }
+        .dash-welcome::before {
+            content: '';
+            position: absolute;
+            top: -80px;
+            left: -80px;
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .dash-welcome::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            right: -50px;
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .dash-welcome-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+        .dash-welcome-text { flex: 1; min-width: 260px; }
+        .dash-welcome .greeting {
+            font-size: 26px;
+            font-weight: 800;
+            margin: 0 0 8px 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+        .dash-welcome .subtitle {
+            font-size: 14px;
+            color: rgba(255,255,255,0.92);
+            margin: 0;
+            line-height: 1.9;
+            font-weight: 500;
+        }
+        .dash-welcome .clock-box {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 14px;
+            padding: 16px 22px;
+            text-align: center;
+            min-width: 200px;
+        }
+        .dash-welcome .clock-time {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            font-variant-numeric: tabular-nums;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .dash-welcome .clock-date {
+            font-size: 12px;
+            color: rgba(255,255,255,0.85);
+            font-weight: 500;
+        }
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
-  
+        /* Stats row */
+        .dash-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .dash-stat {
+            background: #fff;
+            border-radius: 14px;
+            padding: 20px 22px;
+            box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .dash-stat::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--stat-color, #0f766e);
+            transition: width 0.25s;
+        }
+        .dash-stat:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+        }
+        .dash-stat:hover::after { width: 6px; }
+        .dash-stat-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            flex-shrink: 0;
+            background: var(--stat-bg, #ccfbf1);
+            color: var(--stat-color, #0f766e);
+        }
+        .dash-stat-body { flex: 1; min-width: 0; }
+        .dash-stat-value {
+            font-size: 26px;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.1;
+            margin: 0 0 4px 0;
+        }
+        .dash-stat-label {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 600;
+            margin: 0;
+        }
+        .dash-stat.red { --stat-color: #ef4444; --stat-bg: #fee2e2; }
+
+        /* Section header */
+        .dash-section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0 0 16px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .dash-section-title {
+            font-size: 17px;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .dash-section-title i {
+            font-size: 22px;
+            color: #0f766e;
+        }
+
+        /* Quick shortcuts */
+        .dash-shortcuts {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        .dash-shortcut {
+            background: #fff;
+            border-radius: 14px;
+            padding: 20px 16px;
+            text-align: center;
+            text-decoration: none !important;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .dash-shortcut:hover {
+            transform: translateY(-5px);
+            border-color: #14b8a6;
+            box-shadow: 0 12px 30px rgba(20, 184, 166, 0.18);
+            color: #0f766e;
+            text-decoration: none !important;
+        }
+        .dash-shortcut-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 12px;
+            background: #f0fdfa;
+            color: #0f766e;
+            transition: all 0.25s;
+        }
+        .dash-shortcut:hover .dash-shortcut-icon {
+            background: #ccfbf1;
+            transform: scale(1.1) rotate(-5deg);
+        }
+        .dash-shortcut-title {
+            font-size: 13.5px;
+            font-weight: 700;
+            margin: 0 0 4px 0;
+            color: #1e293b;
+        }
+        .dash-shortcut-desc {
+            font-size: 11.5px;
+            color: #64748b;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Two column layout */
+        .dash-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        @media (max-width: 991px) {
+            .dash-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Card */
+        .dash-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 22px 24px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 12px rgba(15, 23, 42, 0.05);
+        }
+        .dash-card-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+        .dash-card-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .dash-card-title i {
+            color: #0f766e;
+            font-size: 20px;
+        }
+        .dash-card-badge {
+            background: #fef3c7;
+            color: #b45309;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* Announcements */
+        .dash-notice {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: #f8fafc;
+            margin-bottom: 10px;
+            border-right: 4px solid #0f766e;
+            transition: all 0.2s;
+        }
+        .dash-notice:hover {
+            background: #f0fdfa;
+            border-right-color: #14b8a6;
+        }
+        .dash-notice-icon {
+            font-size: 22px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .dash-notice-body { flex: 1; min-width: 0; }
+        .dash-notice-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0 0 3px 0;
+            line-height: 1.5;
+        }
+        .dash-notice-meta {
+            font-size: 11px;
+            color: #94a3b8;
+            margin: 0;
+        }
+        .dash-notice.blue { border-right-color: #3b82f6; }
+        .dash-notice.blue:hover { background: #eff6ff; border-right-color: #2563eb; }
+        .dash-notice.red { border-right-color: #ef4444; }
+        .dash-notice.red:hover { background: #fef2f2; border-right-color: #dc2626; }
+
+        /* Support card */
+        .dash-support {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 14px;
+            padding: 24px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        .dash-support::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(20, 184, 166, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .dash-support-title {
+            font-size: 16px;
+            font-weight: 800;
+            margin: 0 0 8px 0;
+            position: relative;
+            z-index: 1;
+        }
+        .dash-support-text {
+            font-size: 12.5px;
+            color: rgba(255,255,255,0.75);
+            line-height: 1.9;
+            margin: 0 0 16px 0;
+            position: relative;
+            z-index: 1;
+        }
+        .dash-support-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+        .dash-support-btn {
+            padding: 9px 16px;
+            border-radius: 10px;
+            font-size: 12.5px;
+            font-weight: 700;
+            text-decoration: none !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .dash-support-btn.primary {
+            background: #14b8a6;
+            color: #fff;
+        }
+        .dash-support-btn.primary:hover {
+            background: #0f766e;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .dash-support-btn.ghost {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .dash-support-btn.ghost:hover {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        /* Tips */
+        .dash-tip {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 12px;
+            padding: 16px 18px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            color: #78350f;
+            font-size: 12.5px;
+            line-height: 1.9;
+            margin-top: 24px;
+        }
+        .dash-tip i {
+            font-size: 22px;
+            color: #d97706;
+            flex-shrink: 0;
+        }
+        .dash-tip strong { color: #92400e; }
+
+        /* Welcome section spacing */
+        .dash-section { margin-bottom: 24px; }
+
+        /* Animation */
+        @keyframes dashFadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .dash-anim { animation: dashFadeUp 0.45s ease both; }
+        .dash-anim.d1 { animation-delay: 0.05s; }
+        .dash-anim.d2 { animation-delay: 0.12s; }
+        .dash-anim.d3 { animation-delay: 0.2s; }
+        .dash-anim.d4 { animation-delay: 0.28s; }
+    </style>
 </asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-     <h4>کارتابل من</h4>
-     <%-- <h3>1402/01/26 از طریق منوی نظام پیشنهادات می توانید پیشنهادهای فنی و غیرفنی ثبت و از همین سامانه پیگیری نمایید</h3>
-      <h4>1401/12/20 از طریق منوی کارهای محوله میتوانید برای همکاران خود کار بفرستید و پیگیر باشید.</h4>
-    <h6>1401/10/21 از طریق منوی عمومی گزینه ی پروفایل می توانید اطلاعات تلفن داخلی و منزل و موبایل خود را مشاهده و بروز نمایید</h6>   
-         <h6>اضافه شدن درج آگهی لوازم مازاد کارکنان از طریق منوی عمومی قسمت ثبت آگهی</h6>   
-           <h6>از این پس میتوانید درخواست های خود را ازطریق این سامانه به واحد فناوری اطلاعات ارسال نمایید</h6>           
-            <h6>کارکنانی که از انبار ابزار کارگاه مرکزی ابزار به امانت گرفته اند میتوانند از منوی تعمیرات گزینه ابزارهای در تحویل من کارتکس خود را ببینند و درصورت مغایرت با شماره 2486 تماس بگیرند.</h6>--%>
-      <dx:ASPxPageControl ID="ASPxPageControl1" runat="server" ActiveTabIndex="0" 
-        ClientIDMode="AutoID" Width="100%" 
-        style="margin-top: 0px" TabIndex="3">
-             <TabPages>
-                 <dx:TabPage Name="trn" Text="آموزش">
-                     <contentcollection>
-                         <dx:ContentControl runat="server" SupportsDisabledAttribute="True">
 
-                           
-                             
-                               <p>سرپرست محترم : خواهشمند است جهت تعيين ميزان تاثيرگذاري دوره مذكور در ارتقاء كيفي انجام وظايف شغلي كاركنان‌، در جدول زير بر روي جزئيات كليك كرده و يكي از گزينه هاي ( بالا - متوسط - پايين ) را انتخاب كنيد .  
-                                 
-</p>
-                        
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 
-                             <dx:ASPxGridView ID="trnGridWorkTable" runat="server" 
-                    AutoGenerateColumns="False" 
-                    KeyFieldName="idd"   
-                    EnableCallBacks="False" ClientIDMode="AutoID" Width="100%">
+    <div class="dash-wrap">
 
-    <ClientSideEvents FocusedRowChanged="function(s, e) {
+        <%-- ============================================================
+             ✅ خوش‌آمدگویی + ساعت زنده + تاریخ شمسی
+             ============================================================ --%>
+        <div class="dash-welcome dash-anim">
+            <div class="dash-welcome-row">
+                <div class="dash-welcome-text">
+                    <h1 class="greeting">
+                        👋 سلام، <asp:Label ID="lblUserName" runat="server" Text="" />
+                    </h1>
+                    <p class="subtitle">
+                        به سامانه یکپارچه پتروشیمی تبریز خوش آمدید.<br />
+                        از منوی سمت راست می‌توانید به تمام بخش‌های سیستم دسترسی داشته باشید.
+                    </p>
+                </div>
+                <div class="clock-box">
+                    <span id="liveClock" class="clock-time">00:00:00</span>
+                    <span class="clock-date">
+                        <asp:Label ID="lblDate" runat="server" /> <!-- ✅ تاریخ برگشت -->
+                    </span>
+                </div>
+            </div>
+        </div>
 
-}" />
+        <%-- ============================================================
+             ✅ کارت‌های آماری (فقط اعلان‌های خوانده‌نشده)
+             ============================================================ --%>
+        <div class="dash-stats dash-anim d1">
 
-    <SettingsBehavior AllowFocusedRow="True" AutoFilterRowInputDelay="120000" />
+            <a href="#" class="dash-stat red" style="text-decoration:none;">
+                <div class="dash-stat-icon">
+                    <i class="mdi mdi-bell-ring-outline"></i>
+                </div>
+                <div class="dash-stat-body">
+                    <p class="dash-stat-value"><asp:Label ID="lblNotificationCount" runat="server" Text="0" /></p>
+                    <p class="dash-stat-label">اعلان‌های خوانده‌نشده</p>
+                </div>
+            </a>
 
-    <Settings ShowFilterRow="True" />
+        </div>
 
-<ClientSideEvents FocusedRowChanged="function(s, e) {
+        <%-- ============================================================
+             ✅ دسترسی سریع
+             ============================================================ --%>
+        <div class="dash-section dash-anim d2">
+            <div class="dash-section-head">
+                <h2 class="dash-section-title">
+                    <i class="mdi mdi-lightning-bolt"></i>
+                    دسترسی سریع
+                </h2>
+            </div>
+            <div class="dash-shortcuts">
+                <a href="personelProfileFrm.aspx" class="dash-shortcut">
+                    <div class="dash-shortcut-icon">
+                        <i class="mdi mdi-account-box-outline"></i>
+                    </div>
+                    <h3 class="dash-shortcut-title">پروفایل شخصی</h3>
+                    <p class="dash-shortcut-desc">مشاهده و ویرایش اطلاعات فردی</p>
+                </a>
 
-}"></ClientSideEvents>
+                <a href="frmPass.aspx" class="dash-shortcut">
+                    <div class="dash-shortcut-icon">
+                        <i class="mdi mdi-lock-reset"></i>
+                    </div>
+                    <h3 class="dash-shortcut-title">تغییر رمز عبور</h3>
+                    <p class="dash-shortcut-desc">به‌روزرسانی رمز ورود به سیستم</p>
+                </a>
 
-    <Columns>
-            <dx:GridViewDataTextColumn ShowInCustomizationForm="True" VisibleIndex="0" 
-            Width="5%">
-            <DataItemTemplate>
-                <asp:LinkButton ID="LinkButton4" runat="server" 
-                    CommandArgument='<%# Eval("idd")%>' CommandName='<%# "moshahede" %>' 
-                    style="color: #000000; font-weight: 700;" Text="جزئیات"></asp:LinkButton>
-            </DataItemTemplate>
-            <HeaderStyle HorizontalAlign="Center" />
-            <CellStyle HorizontalAlign="Center">
-            </CellStyle>
-        </dx:GridViewDataTextColumn>
-        <dx:GridViewDataTextColumn Caption="پرسنل" FieldName="karbar"
-                            VisibleIndex="1" ShowInCustomizationForm="True" 
-            Width="15%">
-        
-            <HeaderStyle HorizontalAlign="Center" />
-            <cellstyle horizontalalign="Center">
-            </cellstyle>
-        </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn Caption="دوره" FieldName="onvan" 
-                            VisibleIndex="2" Width="10%">
-                            <HeaderStyle HorizontalAlign="Center" />
-                            <cellstyle horizontalalign="Right">
-                            </cellstyle>
-                        </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn Caption="از تاریخ" FieldName="tarixShuru" 
-                            VisibleIndex="3" Width="10%">
-                            <HeaderStyle HorizontalAlign="Center" />
-                            <cellstyle horizontalalign="Center">
-                            </cellstyle>
-                        </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn Caption="تا تاریخ" FieldName="tarixShuru" 
-                            VisibleIndex="4" Width="10%">
-                            <HeaderStyle HorizontalAlign="Center" />
-                            <cellstyle horizontalalign="Center">
-                            </cellstyle>
-                        </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn Caption="تاریخ درخواست" FieldName="tarix" 
-                            VisibleIndex="6" Width="10%">
-                            <HeaderStyle HorizontalAlign="Center" />
-                            <cellstyle horizontalalign="Center">
-                            </cellstyle>
-                        </dx:GridViewDataTextColumn>
-      
-        
-            <dx:GridViewDataTextColumn Caption="وضعیت" FieldName="statValue" VisibleIndex="7" Width="5%">
-                <HeaderStyle HorizontalAlign="Center" />
-                <cellstyle horizontalalign="Center">
-                </cellstyle>
-            </dx:GridViewDataTextColumn>
-      
-        
-    </Columns>
+                <a href="frmChngPic.aspx" class="dash-shortcut">
+                    <div class="dash-shortcut-icon">
+                        <i class="mdi mdi-image-edit-outline"></i>
+                    </div>
+                    <h3 class="dash-shortcut-title">تغییر تصویر پروفایل</h3>
+                    <p class="dash-shortcut-desc">بارگذاری عکس جدید برای پروفایل</p>
+                </a>
+            </div>
+        </div>
 
-<SettingsBehavior AllowFocusedRow="True"></SettingsBehavior>
+        <%-- ============================================================
+             ✅ دو ستون: اطلاعیه‌ها + پشتیبانی
+             ============================================================ --%>
+        <div class="dash-grid dash-anim d3">
 
-    <SettingsPager PageSize="17">
-    </SettingsPager>
+            <%-- اطلاعیه‌ها --%>
+            <div class="dash-card">
+                <div class="dash-card-head">
+                    <h2 class="dash-card-title">
+                        <i class="mdi mdi-bullhorn-variant-outline"></i>
+                        اطلاعیه‌های اخیر
+                    </h2>
+                    <span class="dash-card-badge">جدید</span>
+                </div>
 
-<Settings ShowFilterRow="True"></Settings>
-
-</dx:ASPxGridView>
-
-                         </dx:ContentControl>
-                     </contentcollection>
-                 </dx:TabPage>
-                 <dx:TabPage Text="پیشنهادات دریافتی" Visible="False">
-                     <ContentCollection>
-                           <dx:ContentControl runat="server" SupportsDisabledAttribute="True">
-                               <%--<dx:ASPxGridView ID="sugGridWorkTable" runat="server" 
-                    AutoGenerateColumns="False" 
-                    KeyFieldName="sugID"   
-                    EnableCallBacks="False" ClientIDMode="AutoID" Width="100%">
-
-<ClientSideEvents FocusedRowChanged="function(s, e) {
-
-}"></ClientSideEvents>
-
-<SettingsBehavior AllowFocusedRow="True"></SettingsBehavior>
-
-<Settings ShowFilterRow="True"></Settings>
-
-    <ClientSideEvents FocusedRowChanged="function(s, e) {
-
-}" />
-
-    <Columns>
-            <dx:GridViewDataTextColumn ShowInCustomizationForm="True" VisibleIndex="0" 
-            Width="5%">
-            <DataItemTemplate>
-                <asp:LinkButton ID="LinkBtnMosh" runat="server" 
-                    CommandArgument='<%# Eval("sugID")%>' CommandName='<%# "moshahede" %>' 
-                    style="color: #000000; font-weight: 700;" Text="جزئیات"></asp:LinkButton>
-            </DataItemTemplate>
-            <HeaderStyle HorizontalAlign="Center" />
-            <CellStyle HorizontalAlign="Center">
-            </CellStyle>
-        </dx:GridViewDataTextColumn>
-        <dx:GridViewDataTextColumn Caption="کد پیشنهاد" FieldName="sugID"
-                            VisibleIndex="0" ShowInCustomizationForm="True" 
-            Width="5%">
-        
-            <HeaderStyle HorizontalAlign="Center" />
-            <cellstyle horizontalalign="Center">
-            </cellstyle>
-        </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn Caption="موضوع" FieldName="subject" 
-                            VisibleIndex="1" Width="10%">
-                            <HeaderStyle HorizontalAlign="Center" />
-                            <cellstyle horizontalalign="Right">
-                            </cellstyle>
-                        </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn Caption="فرستنده" FieldName="ferestande" VisibleIndex="3" Width="15%">
-                            <HeaderStyle HorizontalAlign="Center" />
-                            <cellstyle horizontalalign="Center">
-                            </cellstyle>
-            </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn Caption="جهت" FieldName="runeveshtTypeValue" 
-                            VisibleIndex="2" Width="10%">
-                            <HeaderStyle HorizontalAlign="Center" />
-                            <cellstyle horizontalalign="Right">
-                            </cellstyle>
-                        </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn Caption="تاریخ" FieldName="tarix" 
-                            VisibleIndex="4" Width="10%">
-                            <HeaderStyle HorizontalAlign="Center" />
-                            <cellstyle horizontalalign="Center">
-                            </cellstyle>
-                        </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn Caption="ساعت" FieldName="saat" 
-                            VisibleIndex="5" Width="10%">
-                            <HeaderStyle HorizontalAlign="Center" />
-                            <cellstyle horizontalalign="Center">
-                            </cellstyle>
-                        </dx:GridViewDataTextColumn>
-      
-        
-            <dx:GridViewDataTextColumn Caption="متن ارجاع" FieldName="matnErja" VisibleIndex="6" Width="15%">
-                <HeaderStyle HorizontalAlign="Center" />
-                <cellstyle horizontalalign="Center">
-                </cellstyle>
-            </dx:GridViewDataTextColumn>
-        <dx:GridViewDataTextColumn Caption="وضعیت" FieldName="statusValue" VisibleIndex="7" Width="5%">
-                <HeaderStyle HorizontalAlign="Center" />
-                <cellstyle horizontalalign="Center">
-                </cellstyle>
-            </dx:GridViewDataTextColumn>
-        
-    </Columns>
-
-    <SettingsBehavior AllowFocusedRow="True" AutoFilterRowInputDelay="120000" />
-
-    <SettingsPager PageSize="17">
-    </SettingsPager>
-
-    <Settings ShowFilterRow="True" />
-
-</dx:ASPxGridView>--%>
-                               </dx:ContentControl>
-                     </ContentCollection>
-                 </dx:TabPage>
-
-
-                   
-                 <dx:TabPage Text="کارهای دریافتی" Visible="False">
-                     <contentcollection>
-                         <dx:ContentControl runat="server" SupportsDisabledAttribute="True">
-                             <dx:ASPxGridView ID="jobGrid" runat="server" 
-                    AutoGenerateColumns="False" 
-                    KeyFieldName="kmID"  
-                    EnableCallBacks="False" CssClass="gr_" Width="100%" ClientIDMode="AutoID">
-                    <ClientSideEvents FocusedRowChanged="function(s, e) {
-
-}" />
-
-                    <SettingsBehavior AllowFocusedRow="True" />
-
-                    <Settings ShowFilterRow="True" ShowHeaderFilterButton="True" ShowGroupPanel="True" ShowFilterBar="Visible" ShowFilterRowMenu="True" />
-<ClientSideEvents FocusedRowChanged="function(s, e) {
-
-}"></ClientSideEvents>
-
-                    <Columns>
-                          <dx:GridViewDataTextColumn ShowInCustomizationForm="True" VisibleIndex="0" 
-            Width="7%">
-            <DataItemTemplate>
-             <%--   <asp:LinkButton ID="LinkButton1" runat="server" 
-                    CommandArgument='<%# Eval("kmID")%>' CommandName='<%# "moshahede" %>' 
-                    style="color: #000000; font-weight: 700;" Text="مشاهده"></asp:LinkButton>--%>
-            </DataItemTemplate>
-            <HeaderStyle HorizontalAlign="Center" />
-            <CellStyle HorizontalAlign="Center">
-            </CellStyle>
-        </dx:GridViewDataTextColumn>
-                        <dx:GridViewCommandColumn VisibleIndex="1">
-                            <clearfilterbutton visible="True">
-                            </clearfilterbutton>
-                        </dx:GridViewCommandColumn>
-                        <dx:GridViewDataTextColumn Caption="کد" FieldName="kmID" 
-                            ShowInCustomizationForm="True" VisibleIndex="2" >
-                          
-                            <HeaderStyle HorizontalAlign="Center" />
-                            <cellstyle horizontalalign="Center">
-                            </cellstyle>
-                        </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn Caption="موضوع" FieldName="subject" 
-                            ShowInCustomizationForm="True" VisibleIndex="3">
-                            <HeaderStyle HorizontalAlign="Center" />
-                            <cellstyle horizontalalign="Center">
-                            </cellstyle>
-                        </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn Caption="فرستنده" FieldName="karbar" VisibleIndex="4">
-                            <HeaderStyle HorizontalAlign="Center" />
-                            <cellstyle horizontalalign="Center">
-                            </cellstyle>
-                            <HeaderStyle HorizontalAlign="Center" />
-                            <cellstyle horizontalalign="Center">
-                            </cellstyle>
-                        </dx:GridViewDataTextColumn>
-                          <dx:GridViewDataTextColumn Caption="تاریخ شروع" FieldName="date_start" VisibleIndex="5">
-                              <HeaderStyle HorizontalAlign="Center" />
-                              <cellstyle horizontalalign="Center">
-                              </cellstyle>
-                          </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn Caption="تاریخ پایان" FieldName="date_end" VisibleIndex="6">
-                            <HeaderStyle HorizontalAlign="Center" />
-                            <cellstyle horizontalalign="Center">
-                            </cellstyle>
-                        </dx:GridViewDataTextColumn>
-                           <dx:GridViewDataTextColumn Caption="الویت" FieldName="valuee" VisibleIndex="7">
-                               <HeaderStyle HorizontalAlign="Center" />
-                               <cellstyle horizontalalign="Center">
-                               </cellstyle>
-                        </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn VisibleIndex="8" FieldName="olaviat" Visible="False">
-        </dx:GridViewDataTextColumn>
-                          <dx:GridViewDataTextColumn Caption="درصد پیشرفت" FieldName="darsad" VisibleIndex="9">
-                              <HeaderStyle HorizontalAlign="Center" />
-                              <cellstyle horizontalalign="Center">
-                              </cellstyle>
-                          </dx:GridViewDataTextColumn>
-                          <dx:GridViewDataTextColumn Caption="نوع کار" FieldName="jobTypeValue" VisibleIndex="10">
-                              <HeaderStyle HorizontalAlign="Center" />
-                              <cellstyle horizontalalign="Center">
-                              </cellstyle>
-                          </dx:GridViewDataTextColumn>
-                    </Columns>
-
-<SettingsBehavior AllowFocusedRow="True"></SettingsBehavior>
-
-                    <settingspager pagesize="25">
-                    </settingspager>
-
-<Settings ShowFilterRow="True"></Settings>
-                </dx:ASPxGridView>
-                         </dx:ContentControl>
-                     </contentcollection>
-                 </dx:TabPage>
-
-
-                   
-             </TabPages>
            
-    </dx:ASPxPageControl>
-     <asp:HiddenField ID="HiddenFieldUserID" runat="server" Value="0" />
-</asp:Content>
 
+                <div class="dash-notice red">
+                    <span class="dash-notice-icon">⚠️</span>
+                    <div class="dash-notice-body">
+                        <p class="dash-notice-title">
+                            از به اشتراک‌گذاری رمز عبور خود با دیگران خودداری کنید.
+                        </p>
+                        <p class="dash-notice-meta">۲ هفته پیش · امنیت اطلاعات</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <%-- پشتیبانی + راهنما --%>
+            <div>
+                <div class="dash-support">
+                    <h3 class="dash-support-title">🎧 نیاز به کمک دارید؟</h3>
+                    <p class="dash-support-text">
+                        تیم پشتیبانی پتروشیمی تبریز در ساعات اداری آماده پاسخگویی به سوالات شماست.
+                    </p>
+                    <div class="dash-support-actions">
+                        <a href="tel:04133286380" class="dash-support-btn primary">
+                            <i class="mdi mdi-phone"></i> تماس با پشتیبانی
+                        </a>
+                        <a href="#" class="dash-support-btn ghost">
+                            <i class="mdi mdi-email-outline"></i> ارسال ایمیل
+                        </a>
+                    </div>
+                </div>
+
+                <div class="dash-tip">
+                    <i class="mdi mdi-lightbulb-on-outline"></i>
+                    <div>
+                        <strong>نکته:</strong> برای دسترسی سریع‌تر به بخش‌های پرکاربرد، از منوی کناری استفاده کنید. تمام منوها بر اساس سطح دسترسی شما نمایش داده می‌شوند.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        // ============================================================
+        // ✅ ساعت زنده در کارت خوش‌آمدگویی
+        // ============================================================
+        (function () {
+            function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+            function updateClock() {
+                var el = document.getElementById('liveClock');
+                if (!el) return;
+                var now = new Date();
+                el.textContent = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+            }
+
+            updateClock();
+            setInterval(updateClock, 1000);
+        })();
+    </script>
+
+</asp:Content>

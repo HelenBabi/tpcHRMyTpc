@@ -14,6 +14,9 @@ Partial Class ChildRequestReview
     Private _fullName As String = ""
     Private _unitName As String = ""
 
+    ' ============================================================
+    ' Page Lifecycle
+    ' ============================================================
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
         If Session("codePersoneli") Is Nothing Then
             Response.Redirect("~/Login_2.aspx")
@@ -59,6 +62,9 @@ Partial Class ChildRequestReview
         End Try
     End Function
 
+    ' ============================================================
+    ' ✅ توابع کمکی دیتابیس
+    ' ============================================================
     Private Function GetDataTable(ByVal sql As String, ByVal ParamArray parameters() As SqlParameter) As DataTable
         Dim paramDict As New Dictionary(Of String, Object)()
         For Each p As SqlParameter In parameters
@@ -109,13 +115,15 @@ Partial Class ChildRequestReview
         End Try
     End Function
 
+    ' ============================================================
+    ' ✅ رویدادها
+    ' ============================================================
     Protected Sub lnkBackToHome_Click(ByVal sender As Object, ByVal e As EventArgs)
         Response.Redirect("~/index.aspx")
     End Sub
 
     Protected Sub lnkExportExcel_Click(ByVal sender As Object, ByVal e As EventArgs)
         Try
-            ' ✅ پاک کردن وضعیت Modal قبل از خروجی
             hfShowModal.Value = "0"
             Session.Remove("ReviewingRequestID")
 
@@ -146,6 +154,9 @@ Partial Class ChildRequestReview
         End Try
     End Sub
 
+    ' ============================================================
+    ' ✅ آمار
+    ' ============================================================
     Private Sub LoadStats()
         Try
             Dim dt As DataTable = GetDataTable(
@@ -174,7 +185,7 @@ Partial Class ChildRequestReview
     End Sub
 
     ' ============================================================
-    ' ✅ Load Open Requests — با مبلغ
+    ' ✅ Load Open Requests — با نوع قرارداد و مبلغ
     ' ============================================================
     Private Sub LoadOpenRequests()
         Try
@@ -188,12 +199,15 @@ Partial Class ChildRequestReview
                 "       cr.ChildType, cr.EducationLevel, cr.EducationLevelID, cr.Average, " &
                 "       cr.ExtraDocumentFileName, cr.StatusCode, cr.CreateDate, " &
                 "       ISNULL(cc.Amount, 0) AS Amount, " &
+                "       ISNULL(ct.value, N'-') AS ContractTypeName, " &
                 "       CASE cr.StatusCode " &
                 "           WHEN 1 THEN N'⏳ در انتظار بررسی' " &
                 "           WHEN 2 THEN N'📝 نیاز به اصلاح' " &
                 "           ELSE N'نامشخص' END AS StatusText " &
                 "FROM exmChildRequests cr " &
                 "LEFT JOIN exmChildConditions cc ON cr.EducationLevelID = cc.ID " &
+                "LEFT JOIN personel p ON p.codePersoneli = cr.PersonCode " &
+                "LEFT JOIN contratType ct ON ct.id = p.typ " &
                 "WHERE cr.AcademicYear = @Year AND cr.StatusCode IN (1, 2)"
 
             Dim params As New List(Of SqlParameter) From {
@@ -258,7 +272,7 @@ Partial Class ChildRequestReview
     End Sub
 
     ' ============================================================
-    ' ✅ Load Closed Requests — با مبلغ
+    ' ✅ Load Closed Requests — با نوع قرارداد و مبلغ
     ' ============================================================
     Private Sub LoadClosedRequests()
         Try
@@ -271,6 +285,7 @@ Partial Class ChildRequestReview
                 "SELECT cr.ID, cr.PersonCode, cr.FullName, cr.ChildFullName, cr.ChildNationalCode, " &
                 "       cr.ChildType, cr.EducationLevel, cr.EducationLevelID, cr.StatusCode, cr.CreateDate, " &
                 "       ISNULL(cc.Amount, 0) AS Amount, " &
+                "       ISNULL(ct.value, N'-') AS ContractTypeName, " &
                 "       CASE cr.StatusCode " &
                 "           WHEN 3 THEN N'✅ تایید شده' " &
                 "           WHEN 4 THEN N'❌ رد شده' " &
@@ -278,6 +293,8 @@ Partial Class ChildRequestReview
                 "           ELSE N'نامشخص' END AS StatusText " &
                 "FROM exmChildRequests cr " &
                 "LEFT JOIN exmChildConditions cc ON cr.EducationLevelID = cc.ID " &
+                "LEFT JOIN personel p ON p.codePersoneli = cr.PersonCode " &
+                "LEFT JOIN contratType ct ON ct.id = p.typ " &
                 "WHERE cr.AcademicYear = @Year AND cr.StatusCode IN (3, 4, 5)"
 
             Dim params As New List(Of SqlParameter) From {
@@ -373,7 +390,7 @@ Partial Class ChildRequestReview
     End Sub
 
     ' ============================================================
-    ' ✅ Load Request Detail — با تمام فیلدهای جدید + واحد کارمند
+    ' ✅ Load Request Detail — با نوع قرارداد
     ' ============================================================
     Private Sub LoadRequestDetail(ByVal requestID As Integer)
         Try
@@ -381,11 +398,13 @@ Partial Class ChildRequestReview
                 "SELECT cr.*, " &
                 "       ISNULL(cc.Amount, 0) AS LevelAmount, " &
                 "       cc.EducationLevel AS LevelName, " &
-                "       ISNULL(o.omur, N'-') AS EmployeeUnitName " &
+                "       ISNULL(o.omur, N'-') AS EmployeeUnitName, " &
+                "       ISNULL(ct.value, N'-') AS ContractTypeName " &
                 "FROM exmChildRequests cr " &
                 "LEFT JOIN exmChildConditions cc ON cr.EducationLevelID = cc.ID " &
                 "LEFT JOIN personel p ON p.codePersoneli = cr.PersonCode " &
                 "LEFT JOIN omurTbl o ON o.omurID = p.omurID " &
+                "LEFT JOIN contratType ct ON ct.id = p.typ " &
                 "WHERE cr.ID = @ID",
                 New SqlParameter("@ID", requestID))
 
@@ -401,11 +420,13 @@ Partial Class ChildRequestReview
             ' اطلاعات کارمند
             lblD_FullName.Text = GetSafeString(row, "FullName")
             lblD_PersonCode.Text = GetSafeString(row, "PersonCode")
-
-            ' ✅ واحد کارمند (نه واحد کارشناس)
             lblD_UnitName.Text = GetSafeString(row, "EmployeeUnitName")
-
             lblD_Mobile.Text = GetSafeString(row, "Mobile")
+
+            ' ✅ نوع قرارداد
+            If lblD_ContractType IsNot Nothing Then
+                lblD_ContractType.Text = GetSafeString(row, "ContractTypeName")
+            End If
 
             ' اطلاعات فرزند
             lblD_ChildName.Text = GetSafeString(row, "ChildFullName")
@@ -449,6 +470,47 @@ Partial Class ChildRequestReview
                 pnlDetailSampad.Visible = False
             End If
 
+            ' ✅ اطلاعات المپیاد
+            Dim isOlympiad As Boolean = False
+            If row.Table.Columns.Contains("IsOlympiad") AndAlso Not IsDBNull(row("IsOlympiad")) Then
+                isOlympiad = Convert.ToBoolean(row("IsOlympiad"))
+            End If
+
+            If isOlympiad AndAlso pnlDetailOlympiad IsNot Nothing Then
+                pnlDetailOlympiad.Visible = True
+                If lblD_OlympiadStatus IsNot Nothing Then
+                    lblD_OlympiadStatus.Text = "✅ بله - قبولی در المپیاد علمی"
+                End If
+
+                Dim olympiadFile As String = GetSafeString(row, "OlympiadDocFileName")
+                If pnlDocOlympiad IsNot Nothing Then
+                    If olympiadFile <> "-" AndAlso Not String.IsNullOrEmpty(olympiadFile) Then
+                        pnlDocOlympiad.Visible = True
+                        If lblDocOlympiadName IsNot Nothing Then lblDocOlympiadName.Text = olympiadFile
+                        If lnkViewOlympiad IsNot Nothing Then
+                            lnkViewOlympiad.HRef = ResolveUrl(DOWNLOAD_HANDLER) & "?id=" & requestID & "&type=olympiad&mode=view"
+                        End If
+                        If lnkDownloadOlympiad IsNot Nothing Then
+                            lnkDownloadOlympiad.HRef = ResolveUrl(DOWNLOAD_HANDLER) & "?id=" & requestID & "&type=olympiad&mode=download"
+                        End If
+                    Else
+                        pnlDocOlympiad.Visible = False
+                    End If
+                End If
+            Else
+                If pnlDetailOlympiad IsNot Nothing Then pnlDetailOlympiad.Visible = False
+            End If
+
+            ' ✅ اطلاعات استثنایی
+            Dim isExceptional As Boolean = False
+            If row.Table.Columns.Contains("IsExceptional") AndAlso Not IsDBNull(row("IsExceptional")) Then
+                isExceptional = Convert.ToBoolean(row("IsExceptional"))
+            End If
+
+            If pnlDetailExceptional IsNot Nothing Then
+                pnlDetailExceptional.Visible = isExceptional
+            End If
+
             ' ✅ اطلاعات دانشگاه
             If isStudent Then
                 pnlDetailUniversity.Visible = True
@@ -473,7 +535,7 @@ Partial Class ChildRequestReview
             End If
 
             ' ============================================================
-            ' ✅ نمایش مبلغ (فقط برای روابط عمومی) — نسخه بهبود یافته
+            ' ✅ نمایش مبلغ
             ' ============================================================
             If IsPublicRelationsUser() Then
                 Dim levelAmount As Decimal = 0
@@ -484,14 +546,8 @@ Partial Class ChildRequestReview
                 If levelAmount > 0 Then
                     pnlDetailAmount.Visible = True
                     pnlDetailAmountEmpty.Visible = False
-
-                    ' نام مقطع
                     lblAmountLevel.Text = GetSafeString(row, "EducationLevel")
-
-                    ' مبلغ عددی
                     lblAmountValue.Text = levelAmount.ToString("#,##0")
-
-                    ' مبلغ به حروف
                     lblAmountWords.Text = ConvertNumberToPersianWords(levelAmount)
                 Else
                     pnlDetailAmount.Visible = False
@@ -706,6 +762,9 @@ Partial Class ChildRequestReview
         End Try
     End Sub
 
+    ' ============================================================
+    ' ✅ بارگذاری تاریخچه بررسی‌ها
+    ' ============================================================
     Private Sub LoadReviewHistory(ByVal requestID As Integer)
         Try
             Dim dt As DataTable = GetDataTable(
@@ -725,6 +784,9 @@ Partial Class ChildRequestReview
         End Try
     End Sub
 
+    ' ============================================================
+    ' ✅ دکمه‌های بررسی
+    ' ============================================================
     Protected Sub btnApprove_Click(ByVal sender As Object, ByVal e As EventArgs)
         ProcessReview(3, "✅ تایید شده", False)
     End Sub
@@ -794,7 +856,15 @@ Partial Class ChildRequestReview
             Dim comment As String = GetReviewCommentValue()
 
             If requireReason AndAlso String.IsNullOrEmpty(reason) Then
-                ShowAlert("warning", "دلیل الزامی", "لطفاً دلیل را وارد کنید.")
+                If newStatusCode = 4 Then
+                    ShowAlert("warning", "دلیل عدم تایید الزامی است",
+                              "لطفاً دلیل رد درخواست را از گزینه‌های بالا انتخاب کنید یا در کادر متن بنویسید.")
+                ElseIf newStatusCode = 2 Then
+                    ShowAlert("warning", "دلیل نیاز به اصلاح الزامی است",
+                              "لطفاً دلیل نیاز به اصلاح را از گزینه‌های بالا انتخاب کنید یا در کادر متن بنویسید.")
+                Else
+                    ShowAlert("warning", "دلیل الزامی", "لطفاً دلیل را وارد کنید.")
+                End If
                 Return
             End If
 
@@ -918,6 +988,9 @@ Partial Class ChildRequestReview
         End Try
     End Function
 
+    ' ============================================================
+    ' ✅ تابع GetSafeString
+    ' ============================================================
     Private Function GetSafeString(ByVal row As DataRow, ByVal colName As String) As String
         Try
             If Not row.Table.Columns.Contains(colName) Then Return "-"
@@ -930,6 +1003,9 @@ Partial Class ChildRequestReview
         End Try
     End Function
 
+    ' ============================================================
+    ' ✅ توابع کمکی برای Markup — Protected
+    ' ============================================================
     Protected Function GetStatusText(ByVal statusCode As Integer) As String
         Select Case statusCode
             Case 1 : Return "⏳ در انتظار بررسی"
@@ -939,18 +1015,6 @@ Partial Class ChildRequestReview
             Case 5 : Return "🚫 انصراف"
             Case Else : Return "نامشخص"
         End Select
-    End Function
-
-    Private Function GetPersianDateTime(ByVal dt As DateTime) As String
-        Try
-            Dim pc As New PersianCalendar()
-            Return pc.GetYear(dt).ToString() & "/" &
-                   pc.GetMonth(dt).ToString().PadLeft(2, "0"c) & "/" &
-                   pc.GetDayOfMonth(dt).ToString().PadLeft(2, "0"c) & " - " &
-                   dt.ToString("HH:mm")
-        Catch
-            Return dt.ToString("yyyy/MM/dd HH:mm")
-        End Try
     End Function
 
     Protected Function GetHistoryDate(ByVal reviewDate As Object, ByVal createDate As Object) As String
@@ -1007,6 +1071,24 @@ Partial Class ChildRequestReview
         End Try
     End Function
 
+    ' ============================================================
+    ' ✅ تابع تاریخ شمسی — Protected
+    ' ============================================================
+    Protected Function GetPersianDateTime(ByVal dt As DateTime) As String
+        Try
+            Dim pc As New PersianCalendar()
+            Return pc.GetYear(dt).ToString() & "/" &
+                   pc.GetMonth(dt).ToString().PadLeft(2, "0"c) & "/" &
+                   pc.GetDayOfMonth(dt).ToString().PadLeft(2, "0"c) & " - " &
+                   dt.ToString("HH:mm")
+        Catch
+            Return dt.ToString("yyyy/MM/dd HH:mm")
+        End Try
+    End Function
+
+    ' ============================================================
+    ' ✅ نمایش Toast
+    ' ============================================================
     Private Sub ShowToast(ByVal type As String, ByVal message As String)
         Try
             Dim safeMsg As String = SanitizeJsString(message)
@@ -1016,6 +1098,9 @@ Partial Class ChildRequestReview
         End Try
     End Sub
 
+    ' ============================================================
+    ' ✅ نمایش Alert
+    ' ============================================================
     Private Sub ShowAlert(ByVal type As String, ByVal title As String, ByVal message As String)
         Try
             Dim safeTitle As String = SanitizeJsString(title)
